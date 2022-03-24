@@ -1,10 +1,20 @@
-import { Body, Controller, Get, Param, Put } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Put,
+  UnauthorizedException,
+  Headers,
+} from '@nestjs/common'
 import { v4 as uuidv4 } from 'uuid'
 import { ActuatorService } from 'src/services/actuator-service.abstract'
 import { DeviceService } from 'src/services/device-service.abstract'
 import { SensorService } from 'src/services/sensor-service.abstract'
 import { SensorReadingDto } from './sensor-reading.dto'
 import { RegisterDeviceDto } from './register-device.dto'
+
+const REGISTRATION_TOKEN_HEADER = 'registration-token'
 
 @Controller('arduino')
 export class ArduinoController {
@@ -15,16 +25,36 @@ export class ArduinoController {
   ) {}
 
   @Get('/:id')
-  async getActuatorState(@Param('id') id: string) {
-    return await this.actuatorSvc.getStates(id)
+  async getActuatorState(
+    @Param('id') deviceId: string,
+    @Headers(REGISTRATION_TOKEN_HEADER) registrationToken: string,
+  ) {
+    const isRegistered = await this.deviceSvc.isDeviceRegistered(
+      deviceId,
+      registrationToken,
+    )
+    if (isRegistered) {
+      throw new UnauthorizedException('Device needs to register first.')
+    }
+
+    return await this.actuatorSvc.getStates(deviceId)
   }
 
   @Put('/:id')
   async pushSensorReadings(
     @Body() readings: SensorReadingDto[],
-    @Param('id') id: string,
+    @Param('id') deviceId: string,
+    @Headers(REGISTRATION_TOKEN_HEADER) registrationToken: string,
   ) {
-    await this.sensorSvc.pushReadings(id, readings)
+    const isRegistered = await this.deviceSvc.isDeviceRegistered(
+      deviceId,
+      registrationToken,
+    )
+    if (isRegistered) {
+      throw new UnauthorizedException('Device needs to register first.')
+    }
+
+    await this.sensorSvc.pushReadings(deviceId, readings)
   }
 
   @Put('/:id/register')

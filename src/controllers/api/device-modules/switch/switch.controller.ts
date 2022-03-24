@@ -1,4 +1,5 @@
-import { Controller, Get, Param, Put } from '@nestjs/common'
+import { Body, Controller, Get, Param, Put } from '@nestjs/common'
+import { SwitchScheduleDto } from './switch-schedule.dto'
 
 @Controller('api/devices/:deviceId/modules/switch')
 export class SwitchController {
@@ -8,9 +9,10 @@ export class SwitchController {
   }
 
   @Put(':switchId')
-  updateSwitchSettings(
+  updateSwitchSchedule(
     @Param('deviceId') deviceId: string,
     @Param('switchId') switchId: string,
+    @Body() schedule: SwitchScheduleDto,
   ) {
     throw new Error('noop')
   }

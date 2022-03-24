@@ -1,4 +1,4 @@
-export interface DeviceModule {
+interface DeviceModule {
   type: string
   id: string
 }

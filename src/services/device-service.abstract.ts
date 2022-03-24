@@ -30,4 +30,6 @@ export abstract class DeviceService {
    * @param token
    */
   abstract isDeviceRegistered(deviceId: string, token: string): Promise<boolean>
+
+  abstract bumpHeartbeat(deviceId: string): Promise<void>
 }

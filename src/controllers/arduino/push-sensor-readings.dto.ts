@@ -1,7 +1,8 @@
 interface DeviceModuleReadings {
   id: string
   type: string
-  readings: unknown
+  value: unknown
+  timestamp?: Date
 }
 
 export class PushSensorReadingsDto {

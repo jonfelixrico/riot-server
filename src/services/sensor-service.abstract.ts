@@ -1,6 +1,6 @@
 export interface SensorReading {
   id: string
-  reading: unknown
+  value: unknown
   timestamp?: Date
 }
 

@@ -1,4 +1,5 @@
-import { Controller, Get, Put } from '@nestjs/common'
+import { Body, Controller, Get, Param, Put } from '@nestjs/common'
+import { RegisterDeviceDto } from './register-device.dto'
 
 @Controller('arduino')
 export class ArduinoController {
@@ -12,8 +13,11 @@ export class ArduinoController {
     throw new Error('noop')
   }
 
-  @Put('/setup')
-  registerDevice() {
+  @Put('/:id/setup')
+  registerDevice(
+    @Body() deviceInfo: RegisterDeviceDto,
+    @Param('id') id: string,
+  ) {
     throw new Error('noop')
   }
 }

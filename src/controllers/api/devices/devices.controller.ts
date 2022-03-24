@@ -1,27 +1,17 @@
-import { Controller, Get, Param, Put } from '@nestjs/common'
+import { Controller, Get, Param } from '@nestjs/common'
+import { DeviceService } from 'src/services/device-service.abstract'
 
 @Controller('api/devices')
 export class DevicesController {
+  constructor(private deviceSvc: DeviceService) {}
+
   @Get()
-  listDevices() {
-    throw new Error('noop')
+  async listDevices() {
+    return await this.deviceSvc.getDevices()
   }
 
   @Get(':deviceId')
-  getDevice(@Param('deviceId') deviceId: string) {
-    throw new Error('noop')
-  }
-
-  @Put(':deviceId')
-  updateDeviceModules(@Param('deviceId') deviceId: string) {
-    throw new Error('noop')
-  }
-
-  @Put(':deviceId/modules/:moduleId')
-  updateDeviceModule(
-    @Param('deviceId') deviceId: string,
-    @Param('moduleId') moduleId: string,
-  ) {
-    throw new Error('noop')
+  async getDevice(@Param('deviceId') deviceId: string) {
+    return await this.deviceSvc.getDevice(deviceId)
   }
 }

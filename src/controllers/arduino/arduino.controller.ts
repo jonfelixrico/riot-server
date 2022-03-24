@@ -1,4 +1,19 @@
-import { Controller } from '@nestjs/common'
+import { Controller, Get, Put } from '@nestjs/common'
 
 @Controller('arduino')
-export class ArduinoController {}
+export class ArduinoController {
+  @Get()
+  getActuatorState() {
+    throw new Error('noop')
+  }
+
+  @Put()
+  pushSensorReadings() {
+    throw new Error('noop')
+  }
+
+  @Put('/setup')
+  registerDevice() {
+    throw new Error('noop')
+  }
+}

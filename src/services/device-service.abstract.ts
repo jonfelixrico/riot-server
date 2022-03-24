@@ -31,5 +31,9 @@ export abstract class DeviceService {
    */
   abstract isDeviceRegistered(deviceId: string, token: string): Promise<boolean>
 
+  /**
+   * Bumps the heartbeat of a device. Hearbeats indicate the last activity received from a device.
+   * @param deviceId The id of the device to bump the heartbeat of.
+   */
   abstract bumpHeartbeat(deviceId: string): Promise<void>
 }

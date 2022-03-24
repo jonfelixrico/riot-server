@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Param, Put } from '@nestjs/common'
+import { v4 as uuidv4 } from 'uuid'
 import { ActuatorService } from 'src/services/actuator-service.abstract'
 import { DeviceService } from 'src/services/device-service.abstract'
 import { SensorService } from 'src/services/sensor-service.abstract'
@@ -9,28 +10,34 @@ import { RegisterDeviceDto } from './register-device.dto'
 export class ArduinoController {
   constructor(
     private actuatorSvc: ActuatorService,
-    private sensorService: SensorService,
-    private deviceService: DeviceService,
+    private sensorSvc: SensorService,
+    private deviceSvc: DeviceService,
   ) {}
 
   @Get('/:id')
-  getActuatorState(@Param('id') id: string) {
-    throw new Error('noop')
+  async getActuatorState(@Param('id') id: string) {
+    return await this.actuatorSvc.getStates(id)
   }
 
   @Put('/:id')
-  pushSensorReadings(
-    @Body() readings: PushSensorReadingsDto,
+  async pushSensorReadings(
+    @Body() body: PushSensorReadingsDto,
     @Param('id') id: string,
   ) {
-    throw new Error('noop')
+    await this.sensorSvc.pushReadings(id, body.modules)
   }
 
   @Put('/:id/setup')
-  registerDevice(
+  async registerDevice(
     @Body() deviceInfo: RegisterDeviceDto,
     @Param('id') id: string,
   ) {
-    throw new Error('noop')
+    await this.deviceSvc.setupDevice(
+      {
+        ...deviceInfo,
+        id: id,
+      },
+      uuidv4(),
+    )
   }
 }

@@ -24,9 +24,9 @@ export class ArduinoController {
     private deviceSvc: DeviceService,
   ) {}
 
-  @Get('/:id')
+  @Get('/:deviceId')
   async getActuatorState(
-    @Param('id') deviceId: string,
+    @Param('deviceId') deviceId: string,
     @Headers(REGISTRATION_TOKEN_HEADER) registrationToken: string,
   ) {
     const isRegistered = await this.deviceSvc.isDeviceRegistered(
@@ -37,13 +37,14 @@ export class ArduinoController {
       throw new UnauthorizedException('Device needs to register first.')
     }
 
+    await this.deviceSvc.bumpHeartbeat(deviceId)
     return await this.actuatorSvc.getStates(deviceId)
   }
 
-  @Put('/:id')
+  @Put('/:deviceId')
   async pushSensorReadings(
     @Body() readings: SensorReadingDto[],
-    @Param('id') deviceId: string,
+    @Param('deviceId') deviceId: string,
     @Headers(REGISTRATION_TOKEN_HEADER) registrationToken: string,
   ) {
     const isRegistered = await this.deviceSvc.isDeviceRegistered(
@@ -54,20 +55,26 @@ export class ArduinoController {
       throw new UnauthorizedException('Device needs to register first.')
     }
 
-    await this.sensorSvc.pushReadings(deviceId, readings)
+    await Promise.all([
+      this.deviceSvc.bumpHeartbeat(deviceId),
+      this.sensorSvc.pushReadings(deviceId, readings),
+    ])
   }
 
-  @Put('/:id/register')
+  @Put('/:deviceId/register')
   async registerDevice(
     @Body() deviceInfo: RegisterDeviceDto,
-    @Param('id') id: string,
+    @Param('deviceId') deviceId: string,
   ) {
-    await this.deviceSvc.registerDevice(
-      {
-        ...deviceInfo,
-        id: id,
-      },
-      uuidv4(),
-    )
+    await Promise.all([
+      this.deviceSvc.registerDevice(
+        {
+          ...deviceInfo,
+          id: deviceId,
+        },
+        uuidv4(),
+      ),
+      this.deviceSvc.bumpHeartbeat(deviceId),
+    ])
   }
 }

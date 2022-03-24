@@ -4,8 +4,8 @@ import { RegisterDeviceDto } from './register-device.dto'
 
 @Controller('arduino')
 export class ArduinoController {
-  @Get()
-  getActuatorState() {
+  @Get('/:id')
+  getActuatorState(@Param('id') id: string) {
     throw new Error('noop')
   }
 

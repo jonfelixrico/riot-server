@@ -5,5 +5,5 @@ interface DeviceModule {
 
 export class RegisterDeviceDto {
   modules: DeviceModule[]
-  firmwareVersion?: number
+  firmwareVersion: string
 }

@@ -27,12 +27,12 @@ export class ArduinoController {
     await this.sensorSvc.pushReadings(id, readings)
   }
 
-  @Put('/:id/setup')
+  @Put('/:id/register')
   async registerDevice(
     @Body() deviceInfo: RegisterDeviceDto,
     @Param('id') id: string,
   ) {
-    await this.deviceSvc.setupDevice(
+    await this.deviceSvc.registerDevice(
       {
         ...deviceInfo,
         id: id,

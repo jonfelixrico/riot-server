@@ -9,7 +9,7 @@ export class SwitchController {
   }
 
   @Put(':switchId')
-  updateSwitchSchedule(
+  setSwitchSchedule(
     @Param('deviceId') deviceId: string,
     @Param('switchId') switchId: string,
     @Body() schedule: SwitchScheduleDto,

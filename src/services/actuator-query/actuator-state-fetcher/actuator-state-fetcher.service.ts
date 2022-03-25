@@ -17,6 +17,7 @@ import {
   StateQueryRequest,
   StateQueryResponse,
   StateQueryResponseAnswer,
+  StateQueryResponseError,
 } from '../actuator-query.types'
 
 type Query = Omit<StateQueryRequest, 'jobId'>
@@ -37,13 +38,15 @@ export class ActuatorStateFetcherService {
    *
    * @param query
    * @param timeout
+   * @param jobId This is only for testing purposes. Do not use this in production.
    * @returns The state of the actuator.
    */
   async queryState<T = unknown>(
     query: Query,
     timeout: number = DEFAULT_TIMEOUT,
+    jobId?: string,
   ): Promise<T> {
-    const jobId = v4()
+    jobId = jobId ?? v4()
 
     this.$request.next({
       ...query,
@@ -56,9 +59,9 @@ export class ActuatorStateFetcherService {
      * Cancels if ACK has been received. This is intended as a timeout feature.
      */
     const $timeout = timer(timeout).pipe(
+      take(1),
       // cancels if it receives an acknowledgement
       takeUntil(answerBus.pipe(filter((res) => res.jobId === jobId))),
-      take(1),
       mergeMap(() => throwError(() => new Error('ack timeout'))),
     )
 
@@ -76,7 +79,7 @@ export class ActuatorStateFetcherService {
      */
     const $error = answerBus.pipe(
       filter((res) => res.jobId === jobId && res.type === 'ERROR'),
-      mergeMap((err) => throwError(() => err)),
+      mergeMap(({ error }: StateQueryResponseError) => throwError(() => error)),
     )
 
     return firstValueFrom(race([$timeout, $answer, $error]))

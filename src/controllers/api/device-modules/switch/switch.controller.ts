@@ -4,8 +4,16 @@ import { SwitchScheduleDto } from './switch-schedule.dto'
 
 @Controller('api/devices/:deviceId/modules/switch')
 export class SwitchController {
-  @Get()
+  @Get(':switchId')
   getDetails(
+    @Param('deviceId') deviceId: string,
+    @Param('switchId') switchId: string,
+  ) {
+    throw new Error('noop')
+  }
+
+  @Get(':switchId/state')
+  getState(
     @Param('deviceId') deviceId: string,
     @Param('switchId') switchId: string,
   ) {

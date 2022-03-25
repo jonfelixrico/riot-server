@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Put } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Put } from '@nestjs/common'
 import { SwitchOverrideDto } from './switch-override.dto'
 import { SwitchScheduleDto } from './switch-schedule.dto'
 
@@ -23,6 +23,14 @@ export class SwitchController {
     @Param('deviceId') deviceId: string,
     @Param('switchId') switchId: string,
     @Body() override: SwitchOverrideDto,
+  ) {
+    throw new Error('noop')
+  }
+
+  @Delete(':switchId/override')
+  clearSwitchScheduleOverride(
+    @Param('deviceId') deviceId: string,
+    @Param('switchId') switchId: string,
   ) {
     throw new Error('noop')
   }

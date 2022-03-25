@@ -1,28 +1,28 @@
-export interface ActuatorQueryRequest {
+export interface StateQueryRequest {
   deviceId: string
   actuatorId: string
   type: string
   jobId: string
 }
 
-export interface ActuatorQueryResponseAck {
+export interface StateQueryResponseAck {
   jobId: string
   type: 'ACK'
 }
 
-export interface ActuatorQueryResponseAnswer<T = unknown> {
+export interface StateQueryResponseAnswer<T = unknown> {
   jobId: string
   state: T
   type: 'ANSWER'
 }
 
-export interface ActuatorQueryResponseError {
+export interface StateQueryResponseError {
   jobId: string
   type: 'ERROR'
   error: Error
 }
 
-export type ActuatorQueryResponse =
-  | ActuatorQueryResponseAck
-  | ActuatorQueryResponseAnswer
-  | ActuatorQueryResponseError
+export type StateQueryResponse =
+  | StateQueryResponseAck
+  | StateQueryResponseAnswer
+  | StateQueryResponseError

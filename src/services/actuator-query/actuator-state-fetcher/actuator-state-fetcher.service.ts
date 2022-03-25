@@ -14,20 +14,20 @@ import {
 import { v4 } from 'uuid'
 import { REQUEST_BUS, RESPONSE_BUS } from '../actuator-query-subjects.di-tokens'
 import {
-  ActuatorQueryRequest,
-  ActuatorQueryResponse,
-  ActuatorQueryResponseAnswer,
+  StateQueryRequest,
+  StateQueryResponse,
+  StateQueryResponseAnswer,
 } from '../actuator-query.types'
 
-type Query = Omit<ActuatorQueryRequest, 'jobId'>
+type Query = Omit<StateQueryRequest, 'jobId'>
 
 const DEFAULT_TIMEOUT = 5000
 
 @Injectable()
 export class ActuatorStateFetcherService {
   constructor(
-    @Inject(REQUEST_BUS) private $request: Subject<ActuatorQueryRequest>,
-    @Inject(RESPONSE_BUS) private $response: Subject<ActuatorQueryResponse>,
+    @Inject(REQUEST_BUS) private $request: Subject<StateQueryRequest>,
+    @Inject(RESPONSE_BUS) private $response: Subject<StateQueryResponse>,
   ) {}
 
   get $queries() {
@@ -71,7 +71,7 @@ export class ActuatorStateFetcherService {
      */
     const $answer = answerBus.pipe(
       filter((res) => res.jobId === jobId && res.type === 'ANSWER'),
-      map(({ state }: ActuatorQueryResponseAnswer<T>) => state),
+      map(({ state }: StateQueryResponseAnswer<T>) => state),
       take(1),
     )
 

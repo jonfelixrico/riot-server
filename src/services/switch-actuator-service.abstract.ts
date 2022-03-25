@@ -50,18 +50,32 @@ export interface WeeklySchedule {
   sat: ScheduleEntry[]
 }
 
-export interface SwitchOverride {
+export interface HourlySchedule {
+  /**
+   * The reference time for the minutes will follow the offset specified.
+   */
+  timezoneOffset: number
+  type: 'HOURLY'
+  schedule: {
+    minutes: number
+    state: SwitchState
+  }[]
+}
+
+export interface Override {
   state: SwitchState
   overrideUntil?: Date
 }
 
+type Schedule = DailySchedule | WeeklySchedule | HourlySchedule
+
 export interface SwitchConfig {
-  schedule: DailySchedule | WeeklySchedule
+  schedule: Schedule
 
   /**
    * If not null, then that means that the switch's schedule is being overridden.
    */
-  override?: SwitchOverride
+  override?: Override
 }
 
 export abstract class SwitchActuatorService {
@@ -73,13 +87,29 @@ export abstract class SwitchActuatorService {
   abstract getState(deviceId: string, moduleId: string): Promise<'on' | 'off'>
 
   /**
-   * Get the state of all switches in a device.
+   * Sets the on/off schedule of a switch.
+   *
    * @param deviceId
+   * @param moduleId
+   * @param schedule The updated schedule of the switch.
    */
-  abstract getState(deviceId: string): Promise<
-    {
-      id: string
-      state: SwitchState
-    }[]
-  >
+  abstract setSchedule(
+    deviceId: string,
+    moduleId: string,
+    schedule: Schedule,
+  ): Promise<void>
+
+  /**
+   * Updates or clears the override of a switch.
+   *
+   * @param deviceId
+   * @param moduleId
+   * @param override If not null, then this will be the new overrides of the switch. Else,
+   * it clears any overrides.
+   */
+  abstract setOverride(
+    deviceId: string,
+    moduleId: string,
+    override: Override | null,
+  ): Promise<void>
 }

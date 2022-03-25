@@ -5,7 +5,7 @@ import { SwitchScheduleDto } from './switch-schedule.dto'
 @Controller('api/devices/:deviceId/modules/switch')
 export class SwitchController {
   @Get()
-  getSwitch(
+  getDetails(
     @Param('deviceId') deviceId: string,
     @Param('switchId') switchId: string,
   ) {
@@ -13,7 +13,7 @@ export class SwitchController {
   }
 
   @Put(':switchId')
-  setSwitchSchedule(
+  setSchedule(
     @Param('deviceId') deviceId: string,
     @Param('switchId') switchId: string,
     @Body() schedule: SwitchScheduleDto,
@@ -22,7 +22,7 @@ export class SwitchController {
   }
 
   @Put(':switchId/override')
-  overrideSwitchSchedule(
+  setOverride(
     @Param('deviceId') deviceId: string,
     @Param('switchId') switchId: string,
     @Body() override: SwitchOverrideDto,
@@ -31,7 +31,7 @@ export class SwitchController {
   }
 
   @Delete(':switchId/override')
-  clearSwitchScheduleOverride(
+  clearOverride(
     @Param('deviceId') deviceId: string,
     @Param('switchId') switchId: string,
   ) {

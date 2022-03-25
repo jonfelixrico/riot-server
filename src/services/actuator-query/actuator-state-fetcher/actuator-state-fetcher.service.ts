@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import {
   filter,
   firstValueFrom,
@@ -12,44 +12,26 @@ import {
   timer,
 } from 'rxjs'
 import { v4 } from 'uuid'
+import { REQUEST_BUS, RESPONSE_BUS } from '../actuator-query-subjects.di-tokens'
+import {
+  ActuatorQueryRequest,
+  ActuatorQueryResponse,
+  ActuatorQueryResponseAnswer,
+} from '../actuator-query.types'
 
-interface QueryRequest {
-  deviceId: string
-  actuatorId: string
-  type: string
-  jobId: string
-}
-
-interface AckResponse {
-  jobId: string
-  type: 'ACK'
-}
-
-interface AnswerResponse<T = unknown> {
-  jobId: string
-  state: T
-  type: 'ANSWER'
-}
-
-interface ErrorResponse {
-  jobId: string
-  type: 'ERROR'
-  error: Error
-}
-
-type QueryResponse = AckResponse | AnswerResponse | ErrorResponse
-
-export type ActuatorStateQuery = Omit<QueryRequest, 'jobId'>
+type Query = Omit<ActuatorQueryRequest, 'jobId'>
 
 const DEFAULT_TIMEOUT = 5000
 
 @Injectable()
 export class ActuatorStateFetcherService {
-  private queryBus = new Subject<QueryRequest>()
-  private answerBus = new Subject<QueryResponse>()
+  constructor(
+    @Inject(REQUEST_BUS) private $request: Subject<ActuatorQueryRequest>,
+    @Inject(RESPONSE_BUS) private $response: Subject<ActuatorQueryResponse>,
+  ) {}
 
   get $queries() {
-    return this.queryBus.asObservable()
+    return this.$request.asObservable()
   }
 
   /**
@@ -62,17 +44,17 @@ export class ActuatorStateFetcherService {
    * @returns The state of the actuator.
    */
   async queryState<T = unknown>(
-    query: ActuatorStateQuery,
+    query: Query,
     timeout: number = DEFAULT_TIMEOUT,
   ): Promise<T> {
     const jobId = v4()
 
-    this.queryBus.next({
+    this.$request.next({
       ...query,
       jobId,
     })
 
-    const { answerBus } = this
+    const { $response: answerBus } = this
 
     /**
      * Cancels if ACK has been received. This is intended as a timeout feature.
@@ -89,7 +71,7 @@ export class ActuatorStateFetcherService {
      */
     const $answer = answerBus.pipe(
       filter((res) => res.jobId === jobId && res.type === 'ANSWER'),
-      map(({ state }: AnswerResponse<T>) => state),
+      map(({ state }: ActuatorQueryResponseAnswer<T>) => state),
       take(1),
     )
 
@@ -105,14 +87,14 @@ export class ActuatorStateFetcherService {
   }
 
   publishAck(jobId: string) {
-    this.answerBus.next({
+    this.$response.next({
       type: 'ACK',
       jobId,
     })
   }
 
   publishAnswer<T = unknown>(jobId: string, state: T) {
-    this.answerBus.next({
+    this.$response.next({
       jobId,
       type: 'ANSWER',
       state,
@@ -120,7 +102,7 @@ export class ActuatorStateFetcherService {
   }
 
   publishError<T extends Error = Error>(jobId: string, error: T) {
-    this.answerBus.next({
+    this.$response.next({
       jobId,
       type: 'ERROR',
       error,

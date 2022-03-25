@@ -44,7 +44,7 @@ export type ActuatorStateQuery = Omit<QueryRequest, 'jobId'>
 const DEFAULT_TIMEOUT = 5000
 
 @Injectable()
-export class UnifiedActuatorStateFetcherService {
+export class ActuatorStateFetcherService {
   private queryBus = new Subject<QueryRequest>()
   private answerBus = new Subject<QueryResponse>()
 

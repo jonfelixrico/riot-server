@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common'
 import {
   filter,
-  firstValueFrom,
   map,
   mergeMap,
   race,
@@ -23,6 +22,8 @@ import {
 type Query = Omit<StateQueryRequest, 'jobId'>
 
 const DEFAULT_TIMEOUT = 5000
+
+export class ActuatorStateFetcherTimeoutError extends Error {}
 
 @Injectable()
 export class ActuatorStateFetcherService {
@@ -62,7 +63,7 @@ export class ActuatorStateFetcherService {
       take(1),
       // cancels if it receives an acknowledgement
       takeUntil(answerBus.pipe(filter((res) => res.jobId === jobId))),
-      mergeMap(() => throwError(() => new Error('ack timeout'))),
+      mergeMap(() => throwError(() => new ActuatorStateFetcherTimeoutError())),
     )
 
     /**
@@ -70,8 +71,8 @@ export class ActuatorStateFetcherService {
      */
     const $answer = answerBus.pipe(
       filter((res) => res.jobId === jobId && res.type === 'ANSWER'),
-      map(({ state }: StateQueryResponseAnswer<T>) => state),
       take(1),
+      map(({ state }: StateQueryResponseAnswer<T>) => state),
     )
 
     /**
@@ -79,9 +80,15 @@ export class ActuatorStateFetcherService {
      */
     const $error = answerBus.pipe(
       filter((res) => res.jobId === jobId && res.type === 'ERROR'),
+      take(1),
       mergeMap(({ error }: StateQueryResponseError) => throwError(() => error)),
     )
 
-    return firstValueFrom(race([$timeout, $answer, $error]))
+    return new Promise((resolve, reject) => {
+      race($timeout, $answer, $error).subscribe({
+        error: reject,
+        next: resolve,
+      })
+    })
   }
 }

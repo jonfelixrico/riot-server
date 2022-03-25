@@ -30,10 +30,6 @@ export class ActuatorStateFetcherService {
     @Inject(RESPONSE_BUS) private $response: Subject<StateQueryResponse>,
   ) {}
 
-  get $queries() {
-    return this.$request.asObservable()
-  }
-
   /**
    * Query the state of an actuator.
    * @throws if there are no responses after `timeout` seconds.
@@ -84,28 +80,5 @@ export class ActuatorStateFetcherService {
     )
 
     return firstValueFrom(race([$timeout, $answer, $error]))
-  }
-
-  publishAck(jobId: string) {
-    this.$response.next({
-      type: 'ACK',
-      jobId,
-    })
-  }
-
-  publishAnswer<T = unknown>(jobId: string, state: T) {
-    this.$response.next({
-      jobId,
-      type: 'ANSWER',
-      state,
-    })
-  }
-
-  publishError<T extends Error = Error>(jobId: string, error: T) {
-    this.$response.next({
-      jobId,
-      type: 'ERROR',
-      error,
-    })
   }
 }

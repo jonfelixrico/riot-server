@@ -9,6 +9,12 @@ export interface DeviceToRegister {
   id: string
 }
 
+export interface Device {
+  id: string
+  modules: DeviceModule[]
+  lastHeartbeatDt: Date
+}
+
 export abstract class DeviceService {
   /**
    * Sets up a device by registering its information with the server.
@@ -30,4 +36,14 @@ export abstract class DeviceService {
    * @param token
    */
   abstract isDeviceRegistered(deviceId: string, token: string): Promise<boolean>
+
+  /**
+   * Bumps the heartbeat of a device. Hearbeats indicate the last activity received from a device.
+   * @param deviceId The id of the device to bump the heartbeat of.
+   */
+  abstract bumpHeartbeat(deviceId: string): Promise<void>
+
+  abstract getDevice(deviceId: string): Promise<Device>
+
+  abstract getDevices(): Promise<Device[]>
 }

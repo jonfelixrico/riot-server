@@ -1,14 +1,27 @@
-export interface ActuatorState {
+/**
+ * Represents the state of an actuator.
+ */
+export interface ActuatorState<T = unknown> {
   type: string
   id: string
-  state: unknown
+  state: T
 }
 
 export abstract class ActuatorService {
   /**
    * Fetches the states of the actuators in the device.
    * @param deviceId
-   * @returns An array containing the states of all actuators in the device.
+   * @returns
    */
   abstract getStates(deviceId: string): Promise<ActuatorState[]>
+
+  /**
+   * Fetches the state of an actuator.
+   * @param deviceId
+   * @param moduleId
+   */
+  abstract getState<T = unknown>(
+    deviceId: string,
+    moduleId: string,
+  ): Promise<ActuatorState<T>>
 }

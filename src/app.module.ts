@@ -8,7 +8,7 @@ import { ControllersModule } from './controllers/controllers.module'
 import { UnknownDevicesController } from './controllers/api/unknown-devices/unknown-devices.controller'
 
 @Module({
-  imports: [ActuatorQueryModule, MongooseModule, ControllersModule],
+  imports: [ActuatorQueryModule, MongooseModule],
   controllers: [
     ArduinoController,
     DevicesController,

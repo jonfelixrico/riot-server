@@ -16,8 +16,15 @@ import mongoose from 'mongoose'
     {
       provide: MONGOOSE_CONN,
       inject: [ConfigService],
-      useFactory: (config: ConfigService) =>
-        mongoose.connect(config.get<string>('MONGODB_URI')),
+      useFactory: (config: ConfigService) => {
+        const uri = config.get<string>('MONGODB_URI')
+
+        if (config.get<string>('NODE_ENV') !== 'production') {
+          console.log('MongoDB: using %s', uri)
+        }
+
+        return mongoose.connect(uri)
+      },
     },
     {
       provide: DEVICE_MODEL,

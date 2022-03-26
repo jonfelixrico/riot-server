@@ -4,6 +4,7 @@ import { MongooseModule } from './mongoose/mongoose.module'
 import { DeviceAdminControllersModule } from './controllers/device-admin-controllers/device-admin-controllers.module'
 import { ArduinoControllersModule } from './controllers/arduino-controllers/arduino-controllers.module'
 import { GenericDeviceModule } from './services/generic-device/generic-device.module'
+import { SpecializedDevicesModule } from './services/specialized-devices/specialized-devices.module'
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { GenericDeviceModule } from './services/generic-device/generic-device.mo
     DeviceAdminControllersModule,
     ArduinoControllersModule,
     GenericDeviceModule,
+    SpecializedDevicesModule,
   ],
 })
 export class AppModule {}

@@ -6,7 +6,7 @@ import {
   SWTICH_CONFIG_MODEL,
 } from './mongoose.di-tokens'
 import { deviceModelFactory } from './models/device.mongo-model'
-import { moduleConfigModelFactory } from './models/device-module.mongo-model'
+import { moduleConfigModelFactory } from './models/module-config.mongo-model'
 import { switchConfigModelFactory } from './models/switch-module.mongo-model'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import mongoose from 'mongoose'

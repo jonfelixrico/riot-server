@@ -1,6 +1,7 @@
 import { Controller, Get, Param, Post } from '@nestjs/common'
 
-@Controller('api/devices/unknown')
+// TODO remove me once ready to dev the unknown devices module
+// @Controller('api/devices/unknown')
 export class UnknownDevicesController {
   @Get()
   getUnknownDevices() {

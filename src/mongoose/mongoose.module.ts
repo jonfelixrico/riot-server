@@ -1,6 +1,42 @@
 import { Module } from '@nestjs/common'
+import {
+  DEVICE_MODEL,
+  MODULE_CONFIG_MODEL,
+  MONGOOSE_CONN,
+  SWTICH_CONFIG_MODEL,
+} from './mongoose.di-tokens'
+import { deviceModelFactory } from './models/device.mongo-model'
+import { moduleConfigModelFactory } from './models/module-config.mongo-model'
+import { switchConfigModelFactory } from './models/switch-config.mongo-model'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import mongoose from 'mongoose'
 
 @Module({
-  providers: [],
+  providers: [
+    {
+      provide: MONGOOSE_CONN,
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) =>
+        mongoose.connect(config.get<string>('MONGODB_URI')),
+    },
+    {
+      provide: DEVICE_MODEL,
+      inject: [MONGOOSE_CONN],
+      useFactory: deviceModelFactory,
+    },
+    {
+      provide: MODULE_CONFIG_MODEL,
+      inject: [MONGOOSE_CONN],
+      useFactory: moduleConfigModelFactory,
+    },
+    {
+      provide: SWTICH_CONFIG_MODEL,
+      inject: [MODULE_CONFIG_MODEL],
+      useFactory: switchConfigModelFactory,
+    },
+  ],
+
+  imports: [ConfigModule.forRoot()],
+  exports: [DEVICE_MODEL, SWTICH_CONFIG_MODEL],
 })
 export class MongooseModule {}

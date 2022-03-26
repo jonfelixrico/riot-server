@@ -8,14 +8,18 @@ import {
 } from 'src/services/specialized-devices/switch/switch-module-service.abstract'
 import { isBetween } from './luxon.utils'
 
-enum WeeklyScheduleLuxonMapping {
-  mon = 1,
-  tue = 2,
-  wed = 3,
-  thurs = 4,
-  fri = 5,
-  sat = 6,
-  sun = 7,
+type WeeklyScheduleKeys = keyof WeeklySchedule['weeklySchedule']
+
+const LUXON_MAPPING: {
+  [key in WeeklyScheduleKeys]: number
+} = {
+  mon: 1,
+  tues: 2,
+  wed: 3,
+  thurs: 4,
+  fri: 5,
+  sat: 6,
+  sun: 7,
 }
 
 /**
@@ -100,7 +104,7 @@ export function computeWeeklyState(
   defaultState: SwitchState = 'OFF',
   now?: DateTime,
 ) {
-  const luxonWeekdayToShortday = WeeklyScheduleLuxonMapping[now.weekday]
+  const luxonWeekdayToShortday = LUXON_MAPPING[now.weekday]
   const scheduleForWeekday = weeklySchedule[luxonWeekdayToShortday]
 
   return (

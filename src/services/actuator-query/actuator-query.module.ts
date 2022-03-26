@@ -5,6 +5,10 @@ import { ActuatorStateResponderService } from './actuator-state-responder/actuat
 import { StateQueryRequest, StateQueryResponse } from './actuator-query.types'
 import { Subject } from 'rxjs'
 
+/**
+ * This module holds services which act as the abstractation layer for fetching
+ * actuator state information.
+ */
 @Module({
   providers: [
     ActuatorStateFetcherService,

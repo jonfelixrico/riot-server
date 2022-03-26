@@ -13,6 +13,7 @@ import {
   computeWeeklyState,
 } from 'src/utils/switch-schedule.utils'
 import {
+  BaseSchedule,
   DailySchedule,
   HourlySchedule,
   Override,
@@ -20,6 +21,19 @@ import {
   SwitchState,
   WeeklySchedule,
 } from '../switch-module-service.abstract'
+
+function scheduleWiper(
+  object: BaseSchedule &
+    Pick<DailySchedule, 'dailySchedule'> &
+    Pick<WeeklySchedule, 'weeklySchedule'> &
+    Pick<HourlySchedule, 'hourlySchedule'>,
+): void {
+  object.dailySchedule = undefined
+  object.hourlySchedule = undefined
+  object.dailySchedule = undefined
+  object.type = undefined
+  object.utcOffset = undefined
+}
 
 @Injectable()
 export class SwitchImplService extends SwitchModuleService {
@@ -30,15 +44,10 @@ export class SwitchImplService extends SwitchModuleService {
     super()
   }
 
-  private async fetch(deviceId: string, moduleId: string, lean?: boolean) {
-    const device = await this.devices.findOne(
-      {
-        id: deviceId,
-      },
-      {
-        lean: true,
-      },
-    )
+  private async fetch(deviceId: string, moduleId: string) {
+    const device = await this.devices.findOne({
+      id: deviceId,
+    })
 
     if (device) {
       return null
@@ -52,13 +61,11 @@ export class SwitchImplService extends SwitchModuleService {
       return null
     }
 
-    return await this.switchConfigs.findById(dModule.config, {
-      lean,
-    })
+    return await this.switchConfigs.findById(dModule.config)
   }
 
   async getState(deviceId: string, moduleId: string): Promise<SwitchState> {
-    const record = await this.fetch(deviceId, moduleId, true)
+    const record = await this.fetch(deviceId, moduleId)
     if (!record) {
       return null
     }
@@ -75,12 +82,20 @@ export class SwitchImplService extends SwitchModuleService {
     }
   }
 
-  setSchedule(
+  async setSchedule(
     deviceId: string,
     moduleId: string,
     schedule: DailySchedule | WeeklySchedule | HourlySchedule,
   ): Promise<void> {
-    throw new Error('Method not implemented.')
+    const record = await this.fetch(deviceId, moduleId)
+    if (!record) {
+      throw new Error('record not found')
+    }
+
+    scheduleWiper(record)
+    Object.assign(record, schedule)
+
+    await record.save()
   }
 
   setOverride(

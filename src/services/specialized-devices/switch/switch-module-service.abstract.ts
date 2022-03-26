@@ -1,7 +1,7 @@
 export type SwitchState = 'ON' | 'OFF'
 
 export interface BaseSchedule {
-  timezoneOffset: number
+  utcOffset: string
   type: 'DAILY' | 'WEEKLY' | 'HOURLY'
 }
 
@@ -29,7 +29,7 @@ export interface DailySchedule extends BaseSchedule {
 /**
  * Schedule in a weekly cycle.
  */
-export interface WeeklySchedule {
+export interface WeeklySchedule extends BaseSchedule {
   type: 'WEEKLY'
   weeklySchedule: {
     sun: ScheduleEntry[]
@@ -42,7 +42,7 @@ export interface WeeklySchedule {
   }
 }
 
-export interface HourlySchedule {
+export interface HourlySchedule extends BaseSchedule {
   type: 'HOURLY'
   hourlySchedule: {
     minute: number

@@ -9,16 +9,16 @@ export interface BaseSchedule {
   type: 'DAILY' | 'WEEKLY' | 'HOURLY'
 }
 
-export interface ScheduleEntry {
-  /**
-   * Must follow the time section of an ISO8601 date.
-   */
-  start: string
+export interface ScheduleTime {
+  minute: number
+  hour: number
+  second: number
+}
 
-  /**
-   * Must follow the time section of an ISO8601 date.
-   */
-  end: string
+export interface ScheduleEntry {
+  start: ScheduleTime
+
+  end: ScheduleTime
   state: SwitchState
 }
 

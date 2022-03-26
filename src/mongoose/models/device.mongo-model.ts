@@ -3,14 +3,21 @@ import { Schema, Connection } from 'mongoose'
 export interface Device {
   id: string
   lastHeartbeatDt: Date
-  modules: []
+  modules: [
+    {
+      id: string
+    },
+  ]
 }
 
-export interface DeviceModule<T = unknown> {
+export interface DeviceModule {
   id: string
-  lastUpdateDt: Date
   type: string
-  config: T
+
+  /**
+   * ObjectId of the ModuleConfig object. We're using a ref here.
+   */
+  config: string
 }
 
 const deviceSchema = new Schema<Device>({
@@ -18,12 +25,31 @@ const deviceSchema = new Schema<Device>({
   lastHeartbeatDt: Date,
   modules: [
     {
-      ref: 'Module',
-      type: Schema.Types.ObjectId,
+      id: String,
+      type: String,
+
+      /*
+       * We don't want to make the ref the entire Module instead of just the config out of concerns regarding performance if we want
+       * to fetch the config of a module.
+       *
+       * If we go with a whole-module ref, we will have to:
+       * 1. Fetch the device record
+       * 2. Hydrate ALL modules <-- the concern
+       * 3. Get the appriate module
+       *
+       * With this approach that we have now, we will have to do:
+       * 1. Fetch the device record
+       * 2. Find the matching module id in the `modules` array
+       * 3. Hydrate the particular record for that single module
+       */
+      config: {
+        type: Schema.Types.ObjectId,
+        ref: 'ModuleConfig',
+      },
     },
   ],
 })
 
 export function deviceModelFactory(connection: Connection) {
-  return connection.model('DeviceModule', deviceSchema)
+  return connection.model('Device', deviceSchema)
 }

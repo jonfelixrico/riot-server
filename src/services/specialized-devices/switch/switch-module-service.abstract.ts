@@ -1,5 +1,10 @@
 export type SwitchState = 'ON' | 'OFF'
 
+export interface BaseSchedule {
+  timezoneOffset: number
+  type: 'DAILY' | 'WEEKLY' | 'HOURLY'
+}
+
 export interface ScheduleEntry {
   /**
    * Must follow the time section of an ISO8601 date.
@@ -16,27 +21,16 @@ export interface ScheduleEntry {
 /**
  * Schedule in a daily cycle.
  */
-export interface DailySchedule {
-  /**
-   * The `start` and `end` dates specified in the schedule will operate under this
-   * timezone.
-   */
-  timezoneOffset: number
-  dailySchedule: ScheduleEntry[]
+export interface DailySchedule extends BaseSchedule {
   type: 'DAILY'
+  dailySchedule: ScheduleEntry[]
 }
 
 /**
  * Schedule in a weekly cycle.
  */
 export interface WeeklySchedule {
-  /**
-   * The `start` and `end` dates specified in the schedules for all days
-   * will operate under this timezone.
-   */
-  timezoneOffset: number
   type: 'WEEKLY'
-
   weeklySchedule: {
     sun: ScheduleEntry[]
     mon: ScheduleEntry[]
@@ -49,10 +43,6 @@ export interface WeeklySchedule {
 }
 
 export interface HourlySchedule {
-  /**
-   * The reference time for the minutes will follow the offset specified.
-   */
-  timezoneOffset: number
   type: 'HOURLY'
   hourlySchedule: {
     minute: number

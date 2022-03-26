@@ -1,7 +1,7 @@
 import {
   Override,
   SwitchState,
-} from 'src/services/switch-module-service.abstract'
+} from 'src/services/specialized-devices/switch/switch-module-service.abstract'
 
 export class SwitchOverrideDto implements Override {
   state: SwitchState

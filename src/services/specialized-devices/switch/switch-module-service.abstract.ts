@@ -72,7 +72,7 @@ export abstract class SwitchModuleService {
    * @param deviceId
    * @param moduleId
    */
-  abstract getState(deviceId: string, moduleId: string): Promise<'on' | 'off'>
+  abstract getState(deviceId: string, moduleId: string): Promise<SwitchState>
 
   /**
    * Sets the on/off schedule of a switch.

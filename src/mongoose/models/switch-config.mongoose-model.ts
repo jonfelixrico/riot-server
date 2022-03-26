@@ -50,7 +50,16 @@ const switchConfigSchema = new Schema<SwitchConfig>({
 
   hourlySchedule: [
     {
-      minute: Number,
+      start: {
+        minute: Number,
+        second: Number,
+      },
+
+      end: {
+        minute: Number,
+        second: Number,
+      },
+
       state: {
         type: String,
         enum: ['OFF', 'ON'],

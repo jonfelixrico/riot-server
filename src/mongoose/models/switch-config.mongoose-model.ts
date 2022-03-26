@@ -10,11 +10,21 @@ export type SwitchConfig = BaseModuleConfig &
   (DailySchedule | WeeklySchedule | HourlySchedule)
 
 const scheduleNestedPath = {
-  start: String,
-  end: String,
+  start: {
+    hour: Number,
+    minute: Number,
+    second: Number,
+  },
+
+  end: {
+    hour: Number,
+    minute: Number,
+    second: Number,
+  },
+
   state: {
     type: String,
-    enum: ['on', 'off'],
+    enum: ['ON', 'OFF'],
   },
 }
 

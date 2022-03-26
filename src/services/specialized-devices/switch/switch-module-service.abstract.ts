@@ -1,9 +1,12 @@
 export type SwitchState = 'ON' | 'OFF'
 
-export type ScheduleUtcOffset<
-  hours extends string = string,
-  minutes extends string = string,
-> = `+${hours}:${minutes}` | `+${hours}` | `-${hours}:${minutes}` | `-${hours}`
+type SingleDigit = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+export type ScheduleUtcOffset =
+  | `+${SingleDigit}${SingleDigit}:${SingleDigit}${SingleDigit}`
+  | `+${SingleDigit}`
+  | `-${SingleDigit}${SingleDigit}:${SingleDigit}${SingleDigit}`
+  | `-${SingleDigit}`
 
 export interface BaseSchedule {
   utcOffset: ScheduleUtcOffset

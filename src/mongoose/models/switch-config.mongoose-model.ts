@@ -49,6 +49,13 @@ const switchConfigSchema = new Schema<SwitchConfig>({
   ],
 })
 
-export function switchConfigModelFactory(model: Model<BaseModuleConfig>) {
-  return model.discriminator('SwitchConfig', switchConfigSchema)
+/**
+ * @param baseConfigModel We'll be attaching the switch config model as a
+ * discriminant of this.
+ * @returns The model for the switch config.
+ */
+export function switchConfigModelFactory(
+  baseConfigModel: Model<BaseModuleConfig>,
+) {
+  return baseConfigModel.discriminator('SwitchConfig', switchConfigSchema)
 }

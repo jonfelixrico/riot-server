@@ -15,7 +15,8 @@ export interface DeviceModule {
   type: string
 
   /**
-   * ObjectId of the ModuleConfig object. We're using a ref here.
+   * ObjectId of the ModuleConfig object. We're using a ref here since
+   * we're leveraging discriminators.
    */
   config: string
 }
@@ -50,6 +51,10 @@ const deviceSchema = new Schema<Device>({
   ],
 })
 
-export function deviceModelFactory(connection: Connection) {
-  return connection.model('Device', deviceSchema)
+/**
+ * @param mongooseConnection
+ * @returns The model that describes a device and its module.
+ */
+export function deviceModelFactory(mongooseConnection: Connection) {
+  return mongooseConnection.model('Device', deviceSchema)
 }

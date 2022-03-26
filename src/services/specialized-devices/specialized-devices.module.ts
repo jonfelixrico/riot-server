@@ -4,7 +4,7 @@ import { SwitchImplService } from './switch/switch-impl/switch-impl.service'
 import { SwitchModuleService } from './switch/switch-module-service.abstract'
 
 @Module({
-  imports: [ActuatorQueryModule],
+  imports: [ActuatorQueryModule, MongooseModule],
 
   providers: [
     SwitchImplService,

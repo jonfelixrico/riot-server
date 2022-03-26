@@ -3,15 +3,32 @@ import { computeHourlyState } from './switch-schedule.util'
 
 describe('computeHourlyState', () => {
   it('returns the default state if nothing matches', () => {
-    const state = computeHourlyState(
-      {
-        utcOffset: '+0800',
-        hourlySchedule: [],
-      },
-      'ON',
-    )
+    expect(
+      computeHourlyState(
+        {
+          utcOffset: '+0800',
+          hourlySchedule: [],
+        },
+        'ON',
+      ),
+    ).toEqual('ON')
 
-    expect(state).toEqual('ON')
+    expect(
+      computeHourlyState(
+        {
+          utcOffset: '+0800',
+          hourlySchedule: [
+            {
+              start: 0,
+              end: 15,
+              state: 'OFF',
+            },
+          ],
+        },
+        'ON',
+        DateTime.fromISO('2022-01-01T00:30:00+0800'),
+      ),
+    ).toEqual('ON')
   })
 
   it('returns the correct state if a match was found', () => {

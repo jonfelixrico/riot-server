@@ -1,4 +1,4 @@
-export type SwitchState = 'on' | 'off'
+export type SwitchState = 'ON' | 'OFF'
 
 export interface ScheduleEntry {
   /**

@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { computeHourlyState } from './switch-schedule.util'
+import { computeDailyState, computeHourlyState } from './switch-schedule.util'
 
 describe('computeHourlyState', () => {
   it('returns the default state if nothing matches', () => {
@@ -58,5 +58,62 @@ describe('computeHourlyState', () => {
     )
 
     expect(state).toEqual('ON')
+  })
+})
+
+describe('computeDailyState', () => {
+  it('returns the default state if nothing matches', () => {
+    expect(
+      computeDailyState(
+        {
+          utcOffset: '+0800',
+          dailySchedule: [],
+        },
+        'OFF',
+      ),
+    ).toEqual('OFF')
+
+    expect(
+      computeDailyState(
+        {
+          utcOffset: '+0800',
+          dailySchedule: [
+            {
+              start: '05:00:00',
+              end: '10:00:00',
+              state: 'ON',
+            },
+          ],
+        },
+        'OFF',
+        DateTime.fromISO('2022-01-01T12:00:00+0800'),
+      ),
+    ).toEqual('OFF')
+  })
+
+  it('returns the correct state if a match was found', () => {
+    const helper = (date: DateTime) =>
+      computeDailyState(
+        {
+          utcOffset: '+0800',
+          dailySchedule: [
+            {
+              start: '00:00:00',
+              end: '12:00:00',
+              state: 'OFF',
+            },
+            {
+              start: '12:00:01',
+              end: '23:59:59',
+              state: 'ON',
+            },
+          ],
+        },
+        'OFF',
+        date,
+      )
+
+    expect(helper(DateTime.fromISO('2022-01-01T13:00:01+0800'))).toEqual('ON')
+    expect(helper(DateTime.fromISO('2022-01-01T09:56:16+0800'))).toEqual('OFF')
   })
 })

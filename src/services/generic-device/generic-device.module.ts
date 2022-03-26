@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common'
+import { ActuatorQueryModule } from '../actuator-query/actuator-query.module'
 
-@Module({})
+@Module({
+  imports: [ActuatorQueryModule],
+})
 export class GenericDeviceModule {}

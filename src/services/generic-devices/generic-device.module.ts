@@ -4,4 +4,4 @@ import { ActuatorQueryModule } from '../actuator-query/actuator-query.module'
 @Module({
   imports: [ActuatorQueryModule],
 })
-export class GenericDeviceModule {}
+export class GenericDevicesModule {}

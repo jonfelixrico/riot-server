@@ -3,7 +3,7 @@ import { ActuatorQueryModule } from './services/actuator-query/actuator-query.mo
 import { MongooseModule } from './mongoose/mongoose.module'
 import { DeviceAdminControllersModule } from './controllers/device-admin-controllers/device-admin-controllers.module'
 import { ArduinoControllersModule } from './controllers/arduino-controllers/arduino-controllers.module'
-import { GenericDeviceModule } from './services/generic-device/generic-device.module'
+import { GenericDevicesModule } from './services/generic-devices/generic-device.module'
 import { SpecializedDevicesModule } from './services/specialized-devices/specialized-devices.module'
 
 @Module({
@@ -12,7 +12,7 @@ import { SpecializedDevicesModule } from './services/specialized-devices/special
     MongooseModule,
     DeviceAdminControllersModule,
     ArduinoControllersModule,
-    GenericDeviceModule,
+    GenericDevicesModule,
     SpecializedDevicesModule,
   ],
 })

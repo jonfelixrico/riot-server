@@ -19,7 +19,7 @@ const scheduleNestedPath = {
 }
 
 const switchConfigSchema = new Schema<SwitchConfig>({
-  timezoneOffset: Number,
+  utcOffset: Number,
 
   type: {
     type: String,

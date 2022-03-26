@@ -111,16 +111,26 @@ export abstract class SwitchModuleService {
   ): Promise<void>
 
   /**
-   * Updates or clears the override of a switch.
+   * Clears the override.
+   * @param deviceId
+   * @param moduleId
+   */
+  abstract setOverride(deviceId: string, moduleId: string): Promise<void>
+  abstract setOverride(
+    deviceId: string,
+    moduleId: string,
+    override: null,
+  ): Promise<void>
+  /**
+   * Updates updates the override of the switch.
    *
    * @param deviceId
    * @param moduleId
-   * @param override If not null, then this will be the new overrides of the switch. Else,
-   * it clears any overrides.
+   * @param override The updated override.
    */
   abstract setOverride(
     deviceId: string,
     moduleId: string,
-    override: Override | null,
+    override: Override,
   ): Promise<void>
 }

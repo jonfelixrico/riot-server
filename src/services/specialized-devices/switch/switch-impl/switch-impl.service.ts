@@ -94,15 +94,28 @@ export class SwitchImplService extends SwitchModuleService {
 
     scheduleWiper(record)
     Object.assign(record, schedule)
+    record.lastUpdateDt = new Date()
 
     await record.save()
   }
 
-  setOverride(
+  async setOverride(
     deviceId: string,
     moduleId: string,
-    override: Override,
+    override?: Override,
   ): Promise<void> {
-    throw new Error('Method not implemented.')
+    const record = await this.fetch(deviceId, moduleId)
+    if (!record) {
+      throw new Error('record not found')
+    }
+
+    if (!override) {
+      record.override = undefined
+    } else {
+      record.override = override
+    }
+
+    record.lastUpdateDt = new Date()
+    await record.save()
   }
 }

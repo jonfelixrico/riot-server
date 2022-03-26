@@ -3,11 +3,7 @@ import { Schema, Connection } from 'mongoose'
 export interface Device {
   id: string
   lastHeartbeatDt: Date
-  modules: [
-    {
-      id: string
-    },
-  ]
+  modules: DeviceModule[]
 }
 
 export interface DeviceModule {

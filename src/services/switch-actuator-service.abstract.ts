@@ -37,17 +37,15 @@ export interface WeeklySchedule {
   timezoneOffset: number
   type: 'WEEKLY'
 
-  /**
-   * Schedule for each day of the week.
-   * Starts with Sunday and ends with Saturday.
-   */
-  sun: ScheduleEntry[]
-  mon: ScheduleEntry[]
-  tues: ScheduleEntry[]
-  wed: ScheduleEntry[]
-  thurs: ScheduleEntry[]
-  fri: ScheduleEntry[]
-  sat: ScheduleEntry[]
+  weeklySchedule: {
+    sun: ScheduleEntry[]
+    mon: ScheduleEntry[]
+    tues: ScheduleEntry[]
+    wed: ScheduleEntry[]
+    thurs: ScheduleEntry[]
+    fri: ScheduleEntry[]
+    sat: ScheduleEntry[]
+  }
 }
 
 export interface HourlySchedule {

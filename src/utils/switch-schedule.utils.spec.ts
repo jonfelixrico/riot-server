@@ -1,5 +1,10 @@
 import { DateTime } from 'luxon'
-import { computeDailyState, computeHourlyState } from './switch-schedule.util'
+import { WeeklySchedule } from 'src/services/specialized-devices/switch/switch-module-service.abstract'
+import {
+  computeDailyState,
+  computeHourlyState,
+  computeWeeklyState,
+} from './switch-schedule.util'
 
 describe('computeHourlyState', () => {
   it('returns the default state if nothing matches', () => {
@@ -113,7 +118,47 @@ describe('computeDailyState', () => {
         date,
       )
 
-    expect(helper(DateTime.fromISO('2022-01-01T13:00:01+0800'))).toEqual('ON')
+    expect(helper(DateTime.fromISO('2022-01-01T12:00:01+0800'))).toEqual('ON')
     expect(helper(DateTime.fromISO('2022-01-01T09:56:16+0800'))).toEqual('OFF')
+  })
+})
+
+describe('computeWeeklyState', () => {
+  const weeklySchedule: Omit<WeeklySchedule, 'type'> = {
+    utcOffset: '+0800',
+    weeklySchedule: {
+      mon: [],
+      tues: [],
+      wed: [
+        {
+          start: '00:00:00',
+          end: '12:00:00',
+          state: 'OFF',
+        },
+        {
+          start: '12:00:01',
+          end: '23:59:59',
+          state: 'ON',
+        },
+      ],
+      thurs: [],
+      fri: [],
+      sat: [],
+      sun: [],
+    },
+  }
+
+  const helper = (date: DateTime) =>
+    computeWeeklyState(weeklySchedule, 'OFF', date)
+
+  it('should return the default state if no matching schedule was found', () => {
+    // a monday
+    expect(helper(DateTime.fromISO('2022-01-03T00:00:25+0800'))).toEqual('OFF')
+  })
+
+  it('should return the correct state if a matching schedule was found', () => {
+    // wednesday
+    expect(helper(DateTime.fromISO('2022-01-05T13:00:01+0800'))).toEqual('ON')
+    expect(helper(DateTime.fromISO('2022-01-05T09:56:16+0800'))).toEqual('OFF')
   })
 })

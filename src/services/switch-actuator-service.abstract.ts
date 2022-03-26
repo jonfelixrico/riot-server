@@ -55,7 +55,7 @@ export interface HourlySchedule {
   timezoneOffset: number
   type: 'HOURLY'
   hourlySchedule: {
-    minutes: number
+    minute: number
     state: SwitchState
   }[]
 }

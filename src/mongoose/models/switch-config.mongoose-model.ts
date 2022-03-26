@@ -4,8 +4,7 @@ import {
   WeeklySchedule,
   HourlySchedule,
 } from 'src/services/specialized-devices/switch/switch-module-service.abstract'
-import { DeviceModule } from './device.mongo-model'
-import { BaseModuleConfig } from './module-config.mongo-model'
+import type { BaseModuleConfig } from './module-config.mongoose-model'
 
 export type SwitchConfig = BaseModuleConfig &
   (DailySchedule | WeeklySchedule | HourlySchedule)
@@ -50,6 +49,6 @@ const switchConfigSchema = new Schema<SwitchConfig>({
   ],
 })
 
-export function switchConfigModelFactory(model: Model<DeviceModule>) {
+export function switchConfigModelFactory(model: Model<BaseModuleConfig>) {
   return model.discriminator('SwitchConfig', switchConfigSchema)
 }

@@ -4,9 +4,10 @@ import { UnknownDevicesController } from './controllers/api/unknown-devices/unkn
 import { DevicesController } from './controllers/api/devices/devices.controller'
 import { SwitchController } from './controllers/api/device-modules/switch/switch.controller'
 import { ActuatorQueryModule } from './services/actuator-query/actuator-query.module'
+import { MongooseModule } from './mongoose/mongoose.module'
 
 @Module({
-  imports: [ActuatorQueryModule],
+  imports: [ActuatorQueryModule, MongooseModule],
   controllers: [
     ArduinoController,
     UnknownDevicesController,

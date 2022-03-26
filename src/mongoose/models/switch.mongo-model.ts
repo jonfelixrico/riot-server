@@ -1,4 +1,5 @@
-import mongoose from 'mongoose'
+import { Schema, Model } from 'mongoose'
+import { DeviceModule } from 'src/services/device-service.abstract'
 import {
   DailySchedule,
   HourlySchedule,
@@ -13,7 +14,7 @@ interface SwitchInterface
   type: 'WEEKLY' | 'HOURLY' | 'DAILY'
 }
 
-const ScheduleEntrySchema = new mongoose.Schema<ScheduleEntry>({
+const scheduleEntrySchema = new Schema<ScheduleEntry>({
   start: String,
   end: String,
   state: {
@@ -22,23 +23,23 @@ const ScheduleEntrySchema = new mongoose.Schema<ScheduleEntry>({
   },
 })
 
-export const SwitchSchema = new mongoose.Schema<SwitchInterface>({
+const switchSchema = new Schema<SwitchInterface>({
   timezoneOffset: Number,
   type: {
     type: String,
     enum: ['DAILY', 'WEEKLY', 'HOURLY'],
   },
 
-  dailySchedule: [ScheduleEntrySchema],
+  dailySchedule: [scheduleEntrySchema],
 
   weeklySchedule: {
-    sun: [ScheduleEntrySchema],
-    mon: [ScheduleEntrySchema],
-    tue: [ScheduleEntrySchema],
-    wed: [ScheduleEntrySchema],
-    thurs: [ScheduleEntrySchema],
-    fri: [ScheduleEntrySchema],
-    sat: [ScheduleEntrySchema],
+    sun: [scheduleEntrySchema],
+    mon: [scheduleEntrySchema],
+    tue: [scheduleEntrySchema],
+    wed: [scheduleEntrySchema],
+    thurs: [scheduleEntrySchema],
+    fri: [scheduleEntrySchema],
+    sat: [scheduleEntrySchema],
   },
 
   hourlySchedule: [
@@ -51,3 +52,7 @@ export const SwitchSchema = new mongoose.Schema<SwitchInterface>({
     },
   ],
 })
+
+export default function (model: Model<DeviceModule>) {
+  return model.discriminator('SwitchModule', switchSchema)
+}

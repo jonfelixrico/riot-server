@@ -52,12 +52,18 @@ export interface HourlySchedule extends BaseSchedule {
     /**
      * In minutes of the hour.
      */
-    start: number
+    start: {
+      minute: number
+      second: number
+    }
 
     /**
      * In minutes of the hour.
      */
-    end: number
+    end: {
+      minute: number
+      second: number
+    }
 
     state: SwitchState
   }[]

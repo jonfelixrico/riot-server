@@ -1,9 +1,10 @@
 import { Schema, Model } from 'mongoose'
-import {
+import type {
   DailySchedule,
   WeeklySchedule,
   HourlySchedule,
   BaseSchedule,
+  Override,
 } from 'src/services/specialized-devices/switch/switch-module-service.abstract'
 import type { BaseModuleConfig } from './module-config.mongoose-model'
 
@@ -12,7 +13,9 @@ export interface SwitchConfig
     Omit<DailySchedule, 'type'>,
     Omit<WeeklySchedule, 'type'>,
     Omit<HourlySchedule, 'type'>,
-    BaseSchedule {}
+    BaseSchedule {
+  override?: Override
+}
 
 const scheduleNestedPath = {
   start: {
@@ -32,6 +35,14 @@ const scheduleNestedPath = {
     enum: ['ON', 'OFF'],
   },
 }
+
+const overrideSchema = new Schema<Override>({
+  overrideUntil: Date,
+  state: {
+    type: String,
+    enum: ['ON', 'OFF'],
+  },
+})
 
 const switchConfigSchema = new Schema<SwitchConfig>({
   utcOffset: Number,
@@ -71,6 +82,8 @@ const switchConfigSchema = new Schema<SwitchConfig>({
       },
     },
   ],
+
+  override: overrideSchema,
 })
 
 /**

@@ -8,11 +8,11 @@ import {
   Headers,
 } from '@nestjs/common'
 import { v4 as uuidv4 } from 'uuid'
-import { ActuatorService } from 'src/services/actuator-service.abstract'
-import { DeviceService } from 'src/services/device-service.abstract'
-import { SensorService } from 'src/services/sensor-service.abstract'
+import { SensorService } from 'src/services/generic-device/sensor-service.abstract'
 import { SensorReadingDto } from './sensor-reading.dto'
 import { RegisterDeviceDto } from './register-device.dto'
+import { DeviceService } from 'src/services/generic-device/device-service.abstract'
+import { ActuatorService } from 'src/services/generic-device/actuator-service.abstract'
 
 const REGISTRATION_TOKEN_HEADER = 'registration-token'
 

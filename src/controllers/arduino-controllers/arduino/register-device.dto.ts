@@ -1,7 +1,7 @@
 import {
   DeviceModule,
   DeviceToRegister,
-} from 'src/services/device-service.abstract'
+} from 'src/services/generic-device/device-service.abstract'
 
 export class RegisterDeviceDto implements DeviceToRegister {
   modules: DeviceModule[]

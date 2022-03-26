@@ -3,6 +3,7 @@ import {
   DailySchedule,
   HourlySchedule,
   ScheduleEntry,
+  ScheduleUtcOffset,
   SwitchState,
   WeeklySchedule,
 } from 'src/services/specialized-devices/switch/switch-module-service.abstract'
@@ -26,12 +27,14 @@ const LUXON_MAPPING: {
  * @param utcOffset ISO8601 compliant UTC offset, should be in luxon techie format.
  * @returns
  */
-function createDtFromTime(timeString: string, utcOffset: string) {
+function createDtFromTime(timeString: string, utcOffset: ScheduleUtcOffset) {
   /**
    * 2022-01-01 is just an arbitrary dummy date.
    * It shouldn't matter much since we only pay attention to the time part in these utils.
    */
-  return DateTime.fromISO(`2022-01-01T${timeString}${utcOffset}`)
+  return DateTime.fromISO(`2022-01-01T${timeString}`).setZone(utcOffset, {
+    keepLocalTime: true,
+  })
 }
 
 /**
@@ -45,12 +48,14 @@ function createDtFromTime(timeString: string, utcOffset: string) {
  */
 function computeStateFrom24HSchedule(
   entries: ScheduleEntry[],
-  utcOffset: string,
+  utcOffset: ScheduleUtcOffset,
   reference: DateTime,
 ): SwitchState | null {
   for (const { start, end, state } of entries) {
     const startDt = createDtFromTime(start, utcOffset)
     const endDt = createDtFromTime(end, utcOffset)
+
+    console.debug(reference.toISO(), startDt.toISO(), start, endDt.toISO(), end)
 
     if (isBetween(reference, startDt, endDt)) {
       return state
@@ -62,20 +67,15 @@ function computeStateFrom24HSchedule(
 
 export function computeDailyState(
   { utcOffset, dailySchedule }: Omit<DailySchedule, 'type'>,
-  defaultState: SwitchState = 'OFF',
   reference?: DateTime,
-) {
+): SwitchState | null {
   reference = reference ?? DateTime.now()
 
-  return (
-    computeStateFrom24HSchedule(dailySchedule, utcOffset, reference) ??
-    defaultState
-  )
+  return computeStateFrom24HSchedule(dailySchedule, utcOffset, reference)
 }
 
 export function computeHourlyState(
   { utcOffset, hourlySchedule }: Omit<HourlySchedule, 'type'>,
-  defaultState: SwitchState = 'OFF',
   reference?: DateTime,
 ) {
   reference = reference ?? DateTime.now()
@@ -94,19 +94,17 @@ export function computeHourlyState(
     }
   }
 
-  return defaultState
+  return null
 }
 
 export function computeWeeklyState(
   { weeklySchedule, utcOffset }: Omit<WeeklySchedule, 'type'>,
-  defaultState: SwitchState = 'OFF',
-  now?: DateTime,
-) {
-  const luxonWeekdayToShortday = LUXON_MAPPING[now.weekday]
+  reference?: DateTime,
+): SwitchState | null {
+  reference = reference?.setZone(utcOffset) ?? DateTime.now().setZone(utcOffset)
+  const luxonWeekdayToShortday = LUXON_MAPPING[reference.weekday]
   const scheduleForWeekday = weeklySchedule[luxonWeekdayToShortday]
+  console.debug(scheduleForWeekday, luxonWeekdayToShortday)
 
-  return (
-    computeStateFrom24HSchedule(scheduleForWeekday, utcOffset, now) ??
-    defaultState
-  )
+  return computeStateFrom24HSchedule(scheduleForWeekday, utcOffset, reference)
 }

@@ -7,21 +7,18 @@ import {
 } from './switch-schedule.util'
 
 describe('computeHourlyState', () => {
-  it('returns the default state if nothing matches', () => {
+  it('returns null nothing matches', () => {
     expect(
-      computeHourlyState(
-        {
-          utcOffset: '+0800',
-          hourlySchedule: [],
-        },
-        'ON',
-      ),
-    ).toEqual('ON')
+      computeHourlyState({
+        utcOffset: 'UTC+8',
+        hourlySchedule: [],
+      }),
+    ).toEqual(null)
 
     expect(
       computeHourlyState(
         {
-          utcOffset: '+0800',
+          utcOffset: 'UTC+8',
           hourlySchedule: [
             {
               start: 0,
@@ -30,16 +27,15 @@ describe('computeHourlyState', () => {
             },
           ],
         },
-        'ON',
         DateTime.fromISO('2022-01-01T00:30:00+0800'),
       ),
-    ).toEqual('ON')
+    ).toEqual(null)
   })
 
   it('returns the correct state if a match was found', () => {
     const state = computeHourlyState(
       {
-        utcOffset: '+0800',
+        utcOffset: 'UTC+8',
         hourlySchedule: [
           {
             start: 0,
@@ -58,7 +54,6 @@ describe('computeHourlyState', () => {
           },
         ],
       },
-      'OFF',
       DateTime.fromISO('2022-01-01T12:25:36.000+0800'),
     )
 
@@ -69,19 +64,16 @@ describe('computeHourlyState', () => {
 describe('computeDailyState', () => {
   it('returns the default state if nothing matches', () => {
     expect(
-      computeDailyState(
-        {
-          utcOffset: '+0800',
-          dailySchedule: [],
-        },
-        'OFF',
-      ),
-    ).toEqual('OFF')
+      computeDailyState({
+        utcOffset: 'UTC+8',
+        dailySchedule: [],
+      }),
+    ).toEqual(null)
 
     expect(
       computeDailyState(
         {
-          utcOffset: '+0800',
+          utcOffset: 'UTC+8',
           dailySchedule: [
             {
               start: '05:00:00',
@@ -90,17 +82,16 @@ describe('computeDailyState', () => {
             },
           ],
         },
-        'OFF',
         DateTime.fromISO('2022-01-01T12:00:00+0800'),
       ),
-    ).toEqual('OFF')
+    ).toEqual(null)
   })
 
   it('returns the correct state if a match was found', () => {
     const helper = (date: DateTime) =>
       computeDailyState(
         {
-          utcOffset: '+0800',
+          utcOffset: 'UTC+8',
           dailySchedule: [
             {
               start: '00:00:00',
@@ -114,7 +105,6 @@ describe('computeDailyState', () => {
             },
           ],
         },
-        'OFF',
         date,
       )
 
@@ -125,7 +115,7 @@ describe('computeDailyState', () => {
 
 describe('computeWeeklyState', () => {
   const weeklySchedule: Omit<WeeklySchedule, 'type'> = {
-    utcOffset: '+0800',
+    utcOffset: 'UTC+8',
     weeklySchedule: {
       mon: [],
       tues: [],
@@ -148,12 +138,11 @@ describe('computeWeeklyState', () => {
     },
   }
 
-  const helper = (date: DateTime) =>
-    computeWeeklyState(weeklySchedule, 'OFF', date)
+  const helper = (date: DateTime) => computeWeeklyState(weeklySchedule, date)
 
   it('should return the default state if no matching schedule was found', () => {
     // a monday
-    expect(helper(DateTime.fromISO('2022-01-03T00:00:25+0800'))).toEqual('OFF')
+    expect(helper(DateTime.fromISO('2022-01-03T00:00:25+0800'))).toEqual(null)
   })
 
   it('should return the correct state if a matching schedule was found', () => {

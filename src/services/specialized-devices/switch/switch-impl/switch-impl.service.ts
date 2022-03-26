@@ -8,6 +8,12 @@ import {
   SWTICH_CONFIG_MODEL,
 } from 'src/mongoose/mongoose.di-tokens'
 import {
+  computeDailyState,
+  computeHourlyState,
+  computeWeeklyState,
+} from 'src/utils/switch-schedule.utils'
+import {
+  BaseSchedule,
   DailySchedule,
   HourlySchedule,
   Override,
@@ -15,6 +21,19 @@ import {
   SwitchState,
   WeeklySchedule,
 } from '../switch-module-service.abstract'
+
+function scheduleWiper(
+  object: BaseSchedule &
+    Pick<DailySchedule, 'dailySchedule'> &
+    Pick<WeeklySchedule, 'weeklySchedule'> &
+    Pick<HourlySchedule, 'hourlySchedule'>,
+): void {
+  object.dailySchedule = undefined
+  object.hourlySchedule = undefined
+  object.dailySchedule = undefined
+  object.type = undefined
+  object.utcOffset = undefined
+}
 
 @Injectable()
 export class SwitchImplService extends SwitchModuleService {
@@ -46,18 +65,37 @@ export class SwitchImplService extends SwitchModuleService {
   }
 
   async getState(deviceId: string, moduleId: string): Promise<SwitchState> {
-    const record = this.fetch(deviceId, moduleId)
+    const record = await this.fetch(deviceId, moduleId)
     if (!record) {
       return null
     }
+
+    switch (record.type) {
+      case 'DAILY':
+        return computeDailyState(record)
+      case 'HOURLY':
+        return computeHourlyState(record)
+      case 'WEEKLY':
+        return computeWeeklyState(record)
+      default:
+        throw new Error('unknown record type')
+    }
   }
 
-  setSchedule(
+  async setSchedule(
     deviceId: string,
     moduleId: string,
     schedule: DailySchedule | WeeklySchedule | HourlySchedule,
   ): Promise<void> {
-    throw new Error('Method not implemented.')
+    const record = await this.fetch(deviceId, moduleId)
+    if (!record) {
+      throw new Error('record not found')
+    }
+
+    scheduleWiper(record)
+    Object.assign(record, schedule)
+
+    await record.save()
   }
 
   setOverride(

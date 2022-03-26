@@ -57,7 +57,7 @@ describe('ActuatorStateFetcherService', () => {
   })
 
   it('should return state value', async () => {
-    service
+    void service
       .queryState<string>(
         {
           actuatorId: 'dummy',

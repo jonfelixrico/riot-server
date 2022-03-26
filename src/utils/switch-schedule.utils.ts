@@ -22,22 +22,6 @@ const LUXON_MAPPING: {
 }
 
 /**
- * Creates a DateTime object based on the time provided. The date will be the current system date.
- * @param timeString ISO 8601 compliant time.
- * @param utcOffset ISO8601 compliant UTC offset, should be in luxon techie format.
- * @returns
- */
-function createDtFromTime(timeString: string, utcOffset: ScheduleUtcOffset) {
-  /**
-   * 2022-01-01 is just an arbitrary dummy date.
-   * It shouldn't matter much since we only pay attention to the time part in these utils.
-   */
-  return DateTime.fromISO(`2022-01-01T${timeString}`).setZone(utcOffset, {
-    keepLocalTime: true,
-  })
-}
-
-/**
  * Tries to find an item in `entries` where `reference` is between the `start` and `end` date.
  *
  * @param entries Schedule entries.
@@ -51,13 +35,13 @@ function computeStateFrom24HSchedule(
   utcOffset: ScheduleUtcOffset,
   reference: DateTime,
 ): SwitchState | null {
+  const zonedReference = reference.setZone(`UTC${utcOffset}`)
+
   for (const { start, end, state } of entries) {
-    const startDt = createDtFromTime(start, utcOffset)
-    const endDt = createDtFromTime(end, utcOffset)
+    const startDt = zonedReference.set(start)
+    const endDt = zonedReference.set(end)
 
-    console.debug(reference.toISO(), startDt.toISO(), start, endDt.toISO(), end)
-
-    if (isBetween(reference, startDt, endDt)) {
+    if (isBetween(zonedReference, startDt, endDt)) {
       return state
     }
   }
@@ -74,22 +58,29 @@ export function computeDailyState(
   return computeStateFrom24HSchedule(dailySchedule, utcOffset, reference)
 }
 
+interface TimeGteInput {
+  minute: number
+  second: number
+}
+
+function isTimeGte(a: TimeGteInput, b: TimeGteInput) {
+  if (a.minute !== b.minute) {
+    return a.minute > b.minute
+  }
+
+  return a.second >= b.second
+}
+
 export function computeHourlyState(
   { utcOffset, hourlySchedule }: Omit<HourlySchedule, 'type'>,
   reference?: DateTime,
 ) {
   reference = reference ?? DateTime.now()
 
-  for (const { start, end, state } of hourlySchedule) {
-    const startDt = createDtFromTime('00:00:00', utcOffset).set({
-      minute: start,
-    })
-    const endDt = createDtFromTime('00:00:00', utcOffset).set({ minute: end })
+  const zonedReference = reference.setZone(`UTC${utcOffset}`)
 
-    if (
-      startDt.minute <= reference.minute &&
-      endDt.minute >= reference.minute
-    ) {
+  for (const { start, end, state } of hourlySchedule) {
+    if (isTimeGte(zonedReference, start) && isTimeGte(end, zonedReference)) {
       return state
     }
   }
@@ -101,10 +92,12 @@ export function computeWeeklyState(
   { weeklySchedule, utcOffset }: Omit<WeeklySchedule, 'type'>,
   reference?: DateTime,
 ): SwitchState | null {
-  reference = reference?.setZone(utcOffset) ?? DateTime.now().setZone(utcOffset)
-  const luxonWeekdayToShortday = LUXON_MAPPING[reference.weekday]
+  reference = reference ?? DateTime.now()
+
+  const zonedReference = reference.setZone(`UTC${utcOffset}`)
+
+  const luxonWeekdayToShortday = LUXON_MAPPING[zonedReference.weekday]
   const scheduleForWeekday = weeklySchedule[luxonWeekdayToShortday]
-  console.debug(scheduleForWeekday, luxonWeekdayToShortday)
 
   return computeStateFrom24HSchedule(scheduleForWeekday, utcOffset, reference)
 }

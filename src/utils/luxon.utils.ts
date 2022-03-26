@@ -1,5 +1,9 @@
 import { DateTime } from 'luxon'
 
+export const EPOCH = DateTime.fromMillis(0, {
+  zone: 'UTC',
+})
+
 /**
  * Checks if a date is within a given range. Inclusive.
  *

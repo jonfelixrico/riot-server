@@ -1,24 +1,28 @@
 export type SwitchState = 'ON' | 'OFF'
 
-export type ScheduleUtcOffset<offset extends string = string> =
-  | `UTC+${offset}`
-  | `UTC-${offset}`
+type SingleDigit = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+export type ScheduleUtcOffset =
+  | `+${SingleDigit}${SingleDigit}:${SingleDigit}${SingleDigit}`
+  | `+${SingleDigit}`
+  | `-${SingleDigit}${SingleDigit}:${SingleDigit}${SingleDigit}`
+  | `-${SingleDigit}`
 
 export interface BaseSchedule {
   utcOffset: ScheduleUtcOffset
   type: 'DAILY' | 'WEEKLY' | 'HOURLY'
 }
 
-export interface ScheduleEntry {
-  /**
-   * Must follow the time section of an ISO8601 date.
-   */
-  start: string
+export interface ScheduleTime {
+  minute: number
+  hour: number
+  second: number
+}
 
-  /**
-   * Must follow the time section of an ISO8601 date.
-   */
-  end: string
+export interface ScheduleEntry {
+  start: ScheduleTime
+
+  end: ScheduleTime
   state: SwitchState
 }
 
@@ -52,12 +56,18 @@ export interface HourlySchedule extends BaseSchedule {
     /**
      * In minutes of the hour.
      */
-    start: number
+    start: {
+      minute: number
+      second: number
+    }
 
     /**
      * In minutes of the hour.
      */
-    end: number
+    end: {
+      minute: number
+      second: number
+    }
 
     state: SwitchState
   }[]

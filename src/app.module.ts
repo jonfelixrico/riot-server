@@ -5,14 +5,10 @@ import { DevicesController } from './controllers/api/devices/devices.controller'
 import { SwitchController } from './controllers/api/device-modules/switch/switch.controller'
 import { ActuatorQueryModule } from './services/actuator-query/actuator-query.module'
 import { MongooseModule } from './mongoose/mongoose.module'
+import { ControllersModule } from './controllers/controllers.module'
 
 @Module({
-  imports: [ActuatorQueryModule, MongooseModule],
-  controllers: [
-    ArduinoController,
-    UnknownDevicesController,
-    DevicesController,
-    SwitchController,
-  ],
+  imports: [ActuatorQueryModule, MongooseModule, ControllersModule],
+  controllers: [ArduinoController, DevicesController, SwitchController],
 })
 export class AppModule {}

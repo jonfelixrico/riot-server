@@ -8,18 +8,16 @@ import {
 } from 'src/services/specialized-devices/switch/switch-module-service.abstract'
 import { isBetween } from './luxon.utils'
 
-type WeeklyScheduleKeys = keyof WeeklySchedule['weeklySchedule']
-
 const LUXON_MAPPING: {
-  [key in WeeklyScheduleKeys]: number
+  [key: number]: keyof WeeklySchedule['weeklySchedule']
 } = {
-  mon: 1,
-  tues: 2,
-  wed: 3,
-  thurs: 4,
-  fri: 5,
-  sat: 6,
-  sun: 7,
+  1: 'mon',
+  2: 'tues',
+  3: 'wed',
+  4: 'thurs',
+  5: 'fri',
+  6: 'sat',
+  7: 'sun',
 }
 
 /**

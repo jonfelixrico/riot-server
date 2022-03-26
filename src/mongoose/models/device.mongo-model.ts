@@ -1,14 +1,32 @@
 import { Schema, Connection } from 'mongoose'
 
-const deviceSchema = new Schema({
+export interface Device {
+  id: string
+  lastHeartbeatDt: Date
+  modules: []
+}
+
+export interface DeviceModule<T = unknown> {
+  id: string
+  lastUpdateDt: Date
+  type: string
+  config: T
+}
+
+const moduleSchema = new Schema<DeviceModule>({
+  id: String,
+  lastUpdateDt: Date,
+  type: String,
+  config: {
+    type: Schema.Types.ObjectId,
+    ref: 'ModuleConfig',
+  },
+})
+
+const deviceSchema = new Schema<Device>({
   id: String,
   lastHeartbeatDt: Date,
-  modules: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Module',
-    },
-  ],
+  modules: [moduleSchema],
 })
 
 export default function (connection: Connection) {

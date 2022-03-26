@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common'
+import { SwitchImplService } from './switch/switch-impl/switch-impl.service'
 
-@Module({})
+@Module({
+  providers: [SwitchImplService],
+})
 export class SpecializedDevicesModule {}

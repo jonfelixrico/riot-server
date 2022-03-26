@@ -13,22 +13,17 @@ export interface DeviceModule<T = unknown> {
   config: T
 }
 
-const moduleSchema = new Schema<DeviceModule>({
-  id: String,
-  lastUpdateDt: Date,
-  type: String,
-  config: {
-    type: Schema.Types.ObjectId,
-    ref: 'ModuleConfig',
-  },
-})
-
 const deviceSchema = new Schema<Device>({
   id: String,
   lastHeartbeatDt: Date,
-  modules: [moduleSchema],
+  modules: [
+    {
+      ref: 'Module',
+      type: Schema.Types.ObjectId,
+    },
+  ],
 })
 
 export function deviceModelFactory(connection: Connection) {
-  return connection.model('Device', deviceSchema)
+  return connection.model('DeviceModule', deviceSchema)
 }

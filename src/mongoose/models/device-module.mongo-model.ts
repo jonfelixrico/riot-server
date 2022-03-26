@@ -8,5 +8,5 @@ const moduleSchema = new Schema<DeviceModule>({
 })
 
 export function moduleConfigModelFactory(conn: Connection) {
-  return conn.model('ModuleConfig', moduleSchema)
+  return conn.model('DeviceModule', moduleSchema)
 }

@@ -18,5 +18,5 @@ export interface DeviceModule<T = unknown> {
 }
 
 export type SwitchModule = DeviceModule<
-  WeeklySchedule | DailySchedule | HourlySchedule
+  DailySchedule | WeeklySchedule | HourlySchedule
 >

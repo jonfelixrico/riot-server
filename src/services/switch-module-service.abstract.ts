@@ -76,7 +76,7 @@ export interface SwitchConfig {
   override?: Override
 }
 
-export abstract class SwitchActuatorService {
+export abstract class SwitchModuleService {
   /**
    * Get the state of a specific switch in a device.
    * @param deviceId

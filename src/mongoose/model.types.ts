@@ -2,7 +2,7 @@ import {
   DailySchedule,
   HourlySchedule,
   WeeklySchedule,
-} from 'src/services/switch-actuator-service.abstract'
+} from 'src/services/switch-module-service.abstract'
 
 export interface Device {
   id: string

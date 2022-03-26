@@ -1,11 +1,10 @@
 import { Schema, Model } from 'mongoose'
-import { DeviceModule } from 'src/services/device-service.abstract'
 import {
   DailySchedule,
   HourlySchedule,
-  ScheduleEntry,
   WeeklySchedule,
 } from 'src/services/switch-actuator-service.abstract'
+import type { DeviceModule } from './device.mongo-model'
 
 interface SwitchInterface
   extends Omit<WeeklySchedule, 'type'>,
@@ -14,14 +13,14 @@ interface SwitchInterface
   type: 'WEEKLY' | 'HOURLY' | 'DAILY'
 }
 
-const scheduleEntrySchema = new Schema<ScheduleEntry>({
+const scheduleNestedPath = {
   start: String,
   end: String,
   state: {
     type: String,
     enum: ['on', 'off'],
   },
-})
+}
 
 const switchSchema = new Schema<SwitchInterface>({
   timezoneOffset: Number,
@@ -30,16 +29,16 @@ const switchSchema = new Schema<SwitchInterface>({
     enum: ['DAILY', 'WEEKLY', 'HOURLY'],
   },
 
-  dailySchedule: [scheduleEntrySchema],
+  dailySchedule: [scheduleNestedPath],
 
   weeklySchedule: {
-    sun: [scheduleEntrySchema],
-    mon: [scheduleEntrySchema],
-    tue: [scheduleEntrySchema],
-    wed: [scheduleEntrySchema],
-    thurs: [scheduleEntrySchema],
-    fri: [scheduleEntrySchema],
-    sat: [scheduleEntrySchema],
+    sun: [scheduleNestedPath],
+    mon: [scheduleNestedPath],
+    tue: [scheduleNestedPath],
+    wed: [scheduleNestedPath],
+    thurs: [scheduleNestedPath],
+    fri: [scheduleNestedPath],
+    sat: [scheduleNestedPath],
   },
 
   hourlySchedule: [
@@ -54,5 +53,5 @@ const switchSchema = new Schema<SwitchInterface>({
 })
 
 export default function (model: Model<DeviceModule>) {
-  return model.discriminator('SwitchModule', switchSchema)
+  return model.discriminator('SwitchConfig', switchSchema)
 }

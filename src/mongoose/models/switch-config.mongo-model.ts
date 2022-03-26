@@ -52,6 +52,6 @@ const switchSchema = new Schema<SwitchInterface>({
   ],
 })
 
-export default function (model: Model<DeviceModule>) {
+export function switchConfigModelFactory(model: Model<DeviceModule>) {
   return model.discriminator('SwitchConfig', switchSchema)
 }

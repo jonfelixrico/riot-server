@@ -7,6 +7,6 @@ const moduleSchema = new Schema<DeviceModule>({
   lastUpdateDt: Date,
 })
 
-export default function (conn: Connection) {
+export function moduleConfigModelFactory(conn: Connection) {
   return conn.model('ModuleConfig', moduleSchema)
 }

@@ -29,6 +29,6 @@ const deviceSchema = new Schema<Device>({
   modules: [moduleSchema],
 })
 
-export default function (connection: Connection) {
+export function deviceModelFactory(connection: Connection) {
   return connection.model('Device', deviceSchema)
 }

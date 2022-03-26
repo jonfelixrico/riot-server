@@ -1,4 +1,4 @@
-export type SwitchState = 'on' | 'off'
+export type SwitchState = 'ON' | 'OFF'
 
 export interface ScheduleEntry {
   /**
@@ -22,7 +22,7 @@ export interface DailySchedule {
    * timezone.
    */
   timezoneOffset: number
-  schedule: ScheduleEntry[]
+  dailySchedule: ScheduleEntry[]
   type: 'DAILY'
 }
 
@@ -37,17 +37,15 @@ export interface WeeklySchedule {
   timezoneOffset: number
   type: 'WEEKLY'
 
-  /**
-   * Schedule for each day of the week.
-   * Starts with Sunday and ends with Saturday.
-   */
-  sun: ScheduleEntry[]
-  mon: ScheduleEntry[]
-  tues: ScheduleEntry[]
-  wed: ScheduleEntry[]
-  thurs: ScheduleEntry[]
-  fri: ScheduleEntry[]
-  sat: ScheduleEntry[]
+  weeklySchedule: {
+    sun: ScheduleEntry[]
+    mon: ScheduleEntry[]
+    tues: ScheduleEntry[]
+    wed: ScheduleEntry[]
+    thurs: ScheduleEntry[]
+    fri: ScheduleEntry[]
+    sat: ScheduleEntry[]
+  }
 }
 
 export interface HourlySchedule {
@@ -56,8 +54,8 @@ export interface HourlySchedule {
    */
   timezoneOffset: number
   type: 'HOURLY'
-  schedule: {
-    minutes: number
+  hourlySchedule: {
+    minute: number
     state: SwitchState
   }[]
 }

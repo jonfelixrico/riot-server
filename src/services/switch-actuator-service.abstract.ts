@@ -22,7 +22,7 @@ export interface DailySchedule {
    * timezone.
    */
   timezoneOffset: number
-  schedule: ScheduleEntry[]
+  dailySchedule: ScheduleEntry[]
   type: 'DAILY'
 }
 
@@ -56,7 +56,7 @@ export interface HourlySchedule {
    */
   timezoneOffset: number
   type: 'HOURLY'
-  schedule: {
+  hourlySchedule: {
     minutes: number
     state: SwitchState
   }[]

@@ -8,6 +8,11 @@ import {
   SWTICH_CONFIG_MODEL,
 } from 'src/mongoose/mongoose.di-tokens'
 import {
+  computeDailyState,
+  computeHourlyState,
+  computeWeeklyState,
+} from 'src/utils/switch-schedule.utils'
+import {
   DailySchedule,
   HourlySchedule,
   Override,
@@ -25,10 +30,15 @@ export class SwitchImplService extends SwitchModuleService {
     super()
   }
 
-  private async fetch(deviceId: string, moduleId: string) {
-    const device = await this.devices.findOne({
-      id: deviceId,
-    })
+  private async fetch(deviceId: string, moduleId: string, lean?: boolean) {
+    const device = await this.devices.findOne(
+      {
+        id: deviceId,
+      },
+      {
+        lean: true,
+      },
+    )
 
     if (device) {
       return null
@@ -42,13 +52,26 @@ export class SwitchImplService extends SwitchModuleService {
       return null
     }
 
-    return await this.switchConfigs.findById(dModule.config)
+    return await this.switchConfigs.findById(dModule.config, {
+      lean,
+    })
   }
 
   async getState(deviceId: string, moduleId: string): Promise<SwitchState> {
-    const record = this.fetch(deviceId, moduleId)
+    const record = await this.fetch(deviceId, moduleId, true)
     if (!record) {
       return null
+    }
+
+    switch (record.type) {
+      case 'DAILY':
+        return computeDailyState(record)
+      case 'HOURLY':
+        return computeHourlyState(record)
+      case 'WEEKLY':
+        return computeWeeklyState(record)
+      default:
+        throw new Error('unknown record type')
     }
   }
 

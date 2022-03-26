@@ -25,7 +25,11 @@ enum WeeklyScheduleLuxonMapping {
  * @returns
  */
 function createDtFromTime(timeString: string, utcOffset: string) {
-  return DateTime.fromFormat(`${timeString}${utcOffset}`, 'HH:mm:ss ZZZ')
+  /**
+   * 2022-01-01 is just an arbitrary dummy date.
+   * It shouldn't matter much since we only pay attention to the time part in these utils.
+   */
+  return DateTime.fromISO(`2022-01-01T${timeString}${utcOffset}`)
 }
 
 /**
@@ -55,7 +59,7 @@ function computeStateFrom24HSchedule(
 }
 
 export function computeDailyState(
-  { utcOffset, dailySchedule }: DailySchedule,
+  { utcOffset, dailySchedule }: Omit<DailySchedule, 'type'>,
   defaultState: SwitchState = 'OFF',
   reference?: DateTime,
 ) {
@@ -68,20 +72,22 @@ export function computeDailyState(
 }
 
 export function computeHourlyState(
-  { utcOffset, hourlySchedule }: HourlySchedule,
+  { utcOffset, hourlySchedule }: Omit<HourlySchedule, 'type'>,
   defaultState: SwitchState = 'OFF',
   reference?: DateTime,
 ) {
   reference = reference ?? DateTime.now()
 
-  const referenceDt = createDtFromTime('00:00:00', utcOffset)
-
   for (const { start, end, state } of hourlySchedule) {
-    const startDt = referenceDt.set({ minute: start })
+    const startDt = createDtFromTime('00:00:00', utcOffset).set({
+      minute: start,
+    })
+    const endDt = createDtFromTime('00:00:00', utcOffset).set({ minute: end })
 
-    const endDt = referenceDt.set({ minute: end })
-
-    if (isBetween(reference, startDt, endDt)) {
+    if (
+      startDt.minute <= reference.minute &&
+      endDt.minute >= reference.minute
+    ) {
       return state
     }
   }
@@ -90,7 +96,7 @@ export function computeHourlyState(
 }
 
 export function computeWeeklyState(
-  { weeklySchedule, utcOffset }: WeeklySchedule,
+  { weeklySchedule, utcOffset }: Omit<WeeklySchedule, 'type'>,
   defaultState: SwitchState = 'OFF',
   now?: DateTime,
 ) {

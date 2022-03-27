@@ -5,6 +5,7 @@ import {
 } from 'src/mongoose/models/mongoose-models.types'
 import {
   DEVICE_MODEL,
+  MONGOOSE_CONN,
   SWTICH_CONFIG_MODEL,
 } from 'src/mongoose/mongoose.di-tokens'
 import {
@@ -13,7 +14,6 @@ import {
   computeWeeklyState,
 } from 'src/utils/switch-schedule.utils'
 import {
-  BaseSchedule,
   DailySchedule,
   HourlySchedule,
   Override,
@@ -21,33 +21,26 @@ import {
   SwitchState,
   WeeklySchedule,
 } from '../switch-module-service.abstract'
-
-function scheduleWiper(
-  object: BaseSchedule &
-    Pick<DailySchedule, 'dailySchedule'> &
-    Pick<WeeklySchedule, 'weeklySchedule'> &
-    Pick<HourlySchedule, 'hourlySchedule'>,
-): void {
-  object.dailySchedule = undefined
-  object.hourlySchedule = undefined
-  object.dailySchedule = undefined
-  object.type = undefined
-  object.utcOffset = undefined
-}
+import { Connection } from 'mongoose'
 
 @Injectable()
 export class SwitchImplService extends SwitchModuleService {
   constructor(
     @Inject(DEVICE_MODEL) private devices: DeviceModel,
     @Inject(SWTICH_CONFIG_MODEL) private switchConfigs: SwitchConfigModel,
+    @Inject(MONGOOSE_CONN) private conn: Connection,
   ) {
     super()
   }
 
   private async fetch(deviceId: string, moduleId: string) {
-    const device = await this.devices.findOne({
-      id: deviceId,
-    })
+    const device = await this.devices.findOne(
+      {
+        id: deviceId,
+      },
+      // setting lean since we don't need much from the device model here
+      { lean: true },
+    )
 
     if (device) {
       return null
@@ -92,7 +85,23 @@ export class SwitchImplService extends SwitchModuleService {
       throw new Error('record not found')
     }
 
-    scheduleWiper(record)
+    switch (record.type) {
+      case 'DAILY': {
+        record.dailySchedule = undefined
+        break
+      }
+
+      case 'HOURLY': {
+        record.hourlySchedule = undefined
+        break
+      }
+
+      case 'WEEKLY': {
+        record.weeklySchedule = undefined
+        break
+      }
+    }
+
     Object.assign(record, schedule)
     record.lastUpdateDt = new Date()
 
@@ -117,5 +126,31 @@ export class SwitchImplService extends SwitchModuleService {
 
     record.lastUpdateDt = new Date()
     await record.save()
+  }
+
+  async initalizeSwitchConfig(deviceId: string, moduleId: string) {
+    const initSwitchConfig = new this.switchConfigs({
+      type: 'HOURLY',
+      hourlySchedule: [],
+      utcOffset: '+0',
+      lastUpdateDt: new Date(),
+    })
+
+    const device = await this.devices.findOne({ id: deviceId })
+    if (!device) {
+      throw new Error('device not found')
+    }
+
+    const dModule = device.modules.find(({ id }) => id === moduleId)
+    if (!dModule) {
+      throw new Error('device not found')
+    }
+
+    dModule.config = initSwitchConfig._id
+
+    await this.conn.transaction(async () => {
+      await initSwitchConfig.save()
+      await device.save()
+    })
   }
 }

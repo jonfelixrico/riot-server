@@ -13,6 +13,7 @@ import { SensorReadingDto } from './sensor-reading.dto'
 import { RegisterDeviceDto } from './register-device.dto'
 import { DeviceService } from 'src/services/generic-devices/device-service.abstract'
 import { ActuatorService } from 'src/services/generic-devices/actuator-service.abstract'
+import { DeviceRegistrationService } from 'src/services/generic-devices/device-registration-service.abstract'
 
 const REGISTRATION_TOKEN_HEADER = 'registration-token'
 
@@ -22,6 +23,7 @@ export class ArduinoController {
     private actuatorSvc: ActuatorService,
     private sensorSvc: SensorService,
     private deviceSvc: DeviceService,
+    private regSvc: DeviceRegistrationService,
   ) {}
 
   @Get('/:deviceId')
@@ -29,7 +31,7 @@ export class ArduinoController {
     @Param('deviceId') deviceId: string,
     @Headers(REGISTRATION_TOKEN_HEADER) registrationToken: string,
   ) {
-    const isRegistered = await this.deviceSvc.isDeviceRegistered(
+    const isRegistered = await this.regSvc.isDeviceRegistered(
       deviceId,
       registrationToken,
     )
@@ -47,7 +49,7 @@ export class ArduinoController {
     @Param('deviceId') deviceId: string,
     @Headers(REGISTRATION_TOKEN_HEADER) registrationToken: string,
   ) {
-    const isRegistered = await this.deviceSvc.isDeviceRegistered(
+    const isRegistered = await this.regSvc.isDeviceRegistered(
       deviceId,
       registrationToken,
     )
@@ -67,7 +69,7 @@ export class ArduinoController {
     @Param('deviceId') deviceId: string,
   ) {
     await Promise.all([
-      this.deviceSvc.registerDevice(
+      this.regSvc.registerDevice(
         {
           ...deviceInfo,
           id: deviceId,

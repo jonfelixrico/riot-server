@@ -3,19 +3,14 @@ import type {
   DailySchedule,
   WeeklySchedule,
   HourlySchedule,
-  BaseSchedule,
   Override,
 } from 'src/services/specialized-devices/switch/switch-module-service.abstract'
 import type { BaseModuleConfig } from './module-config.mongoose-model'
 
-export interface SwitchConfig
-  extends BaseModuleConfig,
-    Omit<DailySchedule, 'type'>,
-    Omit<WeeklySchedule, 'type'>,
-    Omit<HourlySchedule, 'type'>,
-    BaseSchedule {
-  override?: Override
-}
+export type SwitchConfig = BaseModuleConfig &
+  (DailySchedule | WeeklySchedule | HourlySchedule) & {
+    override?: Override
+  }
 
 const scheduleNestedPath = {
   start: {

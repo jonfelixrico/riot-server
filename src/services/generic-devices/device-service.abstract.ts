@@ -9,9 +9,7 @@ export interface DeviceToRegister {
   id: string
 }
 
-export interface Device {
-  id: string
-  modules: DeviceModule[]
+export interface Device extends DeviceToRegister {
   lastHeartbeatDt: Date
 }
 

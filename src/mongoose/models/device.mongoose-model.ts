@@ -1,4 +1,4 @@
-import { Schema, Connection } from 'mongoose'
+import { Schema, Connection, Types } from 'mongoose'
 
 export interface Device {
   id: string
@@ -14,7 +14,7 @@ export interface DeviceModule {
    * ObjectId of the ModuleConfig object. We're using a ref here since
    * we're leveraging discriminators.
    */
-  config: string
+  config: Types.ObjectId
 }
 
 const deviceSchema = new Schema<Device>({

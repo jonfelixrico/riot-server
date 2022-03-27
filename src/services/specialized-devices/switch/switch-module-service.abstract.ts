@@ -133,4 +133,15 @@ export abstract class SwitchModuleService {
     moduleId: string,
     override: Override,
   ): Promise<void>
+
+  /**
+   * Initializes the record for the switch config.
+   *
+   * @param deviceId
+   * @param moduleId
+   */
+  abstract initalizeSwitchConfig(
+    deviceId: string,
+    moduleId: string,
+  ): Promise<void>
 }

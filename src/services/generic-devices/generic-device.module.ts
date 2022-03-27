@@ -5,9 +5,11 @@ import { ActuatorImplService } from './actuator-impl/actuator-impl.service'
 import { ActuatorService } from './actuator-service.abstract'
 import { SensorImplService } from './sensor-impl/sensor-impl.service'
 import { SensorService } from './sensor-service.abstract'
+import { MongooseModule } from 'src/mongoose/mongoose.module'
 
 @Module({
-  imports: [],
+  imports: [MongooseModule],
+
   providers: [
     DeviceImplService,
     {
@@ -27,5 +29,7 @@ import { SensorService } from './sensor-service.abstract'
       useExisting: SensorImplService,
     },
   ],
+
+  exports: [DeviceService, SensorService, ActuatorService],
 })
 export class GenericDevicesModule {}

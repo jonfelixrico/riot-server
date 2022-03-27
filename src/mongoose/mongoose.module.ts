@@ -5,9 +5,9 @@ import {
   MONGOOSE_CONN,
   SWTICH_CONFIG_MODEL,
 } from './mongoose.di-tokens'
-import { deviceModelFactory } from './models/device.mongo-model'
-import { moduleConfigModelFactory } from './models/device-module.mongo-model'
-import { switchConfigModelFactory } from './models/switch-module.mongo-model'
+import { deviceModelFactory } from './models/device.mongoose-model'
+import { moduleConfigModelFactory } from './models/module-config.mongoose-model'
+import { switchConfigModelFactory } from './models/switch-config.mongoose-model'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import mongoose from 'mongoose'
 
@@ -44,6 +44,6 @@ import mongoose from 'mongoose'
   ],
 
   imports: [ConfigModule.forRoot()],
-  exports: [DEVICE_MODEL, SWTICH_CONFIG_MODEL],
+  exports: [MONGOOSE_CONN, DEVICE_MODEL, SWTICH_CONFIG_MODEL],
 })
 export class MongooseModule {}

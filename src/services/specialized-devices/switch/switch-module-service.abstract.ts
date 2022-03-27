@@ -1,0 +1,147 @@
+export type SwitchState = 'ON' | 'OFF'
+
+type SingleDigit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+export type ScheduleUtcOffset =
+  | `+${SingleDigit}${SingleDigit}:${SingleDigit}${SingleDigit}`
+  | `+${SingleDigit}`
+  | `-${SingleDigit}${SingleDigit}:${SingleDigit}${SingleDigit}`
+  | `-${SingleDigit}`
+
+interface BaseSchedule {
+  utcOffset: ScheduleUtcOffset
+  type: 'DAILY' | 'WEEKLY' | 'HOURLY'
+}
+
+export interface ScheduleTime {
+  minute: number
+  hour: number
+  second: number
+}
+
+export interface ScheduleEntry {
+  start: ScheduleTime
+
+  end: ScheduleTime
+  state: SwitchState
+}
+
+/**
+ * Schedule in a daily cycle.
+ */
+export interface DailySchedule extends BaseSchedule {
+  type: 'DAILY'
+  dailySchedule: ScheduleEntry[]
+}
+
+/**
+ * Schedule in a weekly cycle.
+ */
+export interface WeeklySchedule extends BaseSchedule {
+  type: 'WEEKLY'
+  weeklySchedule: {
+    sun: ScheduleEntry[]
+    mon: ScheduleEntry[]
+    tues: ScheduleEntry[]
+    wed: ScheduleEntry[]
+    thurs: ScheduleEntry[]
+    fri: ScheduleEntry[]
+    sat: ScheduleEntry[]
+  }
+}
+
+export interface HourlySchedule extends BaseSchedule {
+  type: 'HOURLY'
+  hourlySchedule: {
+    /**
+     * In minutes of the hour.
+     */
+    start: {
+      minute: number
+      second: number
+    }
+
+    /**
+     * In minutes of the hour.
+     */
+    end: {
+      minute: number
+      second: number
+    }
+
+    state: SwitchState
+  }[]
+}
+
+export interface Override {
+  state: SwitchState
+  overrideUntil?: Date
+}
+
+type Schedule = DailySchedule | WeeklySchedule | HourlySchedule
+
+export interface SwitchConfig {
+  schedule: Schedule
+
+  /**
+   * If not null, then that means that the switch's schedule is being overridden.
+   */
+  override?: Override
+}
+
+export abstract class SwitchModuleService {
+  /**
+   * Get the state of a specific switch in a device.
+   * @param deviceId
+   * @param moduleId
+   */
+  abstract getState(deviceId: string, moduleId: string): Promise<SwitchState>
+
+  /**
+   * Sets the on/off schedule of a switch.
+   *
+   * @param deviceId
+   * @param moduleId
+   * @param schedule The updated schedule of the switch.
+   */
+  abstract setSchedule(
+    deviceId: string,
+    moduleId: string,
+    schedule: Schedule,
+  ): Promise<void>
+
+  /**
+   * Clears the override.
+   * @param deviceId
+   * @param moduleId
+   */
+  abstract setOverride(deviceId: string, moduleId: string): Promise<void>
+  abstract setOverride(
+    deviceId: string,
+    moduleId: string,
+    override: null,
+  ): Promise<void>
+  /**
+   * Updates updates the override of the switch.
+   *
+   * @param deviceId
+   * @param moduleId
+   * @param override The updated override.
+   */
+  abstract setOverride(
+    deviceId: string,
+    moduleId: string,
+    override: Override,
+  ): Promise<void>
+
+  /**
+   * Initializes the record for the switch config.
+   *
+   * @param deviceId
+   * @param moduleId
+   */
+  abstract initalizeSwitchConfig(
+    deviceId: string,
+    moduleId: string,
+  ): Promise<void>
+}

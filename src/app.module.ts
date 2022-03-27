@@ -1,18 +1,17 @@
 import { Module } from '@nestjs/common'
-import { ArduinoController } from './controllers/arduino/arduino.controller'
-import { UnknownDevicesController } from './controllers/api/unknown-devices/unknown-devices.controller'
-import { DevicesController } from './controllers/api/devices/devices.controller'
-import { SwitchController } from './controllers/api/device-modules/switch/switch.controller'
-import { ActuatorQueryModule } from './services/actuator-query/actuator-query.module'
 import { MongooseModule } from './mongoose/mongoose.module'
+import { DeviceAdminControllersModule } from './controllers/device-admin-controllers/device-admin-controllers.module'
+import { ArduinoControllersModule } from './controllers/arduino-controllers/arduino-controllers.module'
+import { GenericDevicesModule } from './services/generic-devices/generic-device.module'
+import { SpecializedDevicesModule } from './services/specialized-devices/specialized-devices.module'
 
 @Module({
-  imports: [ActuatorQueryModule, MongooseModule],
-  controllers: [
-    ArduinoController,
-    UnknownDevicesController,
-    DevicesController,
-    SwitchController,
+  imports: [
+    MongooseModule,
+    DeviceAdminControllersModule,
+    ArduinoControllersModule,
+    GenericDevicesModule,
+    SpecializedDevicesModule,
   ],
 })
 export class AppModule {}

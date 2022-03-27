@@ -8,7 +8,7 @@ export type ScheduleUtcOffset =
   | `-${SingleDigit}${SingleDigit}:${SingleDigit}${SingleDigit}`
   | `-${SingleDigit}`
 
-export interface BaseSchedule {
+interface BaseSchedule {
   utcOffset: ScheduleUtcOffset
   type: 'DAILY' | 'WEEKLY' | 'HOURLY'
 }

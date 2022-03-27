@@ -17,7 +17,7 @@ import { DeviceRegistrationService } from 'src/services/generic-devices/device-r
 
 const REGISTRATION_TOKEN_HEADER = 'registration-token'
 
-@Controller('arduino')
+@Controller('arduino/:deviceId/:firmwareVersion')
 export class ArduinoController {
   constructor(
     private actuatorSvc: ActuatorService,
@@ -26,31 +26,33 @@ export class ArduinoController {
     private regSvc: DeviceRegistrationService,
   ) {}
 
-  @Get('/:deviceId')
+  @Get()
   async getActuatorState(
     @Param('deviceId') deviceId: string,
+    @Param('firmwareVersion') firmwareVersion: string,
     @Headers(REGISTRATION_TOKEN_HEADER) registrationToken: string,
   ) {
     const isRegistered = await this.regSvc.isDeviceRegistered(
-      deviceId,
+      { deviceId, firmwareVersion },
       registrationToken,
     )
     if (isRegistered) {
       throw new UnauthorizedException('Device needs to register first.')
     }
 
-    await this.deviceSvc.bumpHeartbeat(deviceId)
+    await this.deviceSvc.bumpHeartbeat({ firmwareVersion, deviceId })
     return await this.actuatorSvc.getStates(deviceId)
   }
 
-  @Put('/:deviceId')
+  @Put()
   async pushSensorReadings(
     @Body() readings: SensorReadingDto[],
     @Param('deviceId') deviceId: string,
+    @Param('firmwareVersion') firmwareVersion: string,
     @Headers(REGISTRATION_TOKEN_HEADER) registrationToken: string,
   ) {
     const isRegistered = await this.regSvc.isDeviceRegistered(
-      deviceId,
+      { deviceId, firmwareVersion },
       registrationToken,
     )
     if (isRegistered) {
@@ -58,25 +60,27 @@ export class ArduinoController {
     }
 
     await Promise.all([
-      this.deviceSvc.bumpHeartbeat(deviceId),
+      this.deviceSvc.bumpHeartbeat({ deviceId, firmwareVersion }),
       this.sensorSvc.pushReadings(deviceId, readings),
     ])
   }
 
-  @Put('/:deviceId/register')
+  @Put('/register')
   async registerDevice(
     @Body() deviceInfo: RegisterDeviceDto,
     @Param('deviceId') deviceId: string,
+    @Param('firmwareVersion') firmwareVersion: string,
   ) {
     await Promise.all([
       this.regSvc.registerDevice(
         {
           ...deviceInfo,
           id: deviceId,
+          firmwareVersion,
         },
         uuidv4(),
       ),
-      this.deviceSvc.bumpHeartbeat(deviceId),
+      this.deviceSvc.bumpHeartbeat({ deviceId, firmwareVersion }),
     ])
   }
 }

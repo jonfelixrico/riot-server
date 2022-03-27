@@ -22,5 +22,8 @@ export abstract class DeviceRegistrationService {
    * @param deviceId
    * @param token
    */
-  abstract isDeviceRegistered(deviceId: string, token: string): Promise<boolean>
+  abstract isDeviceRegistered(
+    input: { deviceId: string; firmwareVersion: string },
+    token: string,
+  ): Promise<boolean>
 }

@@ -33,10 +33,11 @@ export class SwitchImplService extends SwitchModuleService {
     super()
   }
 
-  private async fetch(deviceId: string, moduleId: string) {
+  private async fetch({ deviceId, moduleId, firmwareVersion }) {
     const device = await this.devices.findOne(
       {
         id: deviceId,
+        firmwareVersion,
       },
       // setting lean since we don't need much from the device model here
       { lean: true },
@@ -57,8 +58,8 @@ export class SwitchImplService extends SwitchModuleService {
     return await this.switchConfigs.findById(dModule.config)
   }
 
-  async getState(deviceId: string, moduleId: string): Promise<SwitchState> {
-    const record = await this.fetch(deviceId, moduleId)
+  async getState(input): Promise<SwitchState> {
+    const record = await this.fetch(input)
     if (!record) {
       return null
     }
@@ -76,11 +77,10 @@ export class SwitchImplService extends SwitchModuleService {
   }
 
   async setSchedule(
-    deviceId: string,
-    moduleId: string,
+    input,
     schedule: DailySchedule | WeeklySchedule | HourlySchedule,
   ): Promise<void> {
-    const record = await this.fetch(deviceId, moduleId)
+    const record = await this.fetch(input)
     if (!record) {
       throw new Error('record not found')
     }
@@ -108,12 +108,8 @@ export class SwitchImplService extends SwitchModuleService {
     await record.save()
   }
 
-  async setOverride(
-    deviceId: string,
-    moduleId: string,
-    override?: Override,
-  ): Promise<void> {
-    const record = await this.fetch(deviceId, moduleId)
+  async setOverride(input, override?: Override): Promise<void> {
+    const record = await this.fetch(input)
     if (!record) {
       throw new Error('record not found')
     }
@@ -128,7 +124,7 @@ export class SwitchImplService extends SwitchModuleService {
     await record.save()
   }
 
-  async initalizeSwitchConfig(deviceId: string, moduleId: string) {
+  async initalizeSwitchConfig({ deviceId, moduleId, firmwareVersion }) {
     const initSwitchConfig = new this.switchConfigs({
       type: 'HOURLY',
       hourlySchedule: [],
@@ -136,7 +132,7 @@ export class SwitchImplService extends SwitchModuleService {
       lastUpdateDt: new Date(),
     })
 
-    const device = await this.devices.findOne({ id: deviceId })
+    const device = await this.devices.findOne({ id: deviceId, firmwareVersion })
     if (!device) {
       throw new Error('device not found')
     }

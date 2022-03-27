@@ -4,6 +4,7 @@ export interface Device {
   id: string
   lastHeartbeatDt: Date
   modules: DeviceModule[]
+  firmwareVersion: string
 }
 
 export interface DeviceModule {
@@ -20,6 +21,8 @@ export interface DeviceModule {
 const deviceSchema = new Schema<Device>({
   id: String,
   lastHeartbeatDt: Date,
+  firmwareVersion: String,
+
   modules: [
     {
       id: String,

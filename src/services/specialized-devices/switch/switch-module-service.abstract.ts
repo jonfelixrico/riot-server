@@ -95,7 +95,11 @@ export abstract class SwitchModuleService {
    * @param deviceId
    * @param moduleId
    */
-  abstract getState(deviceId: string, moduleId: string): Promise<SwitchState>
+  abstract getState(input: {
+    deviceId: string
+    moduleId: string
+    firmwareVersion: string
+  }): Promise<SwitchState>
 
   /**
    * Sets the on/off schedule of a switch.
@@ -105,8 +109,11 @@ export abstract class SwitchModuleService {
    * @param schedule The updated schedule of the switch.
    */
   abstract setSchedule(
-    deviceId: string,
-    moduleId: string,
+    input: {
+      deviceId: string
+      moduleId: string
+      firmwareVersion: string
+    },
     schedule: Schedule,
   ): Promise<void>
 
@@ -115,10 +122,17 @@ export abstract class SwitchModuleService {
    * @param deviceId
    * @param moduleId
    */
-  abstract setOverride(deviceId: string, moduleId: string): Promise<void>
+  abstract setOverride(input: {
+    deviceId: string
+    moduleId: string
+    firmwareVersion: string
+  }): Promise<void>
   abstract setOverride(
-    deviceId: string,
-    moduleId: string,
+    input: {
+      deviceId: string
+      moduleId: string
+      firmwareVersion: string
+    },
     override: null,
   ): Promise<void>
   /**
@@ -129,8 +143,11 @@ export abstract class SwitchModuleService {
    * @param override The updated override.
    */
   abstract setOverride(
-    deviceId: string,
-    moduleId: string,
+    input: {
+      deviceId: string
+      moduleId: string
+      firmwareVersion: string
+    },
     override: Override,
   ): Promise<void>
 
@@ -140,8 +157,9 @@ export abstract class SwitchModuleService {
    * @param deviceId
    * @param moduleId
    */
-  abstract initalizeSwitchConfig(
-    deviceId: string,
-    moduleId: string,
-  ): Promise<void>
+  abstract initalizeSwitchConfig(input: {
+    deviceId: string
+    moduleId: string
+    firmwareVersion: string
+  }): Promise<void>
 }

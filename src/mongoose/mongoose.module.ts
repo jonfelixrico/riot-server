@@ -44,6 +44,6 @@ import mongoose from 'mongoose'
   ],
 
   imports: [ConfigModule.forRoot()],
-  exports: [DEVICE_MODEL, SWTICH_CONFIG_MODEL],
+  exports: [MONGOOSE_CONN, DEVICE_MODEL, SWTICH_CONFIG_MODEL],
 })
 export class MongooseModule {}

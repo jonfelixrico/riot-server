@@ -8,6 +8,9 @@ import {
 
 @Injectable()
 export class DeviceRegistrationQueueImplService extends DeviceRegistrationQueueService {
+  getQueueItem(input: DeviceQuery): Promise<QueuedDevice> {
+    throw new Error('Method not implemented.')
+  }
   flagForQueue(input: DeviceToQueue): Promise<void> {
     throw new Error('Method not implemented.')
   }

@@ -19,4 +19,6 @@ export abstract class DeviceRegistrationQueueService {
   abstract removeFromQueue(input: DeviceQuery): Promise<void>
 
   abstract getQueueItems(): Promise<QueuedDevice[]>
+
+  abstract getQueueItem(input: DeviceQuery): Promise<QueuedDevice>
 }

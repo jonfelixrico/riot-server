@@ -21,7 +21,7 @@ export class ArduinoController {
 
   @Post()
   @HttpCode(202)
-  async registerDevice(
+  async queueForRegistration(
     @Param('deviceId') deviceId,
     @Param('version') firmwareVersion,
     @Body() toRegister: ModuleToRegisterDto[],

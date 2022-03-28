@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common'
 import { DeviceImplService } from './device-impl/device-impl.service'
 import { DeviceService } from './device-service.abstract'
-import { ActuatorImplService } from './actuator-impl/actuator-impl.service'
-import { ActuatorService } from './actuator-service.abstract'
 import { MongooseModule } from 'src/mongoose/mongoose.module'
 import { DeviceRegistrationQueueImplService } from './device-registration-queue-impl/device-registration-queue-impl.service'
 import { DeviceRegistrationQueueService } from './device-registration-queue-service.abstract'
@@ -18,12 +16,6 @@ import { SpecializedDevicesModule } from '../specialized-devices/specialized-dev
       useExisting: DeviceImplService,
     },
 
-    ActuatorImplService,
-    {
-      provide: ActuatorService,
-      useExisting: ActuatorImplService,
-    },
-
     DeviceRegistrationQueueImplService,
     {
       provide: DeviceRegistrationQueueService,
@@ -31,6 +23,6 @@ import { SpecializedDevicesModule } from '../specialized-devices/specialized-dev
     },
   ],
 
-  exports: [DeviceService, ActuatorService, DeviceRegistrationQueueService],
+  exports: [DeviceService, DeviceRegistrationQueueService],
 })
 export class GenericDevicesModule {}

@@ -8,9 +8,10 @@ import { SensorService } from './sensor-service.abstract'
 import { MongooseModule } from 'src/mongoose/mongoose.module'
 import { DeviceRegistrationQueueImplService } from './device-registration-queue-impl/device-registration-queue-impl.service'
 import { DeviceRegistrationQueueService } from './device-registration-queue-service.abstract'
+import { SpecializedDevicesModule } from '../specialized-devices/specialized-devices.module'
 
 @Module({
-  imports: [MongooseModule],
+  imports: [MongooseModule, SpecializedDevicesModule],
 
   providers: [
     DeviceImplService,

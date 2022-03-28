@@ -9,14 +9,14 @@ import {
   Put,
 } from '@nestjs/common'
 import { DeviceService } from 'src/services/generic-devices/device-service.abstract'
-import { RegistrationQueueService } from 'src/services/generic-devices/registration-queue-service.abstract'
+import { DeviceRegistrationQueueService } from 'src/services/generic-devices/device-registration-queue-service.abstract'
 import { ModuleToRegisterDto } from '../../dto/module-to-register.dto'
 
 @Controller('arduino/:deviceId/version/:version')
 export class ArduinoController {
   constructor(
     private deviceSvc: DeviceService,
-    private regSvc: RegistrationQueueService,
+    private regSvc: DeviceRegistrationQueueService,
   ) {}
 
   @Post()
@@ -49,5 +49,7 @@ export class ArduinoController {
     ) {
       throw new NotFoundException('Device is not registered in the system.')
     }
+
+    // TODO return state
   }
 }

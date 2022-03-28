@@ -42,11 +42,16 @@ export class ArduinoController {
     @Param('deviceId') deviceId,
     @Param('version') firmwareVersion,
   ) {
-    if (
-      !(await this.deviceSvc.doesDeviceExist({ deviceId, firmwareVersion }))
-    ) {
+    const query = {
+      deviceId,
+      firmwareVersion,
+    }
+
+    if (!(await this.deviceSvc.doesDeviceExist(query))) {
       throw new NotFoundException('Device is not registered in the system.')
     }
+
+    await this.deviceSvc.bumpHeartbeat(query)
 
     // TODO return state
   }

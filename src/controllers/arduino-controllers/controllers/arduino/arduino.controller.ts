@@ -9,7 +9,7 @@ import {
   Put,
 } from '@nestjs/common'
 import { DeviceService } from 'src/services/generic-devices/device-service.abstract'
-import { ModuleToRegisterDto } from './module-to-register.dto'
+import { ModuleToRegisterDto } from '../../dto/module-to-register.dto'
 
 @Controller('arduino/:deviceId/version/:version')
 export class ArduinoController {

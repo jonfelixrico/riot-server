@@ -1,15 +1,15 @@
 import { DeviceModule } from './device-service.abstract'
 
-interface DeviceQuery {
+export interface DeviceQuery {
   deviceId: string
   firmwareVersion: string
 }
 
-interface DeviceToQueue extends DeviceQuery {
+export interface DeviceToQueue extends DeviceQuery {
   modules: DeviceModule[]
 }
 
-interface QueuedDevice extends DeviceToQueue {
+export interface QueuedDevice extends DeviceToQueue {
   lastQueueDt: Date
 }
 

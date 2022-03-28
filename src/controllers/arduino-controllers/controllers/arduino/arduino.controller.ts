@@ -26,9 +26,7 @@ export class ArduinoController {
     @Param('version') firmwareVersion,
     @Body() toRegister: ModuleToRegisterDto[],
   ) {
-    if (
-      await this.deviceSvc.isDeviceRegistered({ deviceId, firmwareVersion })
-    ) {
+    if (await this.deviceSvc.doesDeviceExist({ deviceId, firmwareVersion })) {
       throw new ForbiddenException('Device has already been registered.')
     }
 
@@ -45,7 +43,7 @@ export class ArduinoController {
     @Param('version') firmwareVersion,
   ) {
     if (
-      !(await this.deviceSvc.isDeviceRegistered({ deviceId, firmwareVersion }))
+      !(await this.deviceSvc.doesDeviceExist({ deviceId, firmwareVersion }))
     ) {
       throw new NotFoundException('Device is not registered in the system.')
     }

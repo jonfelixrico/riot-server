@@ -32,7 +32,7 @@ export abstract class DeviceService {
    * @param input
    * @returns True if the device is registered, false if otherwise.
    */
-  abstract isDeviceRegistered(input: {
+  abstract doesDeviceExist(input: {
     deviceId: string
     firmwareVersion: string
   }): Promise<boolean>

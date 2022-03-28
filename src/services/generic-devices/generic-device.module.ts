@@ -38,6 +38,11 @@ import { DeviceRegistrationQueueService } from './device-registration-queue-serv
     },
   ],
 
-  exports: [DeviceService, SensorService, ActuatorService],
+  exports: [
+    DeviceService,
+    SensorService,
+    ActuatorService,
+    DeviceRegistrationQueueService,
+  ],
 })
 export class GenericDevicesModule {}

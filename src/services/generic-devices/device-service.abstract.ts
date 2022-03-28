@@ -23,7 +23,25 @@ export abstract class DeviceService {
   abstract getDevice(input: {
     deviceId: string
     firmwareVersion: string
-  }): Promise<Device>
+  }): Promise<Device | null>
+
+  /**
+   * Determines if a device exists or not. When checking for exsitence, the use of this should be preferred'
+   * over null-checking `getDevice`.
+   *
+   * @param input
+   * @returns True if the device is registered, false if otherwise.
+   */
+  abstract isDeviceRegistered(input: {
+    deviceId: string
+    firmwareVersion: string
+  }): Promise<boolean>
+
+  abstract registerDevice(input: {
+    deviceId: string
+    firmwareVersion: string
+    modules: DeviceModule[]
+  })
 
   abstract getDevices(): Promise<Device[]>
 }

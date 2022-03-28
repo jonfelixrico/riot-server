@@ -10,17 +10,14 @@ export class DevicesController {
     return await this.deviceSvc.getDevices()
   }
 
-  @Get(':deviceId/version')
-  async listDeviceVersions() {
-    throw new Error('noop')
-  }
-
   @Get(':deviceId/version/:version')
   async getDeviceInfo(
     @Param('deviceId') deviceId: string,
     @Param('version') firmwareVersion: string,
   ) {
-    // return await this.deviceSvc.getDevice(deviceId)
-    throw new Error('noop')
+    return await this.deviceSvc.getDevice({
+      deviceId,
+      firmwareVersion,
+    })
   }
 }

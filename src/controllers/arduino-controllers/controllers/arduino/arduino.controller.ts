@@ -9,14 +9,18 @@ import {
   Put,
 } from '@nestjs/common'
 import { DeviceService } from 'src/services/generic-devices/device-service.abstract'
+import { RegistrationQueueService } from 'src/services/generic-devices/registration-queue-service.abstract'
 import { ModuleToRegisterDto } from '../../dto/module-to-register.dto'
 
 @Controller('arduino/:deviceId/version/:version')
 export class ArduinoController {
-  constructor(private deviceSvc: DeviceService) {}
+  constructor(
+    private deviceSvc: DeviceService,
+    private regSvc: RegistrationQueueService,
+  ) {}
 
   @Post()
-  @HttpCode(201)
+  @HttpCode(202)
   async registerDevice(
     @Param('deviceId') deviceId,
     @Param('version') firmwareVersion,
@@ -28,7 +32,7 @@ export class ArduinoController {
       throw new ForbiddenException('Device has already been registered.')
     }
 
-    await this.deviceSvc.registerDevice({
+    await this.regSvc.flagForQueue({
       deviceId,
       firmwareVersion,
       modules: toRegister,

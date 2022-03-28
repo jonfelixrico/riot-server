@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common'
+import { Controller, Get, NotFoundException, Param } from '@nestjs/common'
 import { DeviceService } from 'src/services/generic-devices/device-service.abstract'
 
 @Controller('api/devices')
@@ -15,9 +15,15 @@ export class DevicesController {
     @Param('deviceId') deviceId: string,
     @Param('version') firmwareVersion: string,
   ) {
-    return await this.deviceSvc.getDevice({
+    const deviceData = await this.deviceSvc.getDevice({
       deviceId,
       firmwareVersion,
     })
+
+    if (!deviceData) {
+      throw new NotFoundException('Device not found.')
+    }
+
+    return deviceData
   }
 }

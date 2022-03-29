@@ -5,9 +5,9 @@ import type {
   HourlySchedule,
   Override,
 } from 'src/services/specialized-devices/switch/switch-module-service.abstract'
-import type { BaseModuleConfig } from './module-config.mongoose-model'
+import type { MongooseModuleConfig } from './module-config.mongoose-model'
 
-export type SwitchConfig = BaseModuleConfig &
+export type SwitchConfig = MongooseModuleConfig &
   (DailySchedule | WeeklySchedule | HourlySchedule) & {
     override?: Override
   }
@@ -87,7 +87,7 @@ const switchConfigSchema = new Schema<SwitchConfig>({
  * @returns The model for the switch config.
  */
 export function switchConfigModelFactory(
-  baseConfigModel: Model<BaseModuleConfig>,
+  baseConfigModel: Model<MongooseModuleConfig>,
 ) {
   return baseConfigModel.discriminator('SwitchConfig', switchConfigSchema)
 }

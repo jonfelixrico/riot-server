@@ -31,6 +31,6 @@ import { ModuleStateService } from './module-state-service.abstract'
     },
   ],
 
-  exports: [DeviceService, DeviceRegistrationQueueService],
+  exports: [DeviceService, DeviceRegistrationQueueService, ModuleStateService],
 })
 export class GenericDevicesModule {}

@@ -7,7 +7,7 @@ export interface MongooseDevice {
   firmwareVersion: string
 }
 
-export interface MongooseDeviceModule {
+interface MongooseDeviceModule {
   id: string
   type: string
 

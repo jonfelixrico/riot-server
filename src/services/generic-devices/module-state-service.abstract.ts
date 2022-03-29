@@ -1,9 +1,9 @@
 export abstract class ModuleStateService {
-  abstract getState<T>(query: {
+  abstract getState(query: {
     moduleId: string
     deviceId: string
     firmwareVersion: string
-  }): Promise<T>
+  }): Promise<unknown>
 
   abstract getStates(query: {
     deviceId: string

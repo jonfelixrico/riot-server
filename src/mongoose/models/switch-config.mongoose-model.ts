@@ -7,7 +7,7 @@ import type {
 } from 'src/services/specialized-devices/switch/switch-module-service.abstract'
 import type { MongooseModuleConfig } from './module-config.mongoose-model'
 
-export type SwitchConfig = MongooseModuleConfig &
+export type MongooseSwitchConfig = MongooseModuleConfig &
   (DailySchedule | WeeklySchedule | HourlySchedule) & {
     override?: Override
   }
@@ -39,7 +39,7 @@ const overrideSchema = new Schema<Override>({
   },
 })
 
-const switchConfigSchema = new Schema<SwitchConfig>({
+const switchConfigSchema = new Schema<MongooseSwitchConfig>({
   utcOffset: Number,
 
   type: {

@@ -1,6 +1,6 @@
 import { Model } from 'mongoose'
 import { MongooseDevice } from './device.mongoose-model'
-import { SwitchConfig } from './switch-config.mongoose-model'
+import { MongooseSwitchConfig } from './switch-config.mongoose-model'
 
 /*
  * Note regarding BaseModuleConfig:
@@ -8,6 +8,6 @@ import { SwitchConfig } from './switch-config.mongoose-model'
  * attach discriminants to it.
  */
 
-export type SwitchConfigModel = Model<SwitchConfig>
+export type SwitchConfigModel = Model<MongooseSwitchConfig>
 
 export type DeviceModel = Model<MongooseDevice>

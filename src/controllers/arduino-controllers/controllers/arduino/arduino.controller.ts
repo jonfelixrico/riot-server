@@ -11,12 +11,14 @@ import {
 import { DeviceService } from 'src/services/generic-devices/device-service.abstract'
 import { DeviceRegistrationQueueService } from 'src/services/generic-devices/device-registration-queue-service.abstract'
 import { ModuleToRegisterDto } from '../../dto/module-to-register.dto'
+import { ModuleStateService } from 'src/services/generic-devices/module-state-service.abstract'
 
 @Controller('arduino/:deviceId/version/:version')
 export class ArduinoController {
   constructor(
     private deviceSvc: DeviceService,
     private regSvc: DeviceRegistrationQueueService,
+    private mStateSvc: ModuleStateService,
   ) {}
 
   @Post()
@@ -51,8 +53,11 @@ export class ArduinoController {
       throw new NotFoundException('Device is not registered in the system.')
     }
 
-    await this.deviceSvc.bumpHeartbeat(query)
+    // not very relevant to the process; we can afford having it fail unexpectedly
+    void this.deviceSvc.bumpHeartbeat(query).catch((e) => {
+      console.error(e)
+    })
 
-    // TODO return state
+    return await this.mStateSvc.getStates(query)
   }
 }

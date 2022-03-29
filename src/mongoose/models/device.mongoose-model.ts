@@ -1,6 +1,6 @@
 import { Schema, Connection, Types } from 'mongoose'
 
-export interface MongooseDevice {
+interface MongooseDevice {
   id: string
   lastHeartbeatDt: Date
   modules: MongooseDeviceModule[]

@@ -1,21 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { INestApplication } from '@nestjs/common'
 import * as request from 'supertest'
-import { AppModule } from '@app/app.module'
+import { ArduinoControllersModule } from '@app/controllers/arduino-controllers/arduino-controllers.module'
 
 describe('AppController (e2e)', () => {
   let app: INestApplication
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [ArduinoControllersModule],
     }).compile()
 
     app = moduleFixture.createNestApplication()
     await app.init()
   })
 
-  it('/ (GET)', () => {
+  test('processEmit', () => {
     return request(app.getHttpServer())
       .get('/')
       .expect(200)

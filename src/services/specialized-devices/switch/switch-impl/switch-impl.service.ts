@@ -17,21 +17,19 @@ import {
   DailySchedule,
   HourlySchedule,
   Override,
-  SwitchModuleService,
+  SwitchManager,
   SwitchState,
   WeeklySchedule,
 } from '../switch-manager.interface'
 import { Connection } from 'mongoose'
 
 @Injectable()
-export class SwitchImplService extends SwitchModuleService {
+export class SwitchImplService implements SwitchManager {
   constructor(
     @Inject(DEVICE_MODEL) private devices: DeviceModel,
     @Inject(SWTICH_CONFIG_MODEL) private switchConfigs: SwitchConfigModel,
     @Inject(MONGOOSE_CONN) private conn: Connection,
-  ) {
-    super()
-  }
+  ) {}
 
   private async fetch({ deviceId, moduleId, firmwareVersion }) {
     const device = await this.devices.findOne(

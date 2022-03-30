@@ -59,13 +59,6 @@ export class DeviceImplService implements DeviceManager {
     }
 
     await this.deviceModel.create(input)
-    for (const { id } of queued.modules) {
-      // TODO change once we get other types
-      // await this.switchSvc.initalizeSwitchConfig({
-      //   ...input,
-      //   moduleId: id,
-      // })
-    }
   }
 
   async getDevices(): Promise<Device[]> {

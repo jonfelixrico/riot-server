@@ -3,8 +3,8 @@ import { DEVICE_MODEL } from 'src/mongoose/mongoose.di-tokens'
 import { DeviceRegistrationQueueService } from '../../device-registration-queue-service.abstract'
 import {
   Device,
+  DeviceManager,
   DeviceModule,
-  DeviceService,
 } from '../../device-service.abstract'
 import { Model } from 'mongoose'
 import { MongooseDevice } from 'src/mongoose/models/device.mongoose-model'
@@ -15,14 +15,12 @@ interface DeviceToRegister extends DeviceQuery {
 }
 
 @Injectable()
-export class DeviceImplService extends DeviceService {
+export class DeviceImplService implements DeviceManager {
   constructor(
     @Inject(forwardRef(() => DeviceRegistrationQueueService))
     private regSvc: DeviceRegistrationQueueService,
     @Inject(DEVICE_MODEL) private deviceModel: Model<MongooseDevice>,
-  ) {
-    super()
-  }
+  ) {}
 
   private async fetch({ deviceId, firmwareVersion }: DeviceQuery) {
     return await this.deviceModel.findOne({ id: deviceId, firmwareVersion })

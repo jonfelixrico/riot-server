@@ -26,7 +26,11 @@ const deviceSchema = new Schema<MongooseDevice>({
   modules: [
     {
       id: String,
-      type: String,
+      /**
+       * @see {@link https://mongoosejs.com/docs/schematypes.html#type-key} to see why `type` has to be defined
+       * this way.
+       */
+      type: { type: String },
 
       /*
        * We don't want to make the ref the entire Module instead of just the config out of concerns regarding performance if we want

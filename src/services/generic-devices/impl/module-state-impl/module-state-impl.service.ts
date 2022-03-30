@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { DEVICE_MODEL } from 'src/mongoose/mongoose.di-tokens'
+import { DEVICE_MODEL } from '@app/mongoose/mongoose.di-tokens'
 import { ModuleStateService } from '../../module-state-service.abstract'
 import { Model } from 'mongoose'
-import { MongooseDevice } from 'src/mongoose/models/device.mongoose-model'
+import { MongooseDevice } from '@app/mongoose/models/device.mongoose-model'
 import {
   SwitchManager,
   SWITCH_MANAGER,
-} from 'src/services/specialized-devices/switch-manager.interface'
+} from '@app/services/specialized-devices/switch-manager.interface'
 
 interface DeviceQuery {
   deviceId: string

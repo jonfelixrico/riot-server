@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { GenericDevicesModule } from 'src/services/generic-devices/generic-device.module'
+import { GenericDevicesModule } from '@app/services/generic-devices/generic-device.module'
 import { ArduinoController } from './controllers/arduino/arduino.controller'
 
 /**

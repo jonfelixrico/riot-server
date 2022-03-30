@@ -11,11 +11,11 @@ import {
 import {
   DeviceManager,
   DEVICE_MANAGER,
-} from 'src/services/generic-devices/device-manager.interface'
+} from '@app/services/generic-devices/device-manager.interface'
 import {
   DeviceRegistrationQueue,
   DEVICE_REGISTRATION_QUEUE,
-} from 'src/services/generic-devices/device-registration-queue.interface'
+} from '@app/services/generic-devices/device-registration-queue.interface'
 
 @Controller('api/devices/unregistered')
 export class DeviceRegistrationController {

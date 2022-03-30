@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { DeviceImplService } from './impl/device-impl/device-impl.service'
 import { DEVICE_MANAGER } from './device-manager.interface'
-import { MongooseModule } from 'src/mongoose/mongoose.module'
+import { MongooseModule } from '@app/mongoose/mongoose.module'
 import { DeviceRegistrationQueueImplService } from './impl/device-registration-queue-impl/device-registration-queue-impl.service'
 import { DEVICE_REGISTRATION_QUEUE } from './device-registration-queue.interface'
 import { SpecializedDevicesModule } from '../specialized-devices/specialized-devices.module'

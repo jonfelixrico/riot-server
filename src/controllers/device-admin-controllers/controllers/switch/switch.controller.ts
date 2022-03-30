@@ -10,7 +10,7 @@ import {
 import {
   SwitchManager,
   SWITCH_MANAGER,
-} from 'src/services/specialized-devices/switch-manager.interface'
+} from '@app/services/specialized-devices/switch-manager.interface'
 import { SwitchOverrideDto } from './switch-override.dto'
 import { SwitchScheduleDto } from './switch-schedule.dto'
 

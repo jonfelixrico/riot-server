@@ -8,7 +8,7 @@ import {
 import {
   DeviceManager,
   DEVICE_MANAGER,
-} from 'src/services/generic-devices/device-manager.interface'
+} from '@app/services/generic-devices/device-manager.interface'
 
 @Controller('api/devices')
 export class DevicesController {

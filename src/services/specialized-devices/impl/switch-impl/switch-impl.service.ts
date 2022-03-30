@@ -2,16 +2,16 @@ import { Inject, Injectable } from '@nestjs/common'
 import {
   DeviceModel,
   SwitchConfigModel,
-} from 'src/mongoose/models/mongoose-models.types'
+} from '@app/mongoose/models/mongoose-models.types'
 import {
   DEVICE_MODEL,
   MONGOOSE_CONN,
   SWTICH_CONFIG_MODEL,
-} from 'src/mongoose/mongoose.di-tokens'
+} from '@app/mongoose/mongoose.di-tokens'
 import {
   computeDailyState,
   computeWeeklyState,
-} from 'src/utils/switch-schedule.utils'
+} from '@app/utils/switch-schedule.utils'
 import {
   DailySchedule,
   Override,
@@ -23,10 +23,10 @@ import {
 import {
   DateTimeProvider,
   DATETIME_PROVIDER,
-} from 'src/common-services/time-provider.interface'
+} from '@app/common-services/time-provider.interface'
 import { DateTime } from 'luxon'
-import { MongooseSwitchConfig } from 'src/mongoose/models/switch-config.mongoose-model'
-import { ModuleQuery } from 'src/types/query-common.types'
+import { MongooseSwitchConfig } from '@app/mongoose/models/switch-config.mongoose-model'
+import { ModuleQuery } from '@app/types/query-common.types'
 import { Connection } from 'mongoose'
 
 function generateDefault(): Omit<MongooseSwitchConfig, 'lastUpdateDt'> {

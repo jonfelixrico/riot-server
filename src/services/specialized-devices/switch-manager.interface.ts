@@ -1,4 +1,4 @@
-import { ModuleQuery } from 'src/types/query-common.types'
+import { ModuleQuery } from '@app/types/query-common.types'
 
 export type SwitchState = 'ON' | 'OFF'
 

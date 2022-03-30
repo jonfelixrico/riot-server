@@ -9,7 +9,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common'
-import { DeviceRegistrationQueueService } from 'src/services/generic-devices/device-registration-queue-service.abstract'
+import { DeviceRegistrationQueueService } from 'src/services/generic-devices/device-registration-queue.interface'
 import { ModuleToRegisterDto } from '../../dto/module-to-register.dto'
 import { ModuleStateService } from 'src/services/generic-devices/module-state-service.abstract'
 import {

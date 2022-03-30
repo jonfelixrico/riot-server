@@ -12,7 +12,7 @@ import {
   DeviceManager,
   DEVICE_MANAGER,
 } from 'src/services/generic-devices/device-manager.interface'
-import { DeviceRegistrationQueueService } from 'src/services/generic-devices/device-registration-queue-service.abstract'
+import { DeviceRegistrationQueueService } from 'src/services/generic-devices/device-registration-queue.interface'
 
 @Controller('api/devices/unregistered')
 export class DeviceRegistrationController {

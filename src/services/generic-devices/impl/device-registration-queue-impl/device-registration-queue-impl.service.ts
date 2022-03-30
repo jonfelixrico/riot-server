@@ -5,7 +5,7 @@ import {
   DeviceRegistrationQueueService,
   DeviceToQueue,
   QueuedDevice,
-} from '../../device-registration-queue-service.abstract'
+} from '../../device-registration-queue.interface'
 import { DeviceManager, DEVICE_MANAGER } from '../../device-manager.interface'
 
 const convertToKey = ({

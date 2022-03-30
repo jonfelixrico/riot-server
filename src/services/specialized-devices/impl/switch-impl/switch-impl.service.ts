@@ -77,15 +77,12 @@ export class SwitchImplService implements SwitchManager {
     )
 
     if (!device) {
-      return null
+      throw new Error('device not found')
     }
 
     const dModule = device.modules.find(({ id }) => id === moduleId)
     if (!dModule) {
-      console.warn(
-        'SwitchImplService: device was found but module ref was not found',
-      )
-      return null
+      throw new Error('module not found')
     }
 
     return await this.switchConfigs.findById(dModule.config)

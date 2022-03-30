@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common'
 import { DATETIME_PROVIDER } from './time-provider.interface'
-import { TimeProviderImplService } from './impl/time-provider-impl/time-provider-impl.service'
+import { DatetimeProviderImplService } from './impl/datetime-provider-impl/datetime-provider-impl.service'
 
 @Module({
   providers: [
+    DatetimeProviderImplService,
     {
       provide: DATETIME_PROVIDER,
-      useExisting: TimeProviderImplService,
+      useExisting: DatetimeProviderImplService,
     },
-    TimeProviderImplService,
   ],
 })
 export class CommonServicesModule {}

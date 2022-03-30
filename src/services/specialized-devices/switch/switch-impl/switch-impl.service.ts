@@ -15,6 +15,7 @@ import {
 import {
   DailySchedule,
   Override,
+  SwitchConfig,
   SwitchManager,
   SwitchState,
   WeeklySchedule,
@@ -24,6 +25,31 @@ import {
   DateTimeProvider,
   DATETIME_PROVIDER,
 } from 'src/common-services/time-provider.interface'
+import { DateTime } from 'luxon'
+import { MongooseSwitchConfig } from 'src/mongoose/models/switch-config.mongoose-model'
+
+const DEFAULT_CONFIG: MongooseSwitchConfig = {
+  schedule: {
+    utcOffset: '+0',
+    type: 'DAILY',
+    dailySchedule: [
+      {
+        start: {
+          hour: 0,
+          minute: 0,
+          second: 0,
+        },
+        end: {
+          hour: 23,
+          minute: 59,
+          second: 59,
+        },
+        state: 'OFF',
+      },
+    ],
+  },
+  lastUpdateDt: new Date(),
+}
 
 @Injectable()
 export class SwitchImplService implements SwitchManager {
@@ -59,22 +85,32 @@ export class SwitchImplService implements SwitchManager {
     return await this.switchConfigs.findById(dModule.config)
   }
 
-  async getState(input): Promise<SwitchState> {
-    const record = await this.fetchRecord(input)
+  private async computeState(config: SwitchConfig): Promise<SwitchState> {
     const now = await this.dtProvider.getCurrentDateTime()
 
-    if (!record) {
-      return null
+    const { override } = config
+    if (override) {
+      if (
+        !override.overrideUntil || // unli-override
+        now.diff(DateTime.fromJSDate(override.overrideUntil)).milliseconds > 0 // override expiration has not yet lapsed
+      ) {
+        return override.state
+      }
     }
 
-    switch (record.type) {
+    switch (config.schedule.type) {
       case 'DAILY':
-        return computeDailyState(record, now)
+        return computeDailyState(config.schedule, now)
       case 'WEEKLY':
-        return computeWeeklyState(record, now)
+        return computeWeeklyState(config.schedule, now)
       default:
         throw new Error('unknown record type')
     }
+  }
+
+  async getState(input): Promise<SwitchState> {
+    const record = await this.fetchRecord(input)
+    return this.computeState(record ?? DEFAULT_CONFIG)
   }
 
   async setSchedule(
@@ -86,14 +122,14 @@ export class SwitchImplService implements SwitchManager {
       throw new Error('record not found')
     }
 
-    switch (record.type) {
+    switch (record.schedule.type) {
       case 'DAILY': {
-        record.dailySchedule = undefined
+        record.schedule.dailySchedule = undefined
         break
       }
 
       case 'WEEKLY': {
-        record.weeklySchedule = undefined
+        record.schedule.weeklySchedule = undefined
         break
       }
     }
@@ -118,31 +154,5 @@ export class SwitchImplService implements SwitchManager {
 
     record.lastUpdateDt = new Date()
     await record.save()
-  }
-
-  async initalizeSwitchConfig({ deviceId, moduleId, firmwareVersion }) {
-    const initSwitchConfig = new this.switchConfigs({
-      type: 'HOURLY',
-      hourlySchedule: [],
-      utcOffset: '+0',
-      lastUpdateDt: new Date(),
-    })
-
-    const device = await this.devices.findOne({ id: deviceId, firmwareVersion })
-    if (!device) {
-      throw new Error('device not found')
-    }
-
-    const dModule = device.modules.find(({ id }) => id === moduleId)
-    if (!dModule) {
-      throw new Error('device not found')
-    }
-
-    dModule.config = initSwitchConfig._id
-
-    await this.conn.transaction(async () => {
-      await initSwitchConfig.save()
-      await device.save()
-    })
   }
 }

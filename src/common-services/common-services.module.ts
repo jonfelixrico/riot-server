@@ -10,5 +10,7 @@ import { DatetimeProviderImplService } from './impl/datetime-provider-impl/datet
       useExisting: DatetimeProviderImplService,
     },
   ],
+
+  exports: [DATETIME_PROVIDER],
 })
 export class CommonServicesModule {}

@@ -1,7 +1,11 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { DEVICE_MODEL } from 'src/mongoose/mongoose.di-tokens'
-import { DeviceRegistrationQueueService } from '../device-registration-queue-service.abstract'
-import { Device, DeviceModule, DeviceService } from '../device-service.abstract'
+import { DeviceRegistrationQueueService } from '../../device-registration-queue-service.abstract'
+import {
+  Device,
+  DeviceModule,
+  DeviceService,
+} from '../../device-service.abstract'
 import { Model } from 'mongoose'
 import { MongooseDevice } from 'src/mongoose/models/device.mongoose-model'
 

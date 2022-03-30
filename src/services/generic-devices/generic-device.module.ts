@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { DeviceImplService } from './device-impl/device-impl.service'
+import { DeviceImplService } from './impl/device-impl/device-impl.service'
 import { DeviceService, DEVICE_MANAGER } from './device-service.abstract'
 import { MongooseModule } from 'src/mongoose/mongoose.module'
 import { DeviceRegistrationQueueImplService } from './device-registration-queue-impl/device-registration-queue-impl.service'
@@ -35,6 +35,11 @@ import { ModuleStateService } from './module-state-service.abstract'
     },
   ],
 
-  exports: [DeviceService, DeviceRegistrationQueueService, ModuleStateService],
+  exports: [
+    DeviceService,
+    DeviceRegistrationQueueService,
+    ModuleStateService,
+    DEVICE_MANAGER,
+  ],
 })
 export class GenericDevicesModule {}

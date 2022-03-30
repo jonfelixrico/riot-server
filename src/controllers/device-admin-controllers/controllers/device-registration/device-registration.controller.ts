@@ -7,6 +7,7 @@ import {
   Inject,
   NotFoundException,
   Param,
+  Post,
 } from '@nestjs/common'
 import {
   DeviceManager,
@@ -29,7 +30,7 @@ export class DeviceRegistrationController {
     return await this.regSvc.getQueueItems()
   }
 
-  @Get(':deviceId/versions/:version')
+  @Get(':deviceId/version/:version')
   async getDeviceForRegistration(
     @Param('deviceId') deviceId: string,
     @Param('version') firmwareVersion: string,
@@ -41,7 +42,7 @@ export class DeviceRegistrationController {
   }
 
   @HttpCode(201)
-  @Get(':deviceId/versions/:version')
+  @Post(':deviceId/version/:version')
   async registerDevice(
     @Param('deviceId') deviceId: string,
     @Param('version') firmwareVersion: string,
@@ -64,7 +65,7 @@ export class DeviceRegistrationController {
     await this.deviceSvc.registerDevice(queueItem)
   }
 
-  @Delete(':deviceId/versions/:version')
+  @Delete(':deviceId/version/:version')
   async deleteRegistrationAttempt(
     @Param('deviceId') deviceId: string,
     @Param('version') firmwareVersion: string,

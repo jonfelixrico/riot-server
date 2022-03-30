@@ -19,7 +19,7 @@ import {
   SwitchManager,
   SwitchState,
   WeeklySchedule,
-} from '../switch-manager.interface'
+} from '../../switch/switch-manager.interface'
 import {
   DateTimeProvider,
   DATETIME_PROVIDER,

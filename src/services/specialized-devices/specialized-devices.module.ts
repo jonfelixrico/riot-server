@@ -15,6 +15,6 @@ import { SWITCH_MANAGER } from './switch/switch-manager.interface'
     },
   ],
 
-  exports: [SwitchModuleService, SWITCH_MANAGER],
+  exports: [SWITCH_MANAGER],
 })
 export class SpecializedDevicesModule {}

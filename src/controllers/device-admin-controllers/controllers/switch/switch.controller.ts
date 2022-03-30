@@ -1,9 +1,23 @@
-import { Body, Controller, Delete, Get, Param, Put } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Put,
+} from '@nestjs/common'
+import {
+  SwitchManager,
+  SWITCH_MANAGER,
+} from 'src/services/specialized-devices/switch-manager.interface'
 import { SwitchOverrideDto } from './switch-override.dto'
 import { SwitchScheduleDto } from './switch-schedule.dto'
 
-@Controller('api/devices/:deviceId/modules/switch')
+@Controller('api/devices/:deviceId/version/:version/modules/switch')
 export class SwitchController {
+  constructor(@Inject(SWITCH_MANAGER) private switchSvc: SwitchManager) {}
+
   /**
    * Gets the full details of a switch.
    * @param deviceId
@@ -24,12 +38,20 @@ export class SwitchController {
    * @param schedule
    */
   @Put(':switchId')
-  setSchedule(
+  async setSchedule(
     @Param('deviceId') deviceId: string,
     @Param('switchId') switchId: string,
-    @Body() schedule: SwitchScheduleDto,
-  ) {
-    throw new Error('noop')
+    @Param('version') firmwareVersion: string,
+    @Body() { schedule }: SwitchScheduleDto,
+  ): Promise<void> {
+    await this.switchSvc.setSchedule(
+      {
+        deviceId,
+        moduleId: switchId,
+        firmwareVersion,
+      },
+      schedule,
+    )
   }
 
   /**
@@ -38,11 +60,20 @@ export class SwitchController {
    * @param switchId
    */
   @Get(':switchId/state')
-  getState(
+  async getState(
     @Param('deviceId') deviceId: string,
-    @Param('switchId') switchId: string,
+    @Param('switchId') moduleId: string,
+    @Param('version') firmwareVersion: string,
   ) {
-    throw new Error('noop')
+    const state = await this.switchSvc.getState({
+      deviceId,
+      moduleId,
+      firmwareVersion,
+    })
+
+    return {
+      state,
+    }
   }
 
   /**
@@ -51,13 +82,21 @@ export class SwitchController {
    * @param switchId
    * @param override
    */
-  @Put(':switchId/state')
-  setOverride(
+  @Put(':switchId/override')
+  async setOverride(
     @Param('deviceId') deviceId: string,
-    @Param('switchId') switchId: string,
+    @Param('switchId') moduleId: string,
+    @Param('version') firmwareVersion: string,
     @Body() override: SwitchOverrideDto,
   ) {
-    throw new Error('noop')
+    await this.switchSvc.setOverride(
+      {
+        deviceId,
+        moduleId,
+        firmwareVersion,
+      },
+      override,
+    )
   }
 
   /**
@@ -65,11 +104,16 @@ export class SwitchController {
    * @param deviceId
    * @param switchId
    */
-  @Delete(':switchId/state')
-  clearOverride(
+  @Delete(':switchId/override')
+  async clearOverride(
     @Param('deviceId') deviceId: string,
-    @Param('switchId') switchId: string,
+    @Param('switchId') moduleId: string,
+    @Param('version') firmwareVersion: string,
   ) {
-    throw new Error('noop')
+    await this.switchSvc.setOverride({
+      deviceId,
+      moduleId,
+      firmwareVersion,
+    })
   }
 }

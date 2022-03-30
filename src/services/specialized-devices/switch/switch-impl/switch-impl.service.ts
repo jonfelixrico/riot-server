@@ -20,7 +20,6 @@ import {
   SwitchState,
   WeeklySchedule,
 } from '../switch-manager.interface'
-import { Connection } from 'mongoose'
 import {
   DateTimeProvider,
   DATETIME_PROVIDER,
@@ -28,27 +27,30 @@ import {
 import { DateTime } from 'luxon'
 import { MongooseSwitchConfig } from 'src/mongoose/models/switch-config.mongoose-model'
 import { ModuleQuery } from 'src/types/query-common.types'
+import { Connection } from 'mongoose'
 
-const DEFAULT_CONFIG: Omit<MongooseSwitchConfig, 'lastUpdateDt'> = {
-  schedule: {
-    utcOffset: '+0',
-    type: 'DAILY',
-    dailySchedule: [
-      {
-        start: {
-          hour: 0,
-          minute: 0,
-          second: 0,
+function generateDefault(): Omit<MongooseSwitchConfig, 'lastUpdateDt'> {
+  return {
+    schedule: {
+      utcOffset: '+0',
+      type: 'DAILY',
+      dailySchedule: [
+        {
+          start: {
+            hour: 0,
+            minute: 0,
+            second: 0,
+          },
+          end: {
+            hour: 23,
+            minute: 59,
+            second: 59,
+          },
+          state: 'OFF',
         },
-        end: {
-          hour: 23,
-          minute: 59,
-          second: 59,
-        },
-        state: 'OFF',
-      },
-    ],
-  },
+      ],
+    },
+  }
 }
 
 @Injectable()
@@ -57,6 +59,7 @@ export class SwitchImplService implements SwitchManager {
     @Inject(DEVICE_MODEL) private devices: DeviceModel,
     @Inject(SWTICH_CONFIG_MODEL) private switchConfigs: SwitchConfigModel,
     @Inject(DATETIME_PROVIDER) private dtProvider: DateTimeProvider,
+    @Inject(MONGOOSE_CONN) private conn: Connection,
   ) {}
 
   private async fetchRecord({
@@ -113,14 +116,51 @@ export class SwitchImplService implements SwitchManager {
 
   async getState(input): Promise<SwitchState> {
     const record = await this.fetchRecord(input)
-    return this.computeState(record ?? DEFAULT_CONFIG)
+    return this.computeState(record ?? generateDefault())
+  }
+
+  private async updateConfig(
+    { deviceId, firmwareVersion, moduleId }: ModuleQuery,
+    config: Omit<MongooseSwitchConfig, 'lastUpdateDt'>,
+  ): Promise<void> {
+    const device = await this.devices.findOne({
+      id: deviceId,
+      firmwareVersion,
+    })
+
+    if (!device) {
+      throw new Error('device not found')
+    }
+
+    const dModule = device.modules.find(({ id }) => id === moduleId)
+    if (!dModule) {
+      throw new Error('moduel not found')
+    }
+
+    const savePayload: MongooseSwitchConfig = {
+      ...config,
+      lastUpdateDt: new Date(),
+    }
+
+    if (dModule.config) {
+      await this.switchConfigs.findByIdAndUpdate(dModule.config, savePayload)
+      return
+    }
+
+    const forSaving = new this.switchConfigs(savePayload)
+    dModule.config = forSaving._id
+
+    await this.conn.transaction(async () => {
+      await device.save()
+      await forSaving.save()
+    })
   }
 
   async setSchedule(
-    input,
+    input: ModuleQuery,
     schedule: DailySchedule | WeeklySchedule,
   ): Promise<void> {
-    const record = await this.fetchRecord(input)
+    const record = (await this.fetchRecord(input)) ?? generateDefault()
     if (!record) {
       throw new Error('record not found')
     }
@@ -138,13 +178,11 @@ export class SwitchImplService implements SwitchManager {
     }
 
     Object.assign(record, schedule)
-    record.lastUpdateDt = new Date()
-
-    await record.save()
+    await this.updateConfig(input, record)
   }
 
-  async setOverride(input, override?: Override): Promise<void> {
-    const record = await this.fetchRecord(input)
+  async setOverride(input: ModuleQuery, override?: Override): Promise<void> {
+    const record = (await this.fetchRecord(input)) ?? generateDefault()
     if (!record) {
       throw new Error('record not found')
     }
@@ -155,7 +193,6 @@ export class SwitchImplService implements SwitchManager {
       record.override = override
     }
 
-    record.lastUpdateDt = new Date()
-    await record.save()
+    await this.updateConfig(input, record)
   }
 }

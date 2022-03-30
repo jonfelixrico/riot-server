@@ -26,9 +26,9 @@ export abstract class DeviceRegistrationQueueService
 }
 
 /**
- * Dependency injection token for {@link DeviceRegistrationQueue}.
+ * Dependency injection token for {@link DEVICE_REGISTRATION_QUEUE}.
  */
-export const DeviceRegistrationQueue = Symbol('registration queue')
+export const DEVICE_REGISTRATION_QUEUE = Symbol('registration queue')
 
 export interface DeviceRegistrationQueue {
   flagForQueue(input: DeviceToQueue): Promise<void>

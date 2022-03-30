@@ -3,7 +3,7 @@ import { DEVICE_MODEL } from 'src/mongoose/mongoose.di-tokens'
 import { ModuleStateService } from '../module-state-service.abstract'
 import { Model } from 'mongoose'
 import { MongooseDevice } from 'src/mongoose/models/device.mongoose-model'
-import { SwitchModuleService } from 'src/services/specialized-devices/switch/switch-module-service.abstract'
+import { SwitchModuleService } from 'src/services/specialized-devices/switch/switch-manager.interface'
 
 interface DeviceQuery {
   deviceId: string

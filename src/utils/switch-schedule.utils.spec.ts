@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { WeeklySchedule } from 'src/services/specialized-devices/switch/switch-module-service.abstract'
+import { WeeklySchedule } from 'src/services/specialized-devices/switch/switch-manager.interface'
 import {
   computeDailyState,
   computeHourlyState,

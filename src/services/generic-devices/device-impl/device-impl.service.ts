@@ -4,7 +4,7 @@ import { DeviceRegistrationQueueService } from '../device-registration-queue-ser
 import { Device, DeviceModule, DeviceService } from '../device-service.abstract'
 import { Model } from 'mongoose'
 import { MongooseDevice } from 'src/mongoose/models/device.mongoose-model'
-import { SwitchModuleService } from 'src/services/specialized-devices/switch/switch-module-service.abstract'
+import { SwitchModuleService } from 'src/services/specialized-devices/switch/switch-manager.interface'
 
 interface DeviceQuery {
   deviceId: string
@@ -65,10 +65,10 @@ export class DeviceImplService extends DeviceService {
     await this.deviceModel.create(input)
     for (const { id } of queued.modules) {
       // TODO change once we get other types
-      await this.switchSvc.initalizeSwitchConfig({
-        ...input,
-        moduleId: id,
-      })
+      // await this.switchSvc.initalizeSwitchConfig({
+      //   ...input,
+      //   moduleId: id,
+      // })
     }
   }
 

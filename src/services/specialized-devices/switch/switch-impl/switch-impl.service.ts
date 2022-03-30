@@ -20,7 +20,7 @@ import {
   SwitchModuleService,
   SwitchState,
   WeeklySchedule,
-} from '../switch-module-service.abstract'
+} from '../switch-manager.interface'
 import { Connection } from 'mongoose'
 
 @Injectable()

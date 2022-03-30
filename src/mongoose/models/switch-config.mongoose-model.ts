@@ -4,7 +4,7 @@ import type {
   WeeklySchedule,
   HourlySchedule,
   Override,
-} from 'src/services/specialized-devices/switch/switch-module-service.abstract'
+} from 'src/services/specialized-devices/switch/switch-manager.interface'
 import type { MongooseModuleConfig } from './module-config.mongoose-model'
 
 export type MongooseSwitchConfig = MongooseModuleConfig &

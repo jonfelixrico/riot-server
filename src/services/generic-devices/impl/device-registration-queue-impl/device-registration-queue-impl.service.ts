@@ -5,8 +5,8 @@ import {
   DeviceRegistrationQueueService,
   DeviceToQueue,
   QueuedDevice,
-} from '../device-registration-queue-service.abstract'
-import { DeviceManager, DEVICE_MANAGER } from '../device-manager.interface'
+} from '../../device-registration-queue-service.abstract'
+import { DeviceManager, DEVICE_MANAGER } from '../../device-manager.interface'
 
 const convertToKey = ({
   firmwareVersion,

@@ -1,12 +1,13 @@
 import { Schema, Connection, Types } from 'mongoose'
 
-export interface Device {
+export interface MongooseDevice {
   id: string
   lastHeartbeatDt: Date
-  modules: DeviceModule[]
+  modules: MongooseDeviceModule[]
+  firmwareVersion: string
 }
 
-export interface DeviceModule {
+interface MongooseDeviceModule {
   id: string
   type: string
 
@@ -17,9 +18,11 @@ export interface DeviceModule {
   config: Types.ObjectId
 }
 
-const deviceSchema = new Schema<Device>({
+const deviceSchema = new Schema<MongooseDevice>({
   id: String,
   lastHeartbeatDt: Date,
+  firmwareVersion: String,
+
   modules: [
     {
       id: String,

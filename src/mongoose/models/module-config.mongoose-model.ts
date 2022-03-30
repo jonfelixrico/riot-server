@@ -1,10 +1,10 @@
 import { Schema, Connection } from 'mongoose'
 
-export interface BaseModuleConfig {
+export interface MongooseModuleConfig {
   lastUpdateDt: Date
 }
 
-const moduleSchema = new Schema<BaseModuleConfig>({
+const moduleSchema = new Schema<MongooseModuleConfig>({
   lastUpdateDt: Date,
 })
 

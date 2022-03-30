@@ -1,16 +1,11 @@
 import { Schema, Model } from 'mongoose'
 import type {
-  DailySchedule,
-  WeeklySchedule,
-  HourlySchedule,
   Override,
-} from 'src/services/specialized-devices/switch/switch-module-service.abstract'
-import type { BaseModuleConfig } from './module-config.mongoose-model'
+  SwitchConfig,
+} from 'src/services/specialized-devices/switch-manager.interface'
+import type { MongooseModuleConfig } from './module-config.mongoose-model'
 
-export type SwitchConfig = BaseModuleConfig &
-  (DailySchedule | WeeklySchedule | HourlySchedule) & {
-    override?: Override
-  }
+export type MongooseSwitchConfig = MongooseModuleConfig & SwitchConfig
 
 const scheduleNestedPath = {
   start: {
@@ -25,58 +20,32 @@ const scheduleNestedPath = {
     second: Number,
   },
 
-  state: {
-    type: String,
-    enum: ['ON', 'OFF'],
-  },
+  state: String,
 }
 
 const overrideSchema = new Schema<Override>({
   overrideUntil: Date,
-  state: {
-    type: String,
-    enum: ['ON', 'OFF'],
-  },
+  state: String,
 })
 
-const switchConfigSchema = new Schema<SwitchConfig>({
-  utcOffset: Number,
+const switchConfigSchema = new Schema<MongooseSwitchConfig>({
+  schedule: {
+    utcOffset: Number,
 
-  type: {
     type: String,
-    enum: ['DAILY', 'WEEKLY', 'HOURLY'],
-  },
 
-  dailySchedule: [scheduleNestedPath],
+    dailySchedule: [scheduleNestedPath],
 
-  weeklySchedule: {
-    sun: [scheduleNestedPath],
-    mon: [scheduleNestedPath],
-    tue: [scheduleNestedPath],
-    wed: [scheduleNestedPath],
-    thurs: [scheduleNestedPath],
-    fri: [scheduleNestedPath],
-    sat: [scheduleNestedPath],
-  },
-
-  hourlySchedule: [
-    {
-      start: {
-        minute: Number,
-        second: Number,
-      },
-
-      end: {
-        minute: Number,
-        second: Number,
-      },
-
-      state: {
-        type: String,
-        enum: ['OFF', 'ON'],
-      },
+    weeklySchedule: {
+      sun: [scheduleNestedPath],
+      mon: [scheduleNestedPath],
+      tue: [scheduleNestedPath],
+      wed: [scheduleNestedPath],
+      thurs: [scheduleNestedPath],
+      fri: [scheduleNestedPath],
+      sat: [scheduleNestedPath],
     },
-  ],
+  },
 
   override: overrideSchema,
 })
@@ -87,7 +56,7 @@ const switchConfigSchema = new Schema<SwitchConfig>({
  * @returns The model for the switch config.
  */
 export function switchConfigModelFactory(
-  baseConfigModel: Model<BaseModuleConfig>,
+  baseConfigModel: Model<MongooseModuleConfig>,
 ) {
   return baseConfigModel.discriminator('SwitchConfig', switchConfigSchema)
 }

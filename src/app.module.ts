@@ -4,6 +4,7 @@ import { DeviceAdminControllersModule } from './controllers/device-admin-control
 import { ArduinoControllersModule } from './controllers/arduino-controllers/arduino-controllers.module'
 import { GenericDevicesModule } from './services/generic-devices/generic-device.module'
 import { SpecializedDevicesModule } from './services/specialized-devices/specialized-devices.module'
+import { CommonServicesModule } from './common-services/common-services.module'
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { SpecializedDevicesModule } from './services/specialized-devices/special
     ArduinoControllersModule,
     GenericDevicesModule,
     SpecializedDevicesModule,
+    CommonServicesModule,
   ],
 })
 export class AppModule {}

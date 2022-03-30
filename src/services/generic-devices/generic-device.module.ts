@@ -1,35 +1,36 @@
 import { Module } from '@nestjs/common'
-import { DeviceImplService } from './device-impl/device-impl.service'
-import { DeviceService } from './device-service.abstract'
-import { ActuatorImplService } from './actuator-impl/actuator-impl.service'
-import { ActuatorService } from './actuator-service.abstract'
-import { SensorImplService } from './sensor-impl/sensor-impl.service'
-import { SensorService } from './sensor-service.abstract'
+import { DeviceImplService } from './impl/device-impl/device-impl.service'
+import { DEVICE_MANAGER } from './device-manager.interface'
 import { MongooseModule } from 'src/mongoose/mongoose.module'
+import { DeviceRegistrationQueueImplService } from './impl/device-registration-queue-impl/device-registration-queue-impl.service'
+import { DEVICE_REGISTRATION_QUEUE } from './device-registration-queue.interface'
+import { SpecializedDevicesModule } from '../specialized-devices/specialized-devices.module'
+import { ModuleStateImplService } from './impl/module-state-impl/module-state-impl.service'
+import { ModuleStateService } from './module-state-service.abstract'
 
 @Module({
-  imports: [MongooseModule],
+  imports: [MongooseModule, SpecializedDevicesModule],
 
   providers: [
     DeviceImplService,
     {
-      provide: DeviceService,
+      provide: DEVICE_MANAGER,
       useExisting: DeviceImplService,
     },
 
-    ActuatorImplService,
+    DeviceRegistrationQueueImplService,
     {
-      provide: ActuatorService,
-      useExisting: ActuatorImplService,
+      provide: DEVICE_REGISTRATION_QUEUE,
+      useExisting: DeviceRegistrationQueueImplService,
     },
 
-    SensorImplService,
+    ModuleStateImplService,
     {
-      provide: SensorService,
-      useExisting: SensorImplService,
+      provide: ModuleStateService,
+      useExisting: ModuleStateImplService,
     },
   ],
 
-  exports: [DeviceService, SensorService, ActuatorService],
+  exports: [ModuleStateService, DEVICE_MANAGER, DEVICE_REGISTRATION_QUEUE],
 })
 export class GenericDevicesModule {}

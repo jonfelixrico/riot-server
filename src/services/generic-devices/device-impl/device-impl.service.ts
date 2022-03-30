@@ -4,7 +4,6 @@ import { DeviceRegistrationQueueService } from '../device-registration-queue-ser
 import { Device, DeviceModule, DeviceService } from '../device-service.abstract'
 import { Model } from 'mongoose'
 import { MongooseDevice } from 'src/mongoose/models/device.mongoose-model'
-import { SwitchModuleService } from 'src/services/specialized-devices/switch/switch-manager.interface'
 
 interface DeviceQuery {
   deviceId: string

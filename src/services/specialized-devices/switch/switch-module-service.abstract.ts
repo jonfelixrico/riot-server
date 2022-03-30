@@ -127,6 +127,7 @@ export abstract class SwitchModuleService {
     moduleId: string
     firmwareVersion: string
   }): Promise<void>
+
   abstract setOverride(
     input: {
       deviceId: string
@@ -135,6 +136,7 @@ export abstract class SwitchModuleService {
     },
     override: null,
   ): Promise<void>
+
   /**
    * Updates updates the override of the switch.
    *
@@ -150,16 +152,4 @@ export abstract class SwitchModuleService {
     },
     override: Override,
   ): Promise<void>
-
-  /**
-   * Initializes the record for the switch config.
-   *
-   * @param deviceId
-   * @param moduleId
-   */
-  abstract initalizeSwitchConfig(input: {
-    deviceId: string
-    moduleId: string
-    firmwareVersion: string
-  }): Promise<void>
 }

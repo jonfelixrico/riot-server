@@ -58,7 +58,7 @@ export class DeviceRegistrationController {
       throw new NotFoundException('Device is not in the registration queue.')
     }
 
-    if (!(await this.deviceSvc.doesDeviceExist(query))) {
+    if (await this.deviceSvc.doesDeviceExist(query)) {
       throw new ForbiddenException('Device already registered.')
     }
 

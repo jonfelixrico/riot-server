@@ -28,7 +28,7 @@ import {
 import { DateTime } from 'luxon'
 import { MongooseSwitchConfig } from 'src/mongoose/models/switch-config.mongoose-model'
 
-const DEFAULT_CONFIG: MongooseSwitchConfig = {
+const DEFAULT_CONFIG: Omit<MongooseSwitchConfig, 'lastUpdateDt'> = {
   schedule: {
     utcOffset: '+0',
     type: 'DAILY',
@@ -48,7 +48,6 @@ const DEFAULT_CONFIG: MongooseSwitchConfig = {
       },
     ],
   },
-  lastUpdateDt: new Date(),
 }
 
 @Injectable()

@@ -10,12 +10,10 @@ import {
 } from 'src/mongoose/mongoose.di-tokens'
 import {
   computeDailyState,
-  computeHourlyState,
   computeWeeklyState,
 } from 'src/utils/switch-schedule.utils'
 import {
   DailySchedule,
-  HourlySchedule,
   Override,
   SwitchManager,
   SwitchState,
@@ -36,7 +34,7 @@ export class SwitchImplService implements SwitchManager {
     @Inject(DATETIME_PROVIDER) private dtProvider: DateTimeProvider,
   ) {}
 
-  private async fetch({ deviceId, moduleId, firmwareVersion }) {
+  private async fetchRecord({ deviceId, moduleId, firmwareVersion }) {
     const device = await this.devices.findOne(
       {
         id: deviceId,
@@ -62,7 +60,7 @@ export class SwitchImplService implements SwitchManager {
   }
 
   async getState(input): Promise<SwitchState> {
-    const record = await this.fetch(input)
+    const record = await this.fetchRecord(input)
     const now = await this.dtProvider.getCurrentDateTime()
 
     if (!record) {
@@ -72,8 +70,6 @@ export class SwitchImplService implements SwitchManager {
     switch (record.type) {
       case 'DAILY':
         return computeDailyState(record, now)
-      case 'HOURLY':
-        return computeHourlyState(record, now)
       case 'WEEKLY':
         return computeWeeklyState(record, now)
       default:
@@ -83,9 +79,9 @@ export class SwitchImplService implements SwitchManager {
 
   async setSchedule(
     input,
-    schedule: DailySchedule | WeeklySchedule | HourlySchedule,
+    schedule: DailySchedule | WeeklySchedule,
   ): Promise<void> {
-    const record = await this.fetch(input)
+    const record = await this.fetchRecord(input)
     if (!record) {
       throw new Error('record not found')
     }
@@ -93,11 +89,6 @@ export class SwitchImplService implements SwitchManager {
     switch (record.type) {
       case 'DAILY': {
         record.dailySchedule = undefined
-        break
-      }
-
-      case 'HOURLY': {
-        record.hourlySchedule = undefined
         break
       }
 
@@ -114,7 +105,7 @@ export class SwitchImplService implements SwitchManager {
   }
 
   async setOverride(input, override?: Override): Promise<void> {
-    const record = await this.fetch(input)
+    const record = await this.fetchRecord(input)
     if (!record) {
       throw new Error('record not found')
     }

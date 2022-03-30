@@ -2,13 +2,12 @@ import { Schema, Model } from 'mongoose'
 import type {
   DailySchedule,
   WeeklySchedule,
-  HourlySchedule,
   Override,
 } from 'src/services/specialized-devices/switch/switch-manager.interface'
 import type { MongooseModuleConfig } from './module-config.mongoose-model'
 
 export type MongooseSwitchConfig = MongooseModuleConfig &
-  (DailySchedule | WeeklySchedule | HourlySchedule) & {
+  (DailySchedule | WeeklySchedule) & {
     override?: Override
   }
 
@@ -58,25 +57,6 @@ const switchConfigSchema = new Schema<MongooseSwitchConfig>({
     fri: [scheduleNestedPath],
     sat: [scheduleNestedPath],
   },
-
-  hourlySchedule: [
-    {
-      start: {
-        minute: Number,
-        second: Number,
-      },
-
-      end: {
-        minute: Number,
-        second: Number,
-      },
-
-      state: {
-        type: String,
-        enum: ['OFF', 'ON'],
-      },
-    },
-  ],
 
   override: overrideSchema,
 })

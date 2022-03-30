@@ -1,7 +1,6 @@
 import { DateTime } from 'luxon'
 import {
   DailySchedule,
-  HourlySchedule,
   ScheduleEntry,
   ScheduleUtcOffset,
   SwitchState,
@@ -56,36 +55,6 @@ export function computeDailyState(
   reference = reference ?? DateTime.now()
 
   return computeStateFrom24HSchedule(dailySchedule, utcOffset, reference)
-}
-
-interface TimeGteInput {
-  minute: number
-  second: number
-}
-
-function isTimeGte(a: TimeGteInput, b: TimeGteInput) {
-  if (a.minute !== b.minute) {
-    return a.minute > b.minute
-  }
-
-  return a.second >= b.second
-}
-
-export function computeHourlyState(
-  { utcOffset, hourlySchedule }: Omit<HourlySchedule, 'type'>,
-  reference?: DateTime,
-) {
-  reference = reference ?? DateTime.now()
-
-  const zonedReference = reference.setZone(`UTC${utcOffset}`)
-
-  for (const { start, end, state } of hourlySchedule) {
-    if (isTimeGte(zonedReference, start) && isTimeGte(end, zonedReference)) {
-      return state
-    }
-  }
-
-  return null
 }
 
 export function computeWeeklyState(

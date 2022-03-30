@@ -1,19 +1,6 @@
 import { DateTime } from 'luxon'
 import { WeeklySchedule } from 'src/services/specialized-devices/switch/switch-manager.interface'
-import {
-  computeDailyState,
-  computeHourlyState,
-  computeWeeklyState,
-} from './switch-schedule.utils'
-
-function minuteHelper(timeString: string) {
-  const split = timeString.split(':').map(Number)
-  const [minute, second] = split
-  return {
-    minute,
-    second,
-  }
-}
+import { computeDailyState, computeWeeklyState } from './switch-schedule.utils'
 
 function hourHelper(timeString: string) {
   const split = timeString.split(':').map(Number)
@@ -24,62 +11,6 @@ function hourHelper(timeString: string) {
     second,
   }
 }
-
-describe('computeHourlyState', () => {
-  it('returns null nothing matches', () => {
-    expect(
-      computeHourlyState({
-        utcOffset: '+8',
-        hourlySchedule: [],
-      }),
-    ).toEqual(null)
-
-    expect(
-      computeHourlyState(
-        {
-          utcOffset: '+8',
-          hourlySchedule: [
-            {
-              start: minuteHelper('00:00'),
-              end: minuteHelper('15:00'),
-              state: 'OFF',
-            },
-          ],
-        },
-        DateTime.fromISO('2022-01-01T00:30:00+0800'),
-      ),
-    ).toEqual(null)
-  })
-
-  it('returns the correct state if a match was found', () => {
-    const state = computeHourlyState(
-      {
-        utcOffset: '+8',
-        hourlySchedule: [
-          {
-            start: minuteHelper('00:00'),
-            end: minuteHelper('21:59'),
-            state: 'OFF',
-          },
-          {
-            start: minuteHelper('22:00'),
-            end: minuteHelper('30:59'),
-
-            state: 'ON',
-          },
-          {
-            start: minuteHelper('30:00'),
-            end: minuteHelper('59:59'),
-            state: 'OFF',
-          },
-        ],
-      },
-      DateTime.fromISO('2022-01-01T12:25:36.000+0800'),
-    )
-
-    expect(state).toEqual('ON')
-  })
-})
 
 describe('computeDailyState', () => {
   it('returns the default state if nothing matches', () => {

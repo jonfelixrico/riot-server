@@ -10,7 +10,7 @@ export type ScheduleUtcOffset =
 
 interface BaseSchedule {
   utcOffset: ScheduleUtcOffset
-  type: 'DAILY' | 'WEEKLY' | 'HOURLY'
+  type: 'DAILY' | 'WEEKLY'
 }
 
 export interface ScheduleTime {
@@ -50,35 +50,12 @@ export interface WeeklySchedule extends BaseSchedule {
   }
 }
 
-export interface HourlySchedule extends BaseSchedule {
-  type: 'HOURLY'
-  hourlySchedule: {
-    /**
-     * In minutes of the hour.
-     */
-    start: {
-      minute: number
-      second: number
-    }
-
-    /**
-     * In minutes of the hour.
-     */
-    end: {
-      minute: number
-      second: number
-    }
-
-    state: SwitchState
-  }[]
-}
-
 export interface Override {
   state: SwitchState
   overrideUntil?: Date
 }
 
-type Schedule = DailySchedule | WeeklySchedule | HourlySchedule
+type Schedule = DailySchedule | WeeklySchedule
 
 export interface SwitchConfig {
   schedule: Schedule

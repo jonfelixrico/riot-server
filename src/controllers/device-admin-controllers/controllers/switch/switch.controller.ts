@@ -14,40 +14,41 @@ import {
 import { SwitchOverrideDto } from './switch-override.dto'
 import { SwitchScheduleDto } from './switch-schedule.dto'
 
-@Controller('api/devices/:deviceId/version/:version/modules/switch')
+@Controller('api/devices/:deviceId/version/:version/switches/:moduleId')
 export class SwitchController {
   constructor(@Inject(SWITCH_MANAGER) private switchSvc: SwitchManager) {}
 
   /**
    * Gets the full details of a switch.
    * @param deviceId
-   * @param switchId
+   * @param moduleId
    */
-  @Get(':switchId')
+  @Get(':moduleId')
   getDetails(
     @Param('deviceId') deviceId: string,
-    @Param('switchId') switchId: string,
+    @Param('moduleId') moduleId: string,
+    @Param('version') firmwareVersion: string,
   ) {
-    throw new Error('noop')
+    return this.switchSvc.getConfig({ deviceId, moduleId, firmwareVersion })
   }
 
   /**
    * Updates the schedule of a switch.
    * @param deviceId
-   * @param switchId
+   * @param moduleId
    * @param schedule
    */
-  @Put(':switchId')
+  @Put(':moduleId')
   async setSchedule(
     @Param('deviceId') deviceId: string,
-    @Param('switchId') switchId: string,
+    @Param('moduleId') moduleId: string,
     @Param('version') firmwareVersion: string,
     @Body() { schedule }: SwitchScheduleDto,
   ): Promise<void> {
     await this.switchSvc.setSchedule(
       {
         deviceId,
-        moduleId: switchId,
+        moduleId: moduleId,
         firmwareVersion,
       },
       schedule,
@@ -57,12 +58,12 @@ export class SwitchController {
   /**
    * Gets the current state of a switch.
    * @param deviceId
-   * @param switchId
+   * @param moduleId
    */
-  @Get(':switchId/state')
+  @Get(':moduleId/state')
   async getState(
     @Param('deviceId') deviceId: string,
-    @Param('switchId') moduleId: string,
+    @Param('moduleId') moduleId: string,
     @Param('version') firmwareVersion: string,
   ) {
     const state = await this.switchSvc.getState({
@@ -79,13 +80,13 @@ export class SwitchController {
   /**
    * Overrides the state of a switch.
    * @param deviceId
-   * @param switchId
+   * @param moduleId
    * @param override
    */
-  @Put(':switchId/override')
+  @Put(':moduleId/override')
   async setOverride(
     @Param('deviceId') deviceId: string,
-    @Param('switchId') moduleId: string,
+    @Param('moduleId') moduleId: string,
     @Param('version') firmwareVersion: string,
     @Body() override: SwitchOverrideDto,
   ) {
@@ -102,12 +103,12 @@ export class SwitchController {
   /**
    * Clears the override of a switch.
    * @param deviceId
-   * @param switchId
+   * @param moduleId
    */
-  @Delete(':switchId/override')
+  @Delete(':moduleId/override')
   async clearOverride(
     @Param('deviceId') deviceId: string,
-    @Param('switchId') moduleId: string,
+    @Param('moduleId') moduleId: string,
     @Param('version') firmwareVersion: string,
   ) {
     await this.switchSvc.setOverride({

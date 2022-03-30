@@ -1,6 +1,5 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { DEVICE_MODEL } from 'src/mongoose/mongoose.di-tokens'
-import { DeviceRegistrationQueueService } from '../../device-registration-queue.interface'
 import {
   Device,
   DeviceManager,
@@ -9,6 +8,10 @@ import {
 import { Model } from 'mongoose'
 import { MongooseDevice } from 'src/mongoose/models/device.mongoose-model'
 import { DeviceQuery } from 'src/types/query-common.types'
+import {
+  DeviceRegistrationQueue,
+  DEVICE_REGISTRATION_QUEUE,
+} from '../../device-registration-queue.interface'
 
 interface DeviceToRegister extends DeviceQuery {
   modules: DeviceModule[]
@@ -17,8 +20,8 @@ interface DeviceToRegister extends DeviceQuery {
 @Injectable()
 export class DeviceImplService implements DeviceManager {
   constructor(
-    @Inject(forwardRef(() => DeviceRegistrationQueueService))
-    private regSvc: DeviceRegistrationQueueService,
+    @Inject(forwardRef(() => DEVICE_REGISTRATION_QUEUE))
+    private regSvc: DeviceRegistrationQueue,
     @Inject(DEVICE_MODEL) private deviceModel: Model<MongooseDevice>,
   ) {}
 

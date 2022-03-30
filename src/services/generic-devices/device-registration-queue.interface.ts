@@ -13,18 +13,6 @@ export interface QueuedDevice extends DeviceToQueue {
   lastQueueDt: Date
 }
 
-export abstract class DeviceRegistrationQueueService
-  implements DeviceRegistrationQueue
-{
-  abstract flagForQueue(input: DeviceToQueue): Promise<void>
-
-  abstract removeFromQueue(input: DeviceQuery): Promise<void>
-
-  abstract getQueueItems(): Promise<QueuedDevice[]>
-
-  abstract getQueueItem(input: DeviceQuery): Promise<QueuedDevice>
-}
-
 /**
  * Dependency injection token for {@link DEVICE_REGISTRATION_QUEUE}.
  */

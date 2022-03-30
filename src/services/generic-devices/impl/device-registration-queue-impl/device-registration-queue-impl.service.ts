@@ -2,9 +2,9 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { sortBy } from 'lodash'
 import {
   DeviceQuery,
-  DeviceRegistrationQueueService,
   DeviceToQueue,
   QueuedDevice,
+  DeviceRegistrationQueue,
 } from '../../device-registration-queue.interface'
 import { DeviceManager, DEVICE_MANAGER } from '../../device-manager.interface'
 
@@ -17,14 +17,14 @@ const convertToKey = ({
 }) => `${deviceId}/${firmwareVersion}`
 
 @Injectable()
-export class DeviceRegistrationQueueImplService extends DeviceRegistrationQueueService {
+export class DeviceRegistrationQueueImplService
+  implements DeviceRegistrationQueue
+{
   private inQueue: Record<string, QueuedDevice> = {}
 
   constructor(
     @Inject(forwardRef(() => DEVICE_MANAGER)) private deviceSvc: DeviceManager,
-  ) {
-    super()
-  }
+  ) {}
 
   async getQueueItem(input: DeviceQuery): Promise<QueuedDevice> {
     return Promise.resolve(this.inQueue[convertToKey(input)])

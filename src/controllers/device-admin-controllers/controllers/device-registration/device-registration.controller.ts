@@ -12,12 +12,15 @@ import {
   DeviceManager,
   DEVICE_MANAGER,
 } from 'src/services/generic-devices/device-manager.interface'
-import { DeviceRegistrationQueueService } from 'src/services/generic-devices/device-registration-queue.interface'
+import {
+  DeviceRegistrationQueue,
+  DEVICE_REGISTRATION_QUEUE,
+} from 'src/services/generic-devices/device-registration-queue.interface'
 
 @Controller('api/devices/unregistered')
 export class DeviceRegistrationController {
   constructor(
-    private regSvc: DeviceRegistrationQueueService,
+    @Inject(DEVICE_REGISTRATION_QUEUE) private regSvc: DeviceRegistrationQueue,
     @Inject(DEVICE_MANAGER) private deviceSvc: DeviceManager,
   ) {}
 

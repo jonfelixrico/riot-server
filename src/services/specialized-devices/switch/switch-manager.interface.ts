@@ -83,11 +83,8 @@ export interface SwitchManager {
 
   /**
    * Clears the override.
-   * @param deviceId
-   * @param moduleId
    */
   setOverride(query: ModuleQuery): Promise<void>
-
   setOverride(query: ModuleQuery, override: null): Promise<void>
 
   /**

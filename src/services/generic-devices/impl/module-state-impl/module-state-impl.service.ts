@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { DEVICE_MODEL } from 'src/mongoose/mongoose.di-tokens'
-import { ModuleStateService } from '../module-state-service.abstract'
+import { ModuleStateService } from '../../module-state-service.abstract'
 import { Model } from 'mongoose'
 import { MongooseDevice } from 'src/mongoose/models/device.mongoose-model'
 import {

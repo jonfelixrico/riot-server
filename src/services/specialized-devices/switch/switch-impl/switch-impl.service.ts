@@ -114,11 +114,6 @@ export class SwitchImplService implements SwitchManager {
     }
   }
 
-  async getState(input): Promise<SwitchState> {
-    const record = await this.fetchRecord(input)
-    return this.computeState(record ?? generateDefault())
-  }
-
   private async updateConfig(
     { deviceId, firmwareVersion, moduleId }: ModuleQuery,
     config: Omit<MongooseSwitchConfig, 'lastUpdateDt'>,
@@ -154,6 +149,11 @@ export class SwitchImplService implements SwitchManager {
       await device.save()
       await forSaving.save()
     })
+  }
+
+  async getState(input): Promise<SwitchState> {
+    const record = await this.fetchRecord(input)
+    return this.computeState(record ?? generateDefault())
   }
 
   async setSchedule(

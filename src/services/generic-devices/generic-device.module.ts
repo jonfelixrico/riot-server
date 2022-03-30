@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { DeviceImplService } from './device-impl/device-impl.service'
-import { DeviceService } from './device-service.abstract'
+import { DeviceService, DEVICE_MANAGER } from './device-service.abstract'
 import { MongooseModule } from 'src/mongoose/mongoose.module'
 import { DeviceRegistrationQueueImplService } from './device-registration-queue-impl/device-registration-queue-impl.service'
 import { DeviceRegistrationQueueService } from './device-registration-queue-service.abstract'
@@ -15,6 +15,10 @@ import { ModuleStateService } from './module-state-service.abstract'
     DeviceImplService,
     {
       provide: DeviceService,
+      useExisting: DeviceImplService,
+    },
+    {
+      provide: DEVICE_MANAGER,
       useExisting: DeviceImplService,
     },
 

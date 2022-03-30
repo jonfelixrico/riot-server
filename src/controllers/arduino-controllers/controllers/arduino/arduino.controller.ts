@@ -24,8 +24,8 @@ export class ArduinoController {
   @Post()
   @HttpCode(202)
   async queueForRegistration(
-    @Param('deviceId') deviceId,
-    @Param('version') firmwareVersion,
+    @Param('deviceId') deviceId: string,
+    @Param('version') firmwareVersion: string,
     @Body() toRegister: ModuleToRegisterDto[],
   ) {
     if (await this.deviceSvc.doesDeviceExist({ deviceId, firmwareVersion })) {
@@ -41,8 +41,8 @@ export class ArduinoController {
 
   @Put()
   async processEmit(
-    @Param('deviceId') deviceId,
-    @Param('version') firmwareVersion,
+    @Param('deviceId') deviceId: string,
+    @Param('version') firmwareVersion: string,
   ) {
     const query = {
       deviceId,

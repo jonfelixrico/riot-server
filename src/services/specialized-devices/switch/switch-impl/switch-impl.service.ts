@@ -27,6 +27,7 @@ import {
 } from 'src/common-services/time-provider.interface'
 import { DateTime } from 'luxon'
 import { MongooseSwitchConfig } from 'src/mongoose/models/switch-config.mongoose-model'
+import { ModuleQuery } from 'src/types/query-common.types'
 
 const DEFAULT_CONFIG: Omit<MongooseSwitchConfig, 'lastUpdateDt'> = {
   schedule: {
@@ -55,11 +56,14 @@ export class SwitchImplService implements SwitchManager {
   constructor(
     @Inject(DEVICE_MODEL) private devices: DeviceModel,
     @Inject(SWTICH_CONFIG_MODEL) private switchConfigs: SwitchConfigModel,
-    @Inject(MONGOOSE_CONN) private conn: Connection,
     @Inject(DATETIME_PROVIDER) private dtProvider: DateTimeProvider,
   ) {}
 
-  private async fetchRecord({ deviceId, moduleId, firmwareVersion }) {
+  private async fetchRecord({
+    deviceId,
+    moduleId,
+    firmwareVersion,
+  }: ModuleQuery) {
     const device = await this.devices.findOne(
       {
         id: deviceId,

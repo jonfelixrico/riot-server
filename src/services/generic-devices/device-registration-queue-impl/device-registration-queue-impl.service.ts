@@ -27,7 +27,7 @@ export class DeviceRegistrationQueueImplService extends DeviceRegistrationQueueS
   }
 
   async getQueueItem(input: DeviceQuery): Promise<QueuedDevice> {
-    return this.inQueue[convertToKey(input)]
+    return Promise.resolve(this.inQueue[convertToKey(input)])
   }
 
   async flagForQueue(input: DeviceToQueue): Promise<void> {
@@ -41,12 +41,13 @@ export class DeviceRegistrationQueueImplService extends DeviceRegistrationQueueS
     }
   }
 
-  async removeFromQueue(input: DeviceQuery): Promise<void> {
+  removeFromQueue(input: DeviceQuery): Promise<void> {
     delete this.inQueue[convertToKey(input)]
+    return Promise.resolve()
   }
 
-  async getQueueItems(): Promise<QueuedDevice[]> {
+  getQueueItems(): Promise<QueuedDevice[]> {
     const values = Object.values(this.inQueue)
-    return sortBy(values, ['deviceId', 'version'])
+    return Promise.resolve(sortBy(values, ['deviceId', 'version']))
   }
 }

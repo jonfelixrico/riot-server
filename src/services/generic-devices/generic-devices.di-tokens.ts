@@ -1,1 +1,1 @@
-export { DEVICE_MANAGER } from './device-service.abstract'
+export { DEVICE_MANAGER } from './device-manager.interface'

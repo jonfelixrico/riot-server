@@ -1,4 +1,4 @@
-import { DeviceModule } from './device-service.abstract'
+import { DeviceModule } from './device-manager.interface'
 
 export interface DeviceQuery {
   deviceId: string

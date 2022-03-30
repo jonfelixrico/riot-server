@@ -5,7 +5,7 @@ import {
   Device,
   DeviceManager,
   DeviceModule,
-} from '../../device-service.abstract'
+} from '../../device-manager.interface'
 import { Model } from 'mongoose'
 import { MongooseDevice } from 'src/mongoose/models/device.mongoose-model'
 import { DeviceQuery } from 'src/types/query-common.types'

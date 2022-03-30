@@ -3,20 +3,24 @@ import {
   Controller,
   ForbiddenException,
   HttpCode,
+  Inject,
   NotFoundException,
   Param,
   Post,
   Put,
 } from '@nestjs/common'
-import { DeviceService } from 'src/services/generic-devices/device-service.abstract'
 import { DeviceRegistrationQueueService } from 'src/services/generic-devices/device-registration-queue-service.abstract'
 import { ModuleToRegisterDto } from '../../dto/module-to-register.dto'
 import { ModuleStateService } from 'src/services/generic-devices/module-state-service.abstract'
+import {
+  DeviceManager,
+  DEVICE_MANAGER,
+} from 'src/services/generic-devices/device-manager.interface'
 
 @Controller('arduino/:deviceId/version/:version')
 export class ArduinoController {
   constructor(
-    private deviceSvc: DeviceService,
+    @Inject(DEVICE_MANAGER) private deviceSvc: DeviceManager,
     private regSvc: DeviceRegistrationQueueService,
     private mStateSvc: ModuleStateService,
   ) {}

@@ -6,7 +6,7 @@ import {
   DeviceToQueue,
   QueuedDevice,
 } from '../device-registration-queue-service.abstract'
-import { DeviceService } from '../device-service.abstract'
+import { DeviceManager, DEVICE_MANAGER } from '../device-manager.interface'
 
 const convertToKey = ({
   firmwareVersion,
@@ -21,7 +21,7 @@ export class DeviceRegistrationQueueImplService extends DeviceRegistrationQueueS
   private inQueue: Record<string, QueuedDevice> = {}
 
   constructor(
-    @Inject(forwardRef(() => DeviceService)) private deviceSvc: DeviceService,
+    @Inject(forwardRef(() => DEVICE_MANAGER)) private deviceSvc: DeviceManager,
   ) {
     super()
   }

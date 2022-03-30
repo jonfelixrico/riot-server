@@ -1,9 +1,18 @@
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common'
-import { DeviceService } from 'src/services/generic-devices/device-service.abstract'
+import {
+  Controller,
+  Get,
+  Inject,
+  NotFoundException,
+  Param,
+} from '@nestjs/common'
+import {
+  DeviceManager,
+  DEVICE_MANAGER,
+} from 'src/services/generic-devices/device-manager.interface'
 
 @Controller('api/devices')
 export class DevicesController {
-  constructor(private deviceSvc: DeviceService) {}
+  constructor(@Inject(DEVICE_MANAGER) private deviceSvc: DeviceManager) {}
 
   @Get()
   async listDevices() {

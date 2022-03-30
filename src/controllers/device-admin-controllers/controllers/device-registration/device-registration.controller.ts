@@ -4,17 +4,21 @@ import {
   ForbiddenException,
   Get,
   HttpCode,
+  Inject,
   NotFoundException,
   Param,
 } from '@nestjs/common'
+import {
+  DeviceManager,
+  DEVICE_MANAGER,
+} from 'src/services/generic-devices/device-manager.interface'
 import { DeviceRegistrationQueueService } from 'src/services/generic-devices/device-registration-queue-service.abstract'
-import { DeviceService } from 'src/services/generic-devices/device-service.abstract'
 
 @Controller('api/devices/unregistered')
 export class DeviceRegistrationController {
   constructor(
     private regSvc: DeviceRegistrationQueueService,
-    private deviceSvc: DeviceService,
+    @Inject(DEVICE_MANAGER) private deviceSvc: DeviceManager,
   ) {}
 
   @Get()

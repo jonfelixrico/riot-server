@@ -32,7 +32,11 @@ const switchConfigSchema = new Schema<MongooseSwitchConfig>({
   schedule: {
     utcOffset: Number,
 
-    type: String,
+    /**
+     * @see {@link https://mongoosejs.com/docs/schematypes.html#type-key} to see why `type` has to be defined
+     * this way.
+     */
+    type: { type: String },
 
     dailySchedule: [scheduleNestedPath],
 

@@ -21,7 +21,6 @@ export class DeviceImplService extends DeviceService {
     @Inject(forwardRef(() => DeviceRegistrationQueueService))
     private regSvc: DeviceRegistrationQueueService,
     @Inject(DEVICE_MODEL) private deviceModel: Model<MongooseDevice>,
-    private switchSvc: SwitchModuleService,
   ) {
     super()
   }

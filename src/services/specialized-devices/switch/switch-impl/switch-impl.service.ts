@@ -22,6 +22,10 @@ import {
   WeeklySchedule,
 } from '../switch-manager.interface'
 import { Connection } from 'mongoose'
+import {
+  DateTimeProvider,
+  DATETIME_PROVIDER,
+} from 'src/common-services/time-provider.interface'
 
 @Injectable()
 export class SwitchImplService implements SwitchManager {
@@ -29,6 +33,7 @@ export class SwitchImplService implements SwitchManager {
     @Inject(DEVICE_MODEL) private devices: DeviceModel,
     @Inject(SWTICH_CONFIG_MODEL) private switchConfigs: SwitchConfigModel,
     @Inject(MONGOOSE_CONN) private conn: Connection,
+    @Inject(DATETIME_PROVIDER) private dtProvider: DateTimeProvider,
   ) {}
 
   private async fetch({ deviceId, moduleId, firmwareVersion }) {
@@ -58,17 +63,19 @@ export class SwitchImplService implements SwitchManager {
 
   async getState(input): Promise<SwitchState> {
     const record = await this.fetch(input)
+    const now = await this.dtProvider.getCurrentDateTime()
+
     if (!record) {
       return null
     }
 
     switch (record.type) {
       case 'DAILY':
-        return computeDailyState(record)
+        return computeDailyState(record, now)
       case 'HOURLY':
-        return computeHourlyState(record)
+        return computeHourlyState(record, now)
       case 'WEEKLY':
-        return computeWeeklyState(record)
+        return computeWeeklyState(record, now)
       default:
         throw new Error('unknown record type')
     }

@@ -89,7 +89,7 @@ export interface SwitchConfig {
   override?: Override
 }
 
-export abstract class SwitchModuleService {
+export abstract class SwitchModuleService implements SwitchManager {
   /**
    * Get the state of a specific switch in a device.
    * @param deviceId
@@ -153,3 +153,70 @@ export abstract class SwitchModuleService {
     override: Override,
   ): Promise<void>
 }
+
+export interface SwitchManager {
+  /**
+   * Get the state of a specific switch in a device.
+   * @param deviceId
+   * @param moduleId
+   */
+  getState(input: {
+    deviceId: string
+    moduleId: string
+    firmwareVersion: string
+  }): Promise<SwitchState>
+
+  /**
+   * Sets the on/off schedule of a switch.
+   *
+   * @param deviceId
+   * @param moduleId
+   * @param schedule The updated schedule of the switch.
+   */
+  setSchedule(
+    input: {
+      deviceId: string
+      moduleId: string
+      firmwareVersion: string
+    },
+    schedule: Schedule,
+  ): Promise<void>
+
+  /**
+   * Clears the override.
+   * @param deviceId
+   * @param moduleId
+   */
+  setOverride(input: {
+    deviceId: string
+    moduleId: string
+    firmwareVersion: string
+  }): Promise<void>
+
+  setOverride(
+    input: {
+      deviceId: string
+      moduleId: string
+      firmwareVersion: string
+    },
+    override: null,
+  ): Promise<void>
+
+  /**
+   * Updates updates the override of the switch.
+   *
+   * @param deviceId
+   * @param moduleId
+   * @param override The updated override.
+   */
+  setOverride(
+    input: {
+      deviceId: string
+      moduleId: string
+      firmwareVersion: string
+    },
+    override: Override,
+  ): Promise<void>
+}
+
+export const SWITCH_MANAGER = Symbol('switch manager')

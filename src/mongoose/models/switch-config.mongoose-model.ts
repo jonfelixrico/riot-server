@@ -2,7 +2,7 @@ import { Schema, Model } from 'mongoose'
 import type {
   Override,
   SwitchConfig,
-} from 'src/services/specialized-devices/switch-manager.interface'
+} from '@app/services/specialized-devices/switch-manager.interface'
 import type { MongooseModuleConfig } from './module-config.mongoose-model'
 
 export type MongooseSwitchConfig = MongooseModuleConfig & SwitchConfig

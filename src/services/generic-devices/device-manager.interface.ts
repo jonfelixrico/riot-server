@@ -1,4 +1,4 @@
-import { DeviceQuery } from 'src/types/query-common.types'
+import { DeviceQuery } from '@app/types/query-common.types'
 
 export interface DeviceModule {
   id: string

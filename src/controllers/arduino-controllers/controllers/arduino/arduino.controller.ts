@@ -10,15 +10,15 @@ import {
   Put,
 } from '@nestjs/common'
 import { ModuleToRegisterDto } from '../../dto/module-to-register.dto'
-import { ModuleStateService } from 'src/services/generic-devices/module-state-service.abstract'
+import { ModuleStateService } from '@app/services/generic-devices/module-state-service.abstract'
 import {
   DeviceManager,
   DEVICE_MANAGER,
-} from 'src/services/generic-devices/device-manager.interface'
+} from '@app/services/generic-devices/device-manager.interface'
 import {
   DeviceRegistrationQueue,
   DEVICE_REGISTRATION_QUEUE,
-} from 'src/services/generic-devices/device-registration-queue.interface'
+} from '@app/services/generic-devices/device-registration-queue.interface'
 
 @Controller('arduino/:deviceId/version/:version')
 export class ArduinoController {

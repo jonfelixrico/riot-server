@@ -1,4 +1,4 @@
-import { DeviceModule } from 'src/services/generic-devices/device-manager.interface'
+import { DeviceModule } from '@app/services/generic-devices/device-manager.interface'
 
 export class ModuleToRegisterDto implements DeviceModule {
   id: string

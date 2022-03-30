@@ -1,13 +1,13 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
-import { DEVICE_MODEL } from 'src/mongoose/mongoose.di-tokens'
+import { DEVICE_MODEL } from '@app/mongoose/mongoose.di-tokens'
 import {
   Device,
   DeviceManager,
   DeviceModule,
 } from '../../device-manager.interface'
 import { Model } from 'mongoose'
-import { MongooseDevice } from 'src/mongoose/models/device.mongoose-model'
-import { DeviceQuery } from 'src/types/query-common.types'
+import { MongooseDevice } from '@app/mongoose/models/device.mongoose-model'
+import { DeviceQuery } from '@app/types/query-common.types'
 import {
   DeviceRegistrationQueue,
   DEVICE_REGISTRATION_QUEUE,

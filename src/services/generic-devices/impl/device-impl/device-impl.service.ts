@@ -8,11 +8,7 @@ import {
 } from '../../device-service.abstract'
 import { Model } from 'mongoose'
 import { MongooseDevice } from 'src/mongoose/models/device.mongoose-model'
-
-interface DeviceQuery {
-  deviceId: string
-  firmwareVersion: string
-}
+import { DeviceQuery } from 'src/types/query-common.types'
 
 interface DeviceToRegister extends DeviceQuery {
   modules: DeviceModule[]

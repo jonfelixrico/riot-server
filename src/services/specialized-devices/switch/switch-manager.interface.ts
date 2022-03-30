@@ -1,3 +1,5 @@
+import { ModuleQuery } from 'src/types/query-common.types'
+
 export type SwitchState = 'ON' | 'OFF'
 
 type SingleDigit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
@@ -72,63 +74,26 @@ export interface SwitchManager {
    * @param deviceId
    * @param moduleId
    */
-  getState(input: {
-    deviceId: string
-    moduleId: string
-    firmwareVersion: string
-  }): Promise<SwitchState>
+  getState(query: ModuleQuery): Promise<SwitchState>
 
   /**
    * Sets the on/off schedule of a switch.
-   *
-   * @param deviceId
-   * @param moduleId
-   * @param schedule The updated schedule of the switch.
    */
-  setSchedule(
-    input: {
-      deviceId: string
-      moduleId: string
-      firmwareVersion: string
-    },
-    schedule: Schedule,
-  ): Promise<void>
+  setSchedule(query: ModuleQuery, schedule: Schedule): Promise<void>
 
   /**
    * Clears the override.
    * @param deviceId
    * @param moduleId
    */
-  setOverride(input: {
-    deviceId: string
-    moduleId: string
-    firmwareVersion: string
-  }): Promise<void>
+  setOverride(query: ModuleQuery): Promise<void>
 
-  setOverride(
-    input: {
-      deviceId: string
-      moduleId: string
-      firmwareVersion: string
-    },
-    override: null,
-  ): Promise<void>
+  setOverride(query: ModuleQuery, override: null): Promise<void>
 
   /**
    * Updates updates the override of the switch.
-   *
-   * @param deviceId
-   * @param moduleId
-   * @param override The updated override.
    */
-  setOverride(
-    input: {
-      deviceId: string
-      moduleId: string
-      firmwareVersion: string
-    },
-    override: Override,
-  ): Promise<void>
+  setOverride(query: ModuleQuery, override: Override): Promise<void>
 }
 
 export const SWITCH_MANAGER = Symbol('switch manager')

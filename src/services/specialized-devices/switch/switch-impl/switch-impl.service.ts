@@ -73,7 +73,7 @@ export class SwitchImplService implements SwitchManager {
       { lean: true },
     )
 
-    if (device) {
+    if (!device) {
       return null
     }
 

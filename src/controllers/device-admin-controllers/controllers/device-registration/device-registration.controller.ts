@@ -18,7 +18,7 @@ import {
   DEVICE_REGISTRATION_QUEUE,
 } from '@app/services/generic-devices/device-registration-queue.interface'
 
-@Controller('api/devices/unregistered')
+@Controller('api/device/unregistered')
 export class DeviceRegistrationController {
   constructor(
     @Inject(DEVICE_REGISTRATION_QUEUE) private regSvc: DeviceRegistrationQueue,

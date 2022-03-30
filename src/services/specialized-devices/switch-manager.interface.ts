@@ -91,6 +91,8 @@ export interface SwitchManager {
    * Updates updates the override of the switch.
    */
   setOverride(query: ModuleQuery, override: Override): Promise<void>
+
+  getConfig(query: ModuleQuery): Promise<SwitchConfig>
 }
 
 export const SWITCH_MANAGER = Symbol('switch manager')

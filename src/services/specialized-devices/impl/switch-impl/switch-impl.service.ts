@@ -61,12 +61,10 @@ export class SwitchImplService implements SwitchManager {
     @Inject(DATETIME_PROVIDER) private dtProvider: DateTimeProvider,
     @Inject(MONGOOSE_CONN) private conn: Connection,
   ) {}
-
-  private async fetchRecord({
-    deviceId,
-    moduleId,
-    firmwareVersion,
-  }: ModuleQuery) {
+  private async fetchRecord(
+    { deviceId, moduleId, firmwareVersion }: ModuleQuery,
+    lean?: boolean,
+  ) {
     const device = await this.devices.findOne(
       {
         id: deviceId,
@@ -85,7 +83,7 @@ export class SwitchImplService implements SwitchManager {
       throw new Error('module not found')
     }
 
-    return await this.switchConfigs.findById(dModule.config)
+    return await this.switchConfigs.findById(dModule.config, { lean })
   }
 
   private async computeState(config: SwitchConfig): Promise<SwitchState> {
@@ -146,6 +144,10 @@ export class SwitchImplService implements SwitchManager {
       await device.save()
       await forSaving.save()
     })
+  }
+
+  async getConfig(query: ModuleQuery): Promise<SwitchConfig> {
+    return (await this.fetchRecord(query, true)) ?? generateDefault()
   }
 
   async getState(input): Promise<SwitchState> {

@@ -5,7 +5,7 @@ import {
   ScheduleUtcOffset,
   SwitchState,
   WeeklySchedule,
-} from 'src/services/specialized-devices/switch/switch-manager.interface'
+} from 'src/services/specialized-devices/switch-manager.interface'
 import { isBetween } from './luxon.utils'
 
 const LUXON_MAPPING: {

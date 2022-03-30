@@ -6,7 +6,7 @@ import { MongooseDevice } from 'src/mongoose/models/device.mongoose-model'
 import {
   SwitchManager,
   SWITCH_MANAGER,
-} from 'src/services/specialized-devices/switch/switch-manager.interface'
+} from 'src/services/specialized-devices/switch-manager.interface'
 
 interface DeviceQuery {
   deviceId: string

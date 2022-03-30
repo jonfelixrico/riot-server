@@ -3,7 +3,10 @@ import { DEVICE_MODEL } from 'src/mongoose/mongoose.di-tokens'
 import { ModuleStateService } from '../module-state-service.abstract'
 import { Model } from 'mongoose'
 import { MongooseDevice } from 'src/mongoose/models/device.mongoose-model'
-import { SwitchModuleService } from 'src/services/specialized-devices/switch/switch-manager.interface'
+import {
+  SwitchManager,
+  SWITCH_MANAGER,
+} from 'src/services/specialized-devices/switch/switch-manager.interface'
 
 interface DeviceQuery {
   deviceId: string
@@ -18,7 +21,7 @@ interface ModuleQuery extends DeviceQuery {
 export class ModuleStateImplService extends ModuleStateService {
   constructor(
     @Inject(DEVICE_MODEL) private deviceModel: Model<MongooseDevice>,
-    private switchSvc: SwitchModuleService,
+    @Inject(SWITCH_MANAGER) private switchSvc: SwitchManager,
   ) {
     super()
   }

@@ -12,7 +12,6 @@ import {
   SWITCH_MANAGER,
 } from '@app/services/specialized-devices/switch-manager.interface'
 import { SwitchOverrideDto } from './switch-override.dto'
-import { SwitchScheduleDto } from './switch-schedule.dto'
 import {
   ApiBody,
   ApiExtraModels,

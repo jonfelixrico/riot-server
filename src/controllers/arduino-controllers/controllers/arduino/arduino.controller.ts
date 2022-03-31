@@ -9,7 +9,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common'
-import { QueueForRegistrationRequestDto } from '../../dto/queue-for-registration.request-dto'
+import { QueueForRegistrationRequestDto } from './queue-for-registration.request-dto'
 import {
   DeviceManager,
   DEVICE_MANAGER,
@@ -34,8 +34,8 @@ import {
 import {
   HeartbeatResponseDto,
   IHeartbeatResponseDto,
-} from '../../dto/heartbeat.response-dto'
-import { HeartbeatRequestDto } from '../../dto/heartbeat.request-dto'
+} from './heartbeat.response-dto'
+import { HeartbeatRequestDto } from './heartbeat.request-dto'
 
 @ApiTags('arduino')
 @Controller('arduino/:deviceId/version/:version')

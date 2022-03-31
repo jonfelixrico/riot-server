@@ -22,7 +22,13 @@ import {
   ModuleStateProvider,
   MODULE_STATE_PROVIDER,
 } from '@app/services/generic-devices/module-state-provider.interface'
-import { ApiBody, ApiTags } from '@nestjs/swagger'
+import {
+  ApiAcceptedResponse,
+  ApiBody,
+  ApiForbiddenResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger'
 
 @ApiTags('arduino')
 @Controller('arduino/:deviceId/version/:version')
@@ -35,7 +41,19 @@ export class ArduinoController {
 
   @Post()
   @HttpCode(202)
-  @ApiBody({ type: [ModuleToRegisterDto] })
+  @ApiBody({
+    type: [ModuleToRegisterDto],
+    description: 'List of modules to be registerd with the device.',
+  })
+  @ApiForbiddenResponse({ description: 'Device has already been registered.' })
+  @ApiAcceptedResponse({
+    description:
+      'Queued for registration. Need to be approved in the admin API.',
+  })
+  @ApiOperation({
+    description: 'Queues up a device for registration.',
+    operationId: 'queueDeviceForRegistration',
+  })
   async queueForRegistration(
     @Param('deviceId') deviceId: string,
     @Param('version') firmwareVersion: string,

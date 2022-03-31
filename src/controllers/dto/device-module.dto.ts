@@ -2,7 +2,6 @@ import { DeviceModule } from '@app/services/generic-devices/device-manager.inter
 import { ApiProperty } from '@nestjs/swagger'
 
 export class DeviceModuleDto implements DeviceModule {
-  @ApiProperty()
   moduleId: string
 
   @ApiProperty({

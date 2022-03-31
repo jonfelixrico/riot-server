@@ -67,7 +67,7 @@ export class SwitchImplService implements SwitchManager {
   ) {
     const device = await this.devices
       .findOne({
-        id: deviceId,
+        deviceId,
         firmwareVersion,
       })
       .lean() // setting lean since we don't need much from the device model here
@@ -112,7 +112,7 @@ export class SwitchImplService implements SwitchManager {
     config: Omit<MongooseSwitchConfig, 'lastUpdateDt'>,
   ): Promise<void> {
     const device = await this.devices.findOne({
-      id: deviceId,
+      deviceId,
       firmwareVersion,
     })
 

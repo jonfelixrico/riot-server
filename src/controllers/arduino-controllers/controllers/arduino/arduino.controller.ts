@@ -10,7 +10,7 @@ import {
   Put,
 } from '@nestjs/common'
 import { ModuleToRegisterDto } from '../../dto/module-to-register.dto'
-import { ModuleStateService } from '@app/services/generic-devices/module-state-service.abstract'
+import { ModuleStateService } from '@app/services/generic-devices/module-state-provider.interface'
 import {
   DeviceManager,
   DEVICE_MANAGER,

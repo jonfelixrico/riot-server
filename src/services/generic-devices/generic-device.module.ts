@@ -6,7 +6,7 @@ import { DeviceRegistrationQueueImplService } from './impl/device-registration-q
 import { DEVICE_REGISTRATION_QUEUE } from './device-registration-queue.interface'
 import { SpecializedDevicesModule } from '../specialized-devices/specialized-devices.module'
 import { ModuleStateImplService } from './impl/module-state-impl/module-state-impl.service'
-import { MODULE_STATE_PROVIDER } from './module-state-service.abstract'
+import { MODULE_STATE_PROVIDER } from './module-state-provider.interface'
 
 @Module({
   imports: [MongooseModule, SpecializedDevicesModule],

@@ -97,7 +97,8 @@ export class ArduinoController {
   async heartbeat(
     @Param('deviceId') deviceId: string,
     @Param('version') firmwareVersion: string,
-    @Body() payload: HeartbeatRequestDto,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Body() payload: HeartbeatRequestDto, // will remain unused until we start supporting sensors
   ): Promise<IHeartbeatResponseDto> {
     const query = {
       deviceId,

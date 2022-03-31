@@ -16,7 +16,7 @@ import { SwitchScheduleDto } from './switch-schedule.dto'
 import { ApiTags } from '@nestjs/swagger'
 
 @ApiTags('switch')
-@Controller('api/devices/:deviceId/version/:version/switch/:moduleId')
+@Controller('api/device/:deviceId/version/:version/switch/:moduleId')
 export class SwitchController {
   constructor(@Inject(SWITCH_MANAGER) private switchSvc: SwitchManager) {}
 

@@ -19,18 +19,29 @@ interface MongooseDeviceModule {
 }
 
 const deviceSchema = new Schema<MongooseDevice>({
-  id: String,
+  id: {
+    type: String,
+    required: true,
+  },
+
+  firmwareVersion: {
+    type: String,
+    required: true,
+  },
+
   lastHeartbeatDt: Date,
-  firmwareVersion: String,
 
   modules: [
     {
-      id: String,
+      id: {
+        type: String,
+        required: true,
+      },
       /**
        * @see {@link https://mongoosejs.com/docs/schematypes.html#type-key} to see why `type` has to be defined
        * this way.
        */
-      type: { type: String },
+      type: { type: String, required: true },
 
       /*
        * We don't want to make the ref the entire Module instead of just the config out of concerns regarding performance if we want

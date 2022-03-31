@@ -10,7 +10,6 @@ import {
   Put,
 } from '@nestjs/common'
 import { ModuleToRegisterDto } from '../../dto/module-to-register.dto'
-import { ModuleStateService } from '@app/services/generic-devices/module-state-service.abstract'
 import {
   DeviceManager,
   DEVICE_MANAGER,
@@ -19,13 +18,17 @@ import {
   DeviceRegistrationQueue,
   DEVICE_REGISTRATION_QUEUE,
 } from '@app/services/generic-devices/device-registration-queue.interface'
+import {
+  ModuleStateProvider,
+  MODULE_STATE_PROVIDER,
+} from '@app/services/generic-devices/module-state-provider.interface'
 
 @Controller('arduino/:deviceId/version/:version')
 export class ArduinoController {
   constructor(
     @Inject(DEVICE_MANAGER) private deviceSvc: DeviceManager,
     @Inject(DEVICE_REGISTRATION_QUEUE) private regSvc: DeviceRegistrationQueue,
-    private mStateSvc: ModuleStateService,
+    @Inject(MODULE_STATE_PROVIDER) private mStateSvc: ModuleStateProvider,
   ) {}
 
   @Post()

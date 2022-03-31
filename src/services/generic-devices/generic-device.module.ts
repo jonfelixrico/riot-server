@@ -6,7 +6,7 @@ import { DeviceRegistrationQueueImplService } from './impl/device-registration-q
 import { DEVICE_REGISTRATION_QUEUE } from './device-registration-queue.interface'
 import { SpecializedDevicesModule } from '../specialized-devices/specialized-devices.module'
 import { ModuleStateImplService } from './impl/module-state-impl/module-state-impl.service'
-import { ModuleStateService } from './module-state-service.abstract'
+import { MODULE_STATE_PROVIDER } from './module-state-provider.interface'
 
 @Module({
   imports: [MongooseModule, SpecializedDevicesModule],
@@ -26,11 +26,11 @@ import { ModuleStateService } from './module-state-service.abstract'
 
     ModuleStateImplService,
     {
-      provide: ModuleStateService,
+      provide: MODULE_STATE_PROVIDER,
       useExisting: ModuleStateImplService,
     },
   ],
 
-  exports: [ModuleStateService, DEVICE_MANAGER, DEVICE_REGISTRATION_QUEUE],
+  exports: [DEVICE_MANAGER, DEVICE_REGISTRATION_QUEUE, MODULE_STATE_PROVIDER],
 })
 export class GenericDevicesModule {}

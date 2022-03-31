@@ -7,6 +7,7 @@ import {
   Inject,
   NotFoundException,
   Param,
+  Post,
 } from '@nestjs/common'
 import {
   DeviceManager,
@@ -17,7 +18,7 @@ import {
   DEVICE_REGISTRATION_QUEUE,
 } from '@app/services/generic-devices/device-registration-queue.interface'
 
-@Controller('api/devices/unregistered')
+@Controller('api/device/unregistered')
 export class DeviceRegistrationController {
   constructor(
     @Inject(DEVICE_REGISTRATION_QUEUE) private regSvc: DeviceRegistrationQueue,
@@ -29,7 +30,7 @@ export class DeviceRegistrationController {
     return await this.regSvc.getQueueItems()
   }
 
-  @Get(':deviceId/versions/:version')
+  @Get(':deviceId/version/:version')
   async getDeviceForRegistration(
     @Param('deviceId') deviceId: string,
     @Param('version') firmwareVersion: string,
@@ -41,7 +42,7 @@ export class DeviceRegistrationController {
   }
 
   @HttpCode(201)
-  @Get(':deviceId/versions/:version')
+  @Post(':deviceId/version/:version')
   async registerDevice(
     @Param('deviceId') deviceId: string,
     @Param('version') firmwareVersion: string,
@@ -57,14 +58,14 @@ export class DeviceRegistrationController {
       throw new NotFoundException('Device is not in the registration queue.')
     }
 
-    if (!(await this.deviceSvc.doesDeviceExist(query))) {
+    if (await this.deviceSvc.doesDeviceExist(query)) {
       throw new ForbiddenException('Device already registered.')
     }
 
     await this.deviceSvc.registerDevice(queueItem)
   }
 
-  @Delete(':deviceId/versions/:version')
+  @Delete(':deviceId/version/:version')
   async deleteRegistrationAttempt(
     @Param('deviceId') deviceId: string,
     @Param('version') firmwareVersion: string,

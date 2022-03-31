@@ -26,7 +26,7 @@ export class DeviceImplService implements DeviceManager {
   ) {}
 
   private async fetch({ deviceId, firmwareVersion }: DeviceQuery) {
-    return await this.deviceModel.findOne({ id: deviceId, firmwareVersion })
+    return await this.deviceModel.findOne({ deviceId, firmwareVersion }).exec()
   }
 
   async bumpHeartbeat(input: DeviceQuery): Promise<void> {
@@ -48,7 +48,7 @@ export class DeviceImplService implements DeviceManager {
     deviceId,
     firmwareVersion,
   }: DeviceQuery): Promise<boolean> {
-    return !!(await this.deviceModel.exists({ id: deviceId, firmwareVersion }))
+    return !!(await this.deviceModel.exists({ deviceId, firmwareVersion }))
   }
 
   async registerDevice(input: DeviceToRegister) {

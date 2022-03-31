@@ -1,14 +1,14 @@
 import { DeviceQuery } from '@app/types/query-common.types'
 
 export interface DeviceModule {
-  id: string
+  moduleId: string
   type: string
 }
 
 export interface Device {
   modules: DeviceModule[]
   firmwareVersion: string
-  id: string
+  deviceId: string
   lastHeartbeatDt: Date
 }
 

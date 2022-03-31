@@ -62,28 +62,29 @@ export class SwitchImplService implements SwitchManager {
     @Inject(MONGOOSE_CONN) private conn: Connection,
   ) {}
   private async fetchRecord(
-    { deviceId, moduleId, firmwareVersion }: ModuleQuery,
+    { moduleId, ...deviceQuery }: ModuleQuery,
     lean?: boolean,
   ) {
-    const device = await this.devices.findOne(
-      {
-        id: deviceId,
-        firmwareVersion,
-      },
-      // setting lean since we don't need much from the device model here
-      { lean: true },
-    )
-
+    const device = await this.devices.findOne(deviceQuery).lean() // setting lean since we don't need much from the device model here
     if (!device) {
       throw new Error('device not found')
     }
 
-    const dModule = device.modules.find(({ id }) => id === moduleId)
+    const dModule = device.modules.find((m) => m.moduleId === moduleId)
     if (!dModule) {
       throw new Error('module not found')
     }
 
-    return await this.switchConfigs.findById(dModule.config, { lean })
+    if (!dModule.config) {
+      return null
+    }
+
+    const query = this.switchConfigs.findById(dModule.config)
+    if (lean) {
+      return await query.lean()
+    }
+
+    return await query.exec()
   }
 
   private async computeState(config: SwitchConfig): Promise<SwitchState> {
@@ -113,16 +114,18 @@ export class SwitchImplService implements SwitchManager {
     { deviceId, firmwareVersion, moduleId }: ModuleQuery,
     config: Omit<MongooseSwitchConfig, 'lastUpdateDt'>,
   ): Promise<void> {
-    const device = await this.devices.findOne({
-      id: deviceId,
-      firmwareVersion,
-    })
+    const device = await this.devices
+      .findOne({
+        deviceId,
+        firmwareVersion,
+      })
+      .exec()
 
     if (!device) {
       throw new Error('device not found')
     }
 
-    const dModule = device.modules.find(({ id }) => id === moduleId)
+    const dModule = device.modules.find((m) => m.moduleId === moduleId)
     if (!dModule) {
       throw new Error('moduel not found')
     }

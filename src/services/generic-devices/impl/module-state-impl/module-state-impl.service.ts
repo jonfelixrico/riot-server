@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { DEVICE_MODEL } from '@app/mongoose/mongoose.di-tokens'
-import { ModuleStateService } from '../../module-state-service.abstract'
+import { ModuleStateProvider } from '../../module-state-provider.interface'
 import { Model } from 'mongoose'
 import { MongooseDevice } from '@app/mongoose/models/device.mongoose-model'
 import {
@@ -18,13 +18,11 @@ interface ModuleQuery extends DeviceQuery {
 }
 
 @Injectable()
-export class ModuleStateImplService extends ModuleStateService {
+export class ModuleStateImplService implements ModuleStateProvider {
   constructor(
     @Inject(DEVICE_MODEL) private deviceModel: Model<MongooseDevice>,
     @Inject(SWITCH_MANAGER) private switchSvc: SwitchManager,
-  ) {
-    super()
-  }
+  ) {}
 
   async getState(query: ModuleQuery): Promise<unknown> {
     // TODO add other module types
@@ -32,20 +30,20 @@ export class ModuleStateImplService extends ModuleStateService {
   }
 
   async getStates(query: DeviceQuery): Promise<Record<string, unknown>> {
-    const device = await this.deviceModel.findOne(query, { lean: true })
+    const device = await this.deviceModel.findOne(query).lean()
     if (!device) {
       throw new Error('device not found')
     }
 
     const states: Record<string, unknown> = {}
-    for (const { id } of device.modules) {
+    for (const { moduleId } of device.modules) {
       // TODO add other module types
       const state = await this.switchSvc.getState({
         ...query,
-        moduleId: id,
+        moduleId,
       })
 
-      states[id] = state
+      states[moduleId] = state
     }
 
     return states

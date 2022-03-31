@@ -1,14 +1,14 @@
 import { Schema, Connection, Types } from 'mongoose'
 
 export interface MongooseDevice {
-  id: string
+  deviceId: string
   lastHeartbeatDt: Date
   modules: MongooseDeviceModule[]
   firmwareVersion: string
 }
 
 interface MongooseDeviceModule {
-  id: string
+  moduleId: string
   type: string
 
   /**
@@ -19,14 +19,29 @@ interface MongooseDeviceModule {
 }
 
 const deviceSchema = new Schema<MongooseDevice>({
-  id: String,
+  deviceId: {
+    type: String,
+    required: true,
+  },
+
+  firmwareVersion: {
+    type: String,
+    required: true,
+  },
+
   lastHeartbeatDt: Date,
-  firmwareVersion: String,
 
   modules: [
     {
-      id: String,
-      type: String,
+      moduleId: {
+        type: String,
+        required: true,
+      },
+      /**
+       * @see {@link https://mongoosejs.com/docs/schematypes.html#type-key} to see why `type` has to be defined
+       * this way.
+       */
+      type: { type: String, required: true },
 
       /*
        * We don't want to make the ref the entire Module instead of just the config out of concerns regarding performance if we want

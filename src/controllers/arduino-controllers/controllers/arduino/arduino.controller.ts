@@ -9,7 +9,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common'
-import { ModuleToRegisterDto } from '../../dto/module-to-register.request-dto'
+import { QueueForRegistrationRequestDto } from '../../dto/queue-for-registration.request-dto'
 import {
   DeviceManager,
   DEVICE_MANAGER,
@@ -49,7 +49,7 @@ export class ArduinoController {
   @Post()
   @HttpCode(202)
   @ApiBody({
-    type: [ModuleToRegisterDto],
+    type: [QueueForRegistrationRequestDto],
     description: 'List of modules to be registerd with the device.',
   })
   @ApiForbiddenResponse({ description: 'Device has already been registered.' })
@@ -64,7 +64,7 @@ export class ArduinoController {
   async queueForRegistration(
     @Param('deviceId') deviceId: string,
     @Param('version') firmwareVersion: string,
-    @Body() toRegister: ModuleToRegisterDto[],
+    @Body() toRegister: QueueForRegistrationRequestDto[],
   ) {
     if (await this.deviceSvc.doesDeviceExist({ deviceId, firmwareVersion })) {
       throw new ForbiddenException('Device has already been registered.')
@@ -87,6 +87,7 @@ export class ArduinoController {
   @ApiOperation({
     description:
       'This is the main endpoint that devices call. This allows them to receive states and/or send sensor readings.',
+    operationId: 'devceHeartbeat',
   })
   @ApiBody({
     description:

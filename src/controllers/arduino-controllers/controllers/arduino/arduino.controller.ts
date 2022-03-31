@@ -31,11 +31,8 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger'
-import {
-  HeartbeatResponseDto,
-  IHeartbeatResponseDto,
-} from './heartbeat.response-dto'
-import { HeartbeatRequestDto } from './heartbeat.request-dto'
+import { ModuleStatesDto, IModuleStatesDto } from './module-states.dto'
+import { ModuleReadingsDto } from './module-readings.dto'
 
 @ApiTags('arduino')
 @Controller('arduino/:deviceId/version/:version')
@@ -79,7 +76,7 @@ export class ArduinoController {
 
   @Put()
   @ApiOkResponse({
-    type: HeartbeatResponseDto,
+    type: ModuleStatesDto,
   })
   @ApiNotFoundResponse({
     description: 'The device is not yet registered.',
@@ -92,14 +89,14 @@ export class ArduinoController {
   @ApiBody({
     description:
       'The data sent by the device into the server. May contain sensor readings.',
-    type: HeartbeatRequestDto,
+    type: ModuleReadingsDto,
   })
   async heartbeat(
     @Param('deviceId') deviceId: string,
     @Param('version') firmwareVersion: string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    @Body() payload: HeartbeatRequestDto, // will remain unused until we start supporting sensors
-  ): Promise<IHeartbeatResponseDto> {
+    @Body() payload: ModuleReadingsDto, // will remain unused until we start supporting sensors
+  ): Promise<IModuleStatesDto> {
     const query = {
       deviceId,
       firmwareVersion,

@@ -62,16 +62,10 @@ export class SwitchImplService implements SwitchManager {
     @Inject(MONGOOSE_CONN) private conn: Connection,
   ) {}
   private async fetchRecord(
-    { deviceId, moduleId, firmwareVersion }: ModuleQuery,
+    { moduleId, ...deviceQuery }: ModuleQuery,
     lean?: boolean,
   ) {
-    const device = await this.devices
-      .findOne({
-        deviceId,
-        firmwareVersion,
-      })
-      .lean() // setting lean since we don't need much from the device model here
-
+    const device = await this.devices.findOne(deviceQuery).lean() // setting lean since we don't need much from the device model here
     if (!device) {
       throw new Error('device not found')
     }

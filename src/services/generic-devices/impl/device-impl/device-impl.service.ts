@@ -48,7 +48,7 @@ export class DeviceImplService implements DeviceManager {
     deviceId,
     firmwareVersion,
   }: DeviceQuery): Promise<boolean> {
-    return !!(await this.deviceModel.exists({ id: deviceId, firmwareVersion }))
+    return !!(await this.deviceModel.exists({ deviceId, firmwareVersion }))
   }
 
   async registerDevice(input: DeviceToRegister) {
@@ -61,11 +61,7 @@ export class DeviceImplService implements DeviceManager {
       throw new Error('queued item is not found')
     }
 
-    await this.deviceModel.create({
-      firmwareVersion: input.firmwareVersion,
-      id: input.deviceId,
-      modules: input.modules,
-    })
+    await this.deviceModel.create(input)
   }
 
   async getDevices(): Promise<Device[]> {

@@ -75,7 +75,16 @@ export class SwitchImplService implements SwitchManager {
       throw new Error('module not found')
     }
 
-    return await this.switchConfigs.findById(dModule.config, { lean })
+    if (!dModule.config) {
+      return null
+    }
+
+    const query = this.switchConfigs.findById(dModule.config)
+    if (lean) {
+      return await query.lean()
+    }
+
+    return await query.exec()
   }
 
   private async computeState(config: SwitchConfig): Promise<SwitchState> {
@@ -105,10 +114,12 @@ export class SwitchImplService implements SwitchManager {
     { deviceId, firmwareVersion, moduleId }: ModuleQuery,
     config: Omit<MongooseSwitchConfig, 'lastUpdateDt'>,
   ): Promise<void> {
-    const device = await this.devices.findOne({
-      deviceId,
-      firmwareVersion,
-    })
+    const device = await this.devices
+      .findOne({
+        deviceId,
+        firmwareVersion,
+      })
+      .exec()
 
     if (!device) {
       throw new Error('device not found')

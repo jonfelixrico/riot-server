@@ -26,7 +26,7 @@ export class DeviceImplService implements DeviceManager {
   ) {}
 
   private async fetch({ deviceId, firmwareVersion }: DeviceQuery) {
-    return await this.deviceModel.findOne({ deviceId, firmwareVersion })
+    return await this.deviceModel.findOne({ deviceId, firmwareVersion }).exec()
   }
 
   async bumpHeartbeat(input: DeviceQuery): Promise<void> {

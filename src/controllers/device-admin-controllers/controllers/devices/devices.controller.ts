@@ -9,7 +9,9 @@ import {
   DeviceManager,
   DEVICE_MANAGER,
 } from '@app/services/generic-devices/device-manager.interface'
+import { ApiTags } from '@nestjs/swagger'
 
+@ApiTags('device')
 @Controller('api/devices')
 export class DevicesController {
   constructor(@Inject(DEVICE_MANAGER) private deviceSvc: DeviceManager) {}

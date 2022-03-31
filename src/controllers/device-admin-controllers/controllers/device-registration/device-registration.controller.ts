@@ -17,7 +17,9 @@ import {
   DeviceRegistrationQueue,
   DEVICE_REGISTRATION_QUEUE,
 } from '@app/services/generic-devices/device-registration-queue.interface'
+import { ApiTags } from '@nestjs/swagger'
 
+@ApiTags('device-registration')
 @Controller('api/device/unregistered')
 export class DeviceRegistrationController {
   constructor(

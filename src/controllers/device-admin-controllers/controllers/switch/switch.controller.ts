@@ -13,7 +13,9 @@ import {
 } from '@app/services/specialized-devices/switch-manager.interface'
 import { SwitchOverrideDto } from './switch-override.dto'
 import { SwitchScheduleDto } from './switch-schedule.dto'
+import { ApiTags } from '@nestjs/swagger'
 
+@ApiTags('switch')
 @Controller('api/devices/:deviceId/version/:version/switches/:moduleId')
 export class SwitchController {
   constructor(@Inject(SWITCH_MANAGER) private switchSvc: SwitchManager) {}

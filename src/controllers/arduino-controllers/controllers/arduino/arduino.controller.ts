@@ -22,8 +22,9 @@ import {
   ModuleStateProvider,
   MODULE_STATE_PROVIDER,
 } from '@app/services/generic-devices/module-state-provider.interface'
-import { ApiBody } from '@nestjs/swagger'
+import { ApiBody, ApiTags } from '@nestjs/swagger'
 
+@ApiTags('arduino')
 @Controller('arduino/:deviceId/version/:version')
 export class ArduinoController {
   constructor(

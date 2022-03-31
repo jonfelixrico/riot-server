@@ -52,8 +52,8 @@ describe('registration flow', () => {
     expect(body.modules).toContainEqual(testDevice)
   })
 
-  it('should register sucesssfully', async () => {
-    await request(app.getHttpServer())
+  it('should register sucesssfully', () => {
+    return request(app.getHttpServer())
       .post(`/api/device/unregistered/${deviceId}/version/${version}`)
       .expect(201)
   })

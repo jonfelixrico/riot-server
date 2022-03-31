@@ -2,11 +2,6 @@ import { DeviceModule } from '@app/services/generic-devices/device-manager.inter
 import { ApiProperty } from '@nestjs/swagger'
 
 export class DeviceToRegisterDto implements DeviceModule {
-  @ApiProperty({
-    description:
-      'The id of the module to be registered. This is namespaced within the device id. You define this.',
-    required: true,
-  })
   moduleId: string
 
   @ApiProperty({

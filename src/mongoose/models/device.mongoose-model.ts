@@ -1,14 +1,14 @@
 import { Schema, Connection, Types } from 'mongoose'
 
 export interface MongooseDevice {
-  id: string
+  deviceId: string
   lastHeartbeatDt: Date
   modules: MongooseDeviceModule[]
   firmwareVersion: string
 }
 
 interface MongooseDeviceModule {
-  id: string
+  moduleId: string
   type: string
 
   /**
@@ -19,7 +19,7 @@ interface MongooseDeviceModule {
 }
 
 const deviceSchema = new Schema<MongooseDevice>({
-  id: {
+  deviceId: {
     type: String,
     required: true,
   },
@@ -33,7 +33,7 @@ const deviceSchema = new Schema<MongooseDevice>({
 
   modules: [
     {
-      id: {
+      moduleId: {
         type: String,
         required: true,
       },

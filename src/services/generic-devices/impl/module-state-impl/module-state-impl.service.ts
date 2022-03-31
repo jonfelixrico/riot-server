@@ -36,14 +36,14 @@ export class ModuleStateImplService implements ModuleStateProvider {
     }
 
     const states: Record<string, unknown> = {}
-    for (const { id } of device.modules) {
+    for (const { moduleId } of device.modules) {
       // TODO add other module types
       const state = await this.switchSvc.getState({
         ...query,
-        moduleId: id,
+        moduleId,
       })
 
-      states[id] = state
+      states[moduleId] = state
     }
 
     return states

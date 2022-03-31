@@ -2,9 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { INestApplication } from '@nestjs/common'
 import * as request from 'supertest'
 import { AppModule } from '@app/app.module'
-import { uniqueId } from 'lodash'
 import { DeviceModule } from '@app/services/generic-devices/device-manager.interface'
 import { QueuedDevice } from '@app/services/generic-devices/device-registration-queue.interface'
+import { v4 } from 'uuid'
 
 describe('registration flow', () => {
   let app: INestApplication
@@ -18,10 +18,10 @@ describe('registration flow', () => {
     await app.init()
   })
 
-  const deviceId = uniqueId()
+  const deviceId = v4()
   const version = '1'
   const testDevice: DeviceModule = {
-    id: 'device-1',
+    moduleId: 'switch-1',
     type: 'switch',
   }
 

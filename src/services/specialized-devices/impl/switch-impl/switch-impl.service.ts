@@ -76,7 +76,7 @@ export class SwitchImplService implements SwitchManager {
       throw new Error('device not found')
     }
 
-    const dModule = device.modules.find(({ id }) => id === moduleId)
+    const dModule = device.modules.find((m) => m.moduleId === moduleId)
     if (!dModule) {
       throw new Error('module not found')
     }
@@ -120,7 +120,7 @@ export class SwitchImplService implements SwitchManager {
       throw new Error('device not found')
     }
 
-    const dModule = device.modules.find(({ id }) => id === moduleId)
+    const dModule = device.modules.find((m) => m.moduleId === moduleId)
     if (!dModule) {
       throw new Error('moduel not found')
     }

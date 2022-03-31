@@ -61,7 +61,11 @@ export class DeviceImplService implements DeviceManager {
       throw new Error('queued item is not found')
     }
 
-    await this.deviceModel.create(input)
+    await this.deviceModel.create({
+      firmwareVersion: input.firmwareVersion,
+      id: input.deviceId,
+      modules: input.modules,
+    })
   }
 
   async getDevices(): Promise<Device[]> {

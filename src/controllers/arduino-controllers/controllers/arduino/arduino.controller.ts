@@ -9,7 +9,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common'
-import { ModuleToRegisterDto } from '../../dto/module-to-register.dto'
+import { ModuleToRegisterDto } from '../../dto/module-to-register.request-dto'
 import {
   DeviceManager,
   DEVICE_MANAGER,
@@ -26,9 +26,16 @@ import {
   ApiAcceptedResponse,
   ApiBody,
   ApiForbiddenResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger'
+import {
+  HeartbeatResponseDto,
+  IHeartbeatResponseDto,
+} from '../../dto/heartbeat.response-dto'
+import { HeartbeatRequestDto } from '../../dto/heartbeat.request-dto'
 
 @ApiTags('arduino')
 @Controller('arduino/:deviceId/version/:version')
@@ -71,10 +78,26 @@ export class ArduinoController {
   }
 
   @Put()
-  async processEmit(
+  @ApiOkResponse({
+    type: HeartbeatResponseDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'The device is not yet registered.',
+  })
+  @ApiOperation({
+    description:
+      'This is the main endpoint that devices call. This allows them to receive states and/or send sensor readings.',
+  })
+  @ApiBody({
+    description:
+      'The data sent by the device into the server. May contain sensor readings.',
+    type: HeartbeatRequestDto,
+  })
+  async heartbeat(
     @Param('deviceId') deviceId: string,
     @Param('version') firmwareVersion: string,
-  ) {
+    @Body() payload: HeartbeatRequestDto,
+  ): Promise<IHeartbeatResponseDto> {
     const query = {
       deviceId,
       firmwareVersion,
@@ -89,6 +112,8 @@ export class ArduinoController {
       console.error(e)
     })
 
-    return await this.mStateSvc.getStates(query)
+    return {
+      states: await this.mStateSvc.getStates(query),
+    }
   }
 }

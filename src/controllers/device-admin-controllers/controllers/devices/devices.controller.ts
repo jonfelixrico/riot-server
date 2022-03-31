@@ -12,7 +12,7 @@ import {
 import { ApiTags } from '@nestjs/swagger'
 
 @ApiTags('device')
-@Controller('api/devices')
+@Controller('api/device')
 export class DevicesController {
   constructor(@Inject(DEVICE_MANAGER) private deviceSvc: DeviceManager) {}
 

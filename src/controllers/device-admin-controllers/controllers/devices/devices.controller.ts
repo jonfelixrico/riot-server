@@ -21,7 +21,7 @@ export class DevicesController {
     return await this.deviceSvc.getDevices()
   }
 
-  @Get(':deviceId/versions/:version')
+  @Get(':deviceId/version/:version')
   async getDeviceInfo(
     @Param('deviceId') deviceId: string,
     @Param('version') firmwareVersion: string,

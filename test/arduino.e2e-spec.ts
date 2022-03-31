@@ -57,4 +57,10 @@ describe('registration flow', () => {
       .post(`/api/device/unregistered/${deviceId}/version/${version}`)
       .expect(201)
   })
+
+  it('should return 200 since the device has been registered', () => {
+    return request(app.getHttpServer())
+      .put(`/arduino/${deviceId}/version/${version}`)
+      .expect(200)
+  })
 })

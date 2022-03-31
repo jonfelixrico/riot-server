@@ -22,6 +22,7 @@ import {
   ModuleStateProvider,
   MODULE_STATE_PROVIDER,
 } from '@app/services/generic-devices/module-state-provider.interface'
+import { ApiBody } from '@nestjs/swagger'
 
 @Controller('arduino/:deviceId/version/:version')
 export class ArduinoController {
@@ -33,6 +34,7 @@ export class ArduinoController {
 
   @Post()
   @HttpCode(202)
+  @ApiBody({ type: [ModuleToRegisterDto] })
   async queueForRegistration(
     @Param('deviceId') deviceId: string,
     @Param('version') firmwareVersion: string,

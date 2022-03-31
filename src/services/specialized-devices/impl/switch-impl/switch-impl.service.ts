@@ -65,14 +65,12 @@ export class SwitchImplService implements SwitchManager {
     { deviceId, moduleId, firmwareVersion }: ModuleQuery,
     lean?: boolean,
   ) {
-    const device = await this.devices.findOne(
-      {
+    const device = await this.devices
+      .findOne({
         id: deviceId,
         firmwareVersion,
-      },
-      // setting lean since we don't need much from the device model here
-      { lean: true },
-    )
+      })
+      .lean() // setting lean since we don't need much from the device model here
 
     if (!device) {
       throw new Error('device not found')

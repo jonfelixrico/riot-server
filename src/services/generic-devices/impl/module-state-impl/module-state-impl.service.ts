@@ -30,7 +30,7 @@ export class ModuleStateImplService implements ModuleStateProvider {
   }
 
   async getStates(query: DeviceQuery): Promise<Record<string, unknown>> {
-    const device = await this.deviceModel.findOne(query, { lean: true })
+    const device = await this.deviceModel.findOne(query).lean()
     if (!device) {
       throw new Error('device not found')
     }

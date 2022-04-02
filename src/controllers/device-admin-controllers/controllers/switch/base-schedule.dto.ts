@@ -2,10 +2,9 @@ import {
   BaseSchedule,
   ScheduleUtcOffset,
 } from '@app/services/specialized-devices/switch-manager.interface'
-import { IsUtc } from '@app/validators/utc.validator'
 
+// No validators here because this is not exposed directly
 export class BaseScheduleDto implements BaseSchedule {
-  @IsUtc()
   utcOffset: ScheduleUtcOffset
   type: 'DAILY' | 'WEEKLY'
 }

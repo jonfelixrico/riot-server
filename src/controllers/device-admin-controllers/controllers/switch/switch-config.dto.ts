@@ -6,6 +6,7 @@ import { WeeklyScheduleDto } from './weekly-schedule.dto'
 import { ValidateNested } from 'class-validator'
 import { Type } from 'class-transformer'
 import { BaseScheduleDto } from './base-schedule.dto'
+import { IsOptional } from 'class-validator'
 
 export class SwitchConfigDto implements SwitchConfig {
   @ApiExtraModels(DailyScheduleDto, WeeklyScheduleDto)
@@ -39,5 +40,6 @@ export class SwitchConfigDto implements SwitchConfig {
   schedule: DailyScheduleDto | WeeklyScheduleDto
 
   @ValidateNested()
+  @IsOptional()
   override?: SwitchOverrideDto
 }

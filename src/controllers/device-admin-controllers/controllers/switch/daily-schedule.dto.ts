@@ -5,6 +5,7 @@ import {
 import { ScheduleEntryDto } from './schedule-entry.dto'
 import { ValidateNested, IsArray, Equals, IsNotEmpty } from 'class-validator'
 import { BaseScheduleDto } from './base-schedule.dto'
+import { IsUtc } from '@app/validators/utc.validator'
 
 export class DailyScheduleDto extends BaseScheduleDto implements DailySchedule {
   @Equals('DAILY')
@@ -14,7 +15,7 @@ export class DailyScheduleDto extends BaseScheduleDto implements DailySchedule {
   @IsArray()
   dailySchedule: ScheduleEntryDto[]
 
-  // TODO add regexp validation here
   @IsNotEmpty()
+  @IsUtc()
   utcOffset: ScheduleUtcOffset
 }

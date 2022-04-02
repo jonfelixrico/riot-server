@@ -1,6 +1,6 @@
 import { DeviceModule } from '@app/services/generic-devices/device-manager.interface'
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNotEmpty } from 'class-validator'
+import { IsNotEmpty, IsString } from 'class-validator'
 
 export class DeviceModuleDto implements DeviceModule {
   @IsNotEmpty()
@@ -10,5 +10,6 @@ export class DeviceModuleDto implements DeviceModule {
     enum: ['SWITCH'],
   })
   @IsNotEmpty()
+  @IsString()
   type: string
 }

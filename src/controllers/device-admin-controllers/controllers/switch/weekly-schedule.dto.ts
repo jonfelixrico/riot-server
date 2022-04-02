@@ -5,6 +5,7 @@ import {
 import { ScheduleEntryDto } from './schedule-entry.dto'
 import { ValidateNested, Equals, IsObject, IsArray } from 'class-validator'
 import { BaseScheduleDto } from './base-schedule.dto'
+import { IsUtc } from '@app/validators/utc.validator'
 
 type WeeklyScheduleSubObject = WeeklySchedule['weeklySchedule']
 
@@ -49,6 +50,6 @@ export class WeeklyScheduleDto
   @IsObject()
   weeklySchedule: WeeklySchedleSubObjectDto
 
-  // TODO add regexp validation
+  @IsUtc()
   utcOffset: ScheduleUtcOffset
 }

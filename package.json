@@ -82,6 +82,7 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
     "moduleNameMapper": {
+      "@dto/(.*)": "<rootDir>/dto/$1",
       "@app/(.*)": "<rootDir>/$1"
     }
   }

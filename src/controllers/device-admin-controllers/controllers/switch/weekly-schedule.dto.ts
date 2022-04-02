@@ -4,6 +4,7 @@ import {
 } from '@app/services/specialized-devices/switch-manager.interface'
 import { ScheduleEntryDto } from './schedule-entry.dto'
 import { ValidateNested, Equals, IsObject, IsArray } from 'class-validator'
+import { BaseScheduleDto } from './base-schedule.dto'
 
 type WeeklyScheduleSubObject = WeeklySchedule['weeklySchedule']
 
@@ -37,7 +38,10 @@ class WeeklySchedleSubObjectDto implements WeeklyScheduleSubObject {
   sat: ScheduleEntryDto[]
 }
 
-export class WeeklyScheduleDto implements WeeklySchedule {
+export class WeeklyScheduleDto
+  extends BaseScheduleDto
+  implements WeeklySchedule
+{
   @Equals('WEEKLY')
   type: 'WEEKLY'
 

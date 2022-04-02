@@ -4,8 +4,9 @@ import {
 } from '@app/services/specialized-devices/switch-manager.interface'
 import { ScheduleEntryDto } from './schedule-entry.dto'
 import { ValidateNested, IsArray, Equals, IsNotEmpty } from 'class-validator'
+import { BaseScheduleDto } from './base-schedule.dto'
 
-export class DailyScheduleDto implements DailySchedule {
+export class DailyScheduleDto extends BaseScheduleDto implements DailySchedule {
   @Equals('DAILY')
   type: 'DAILY'
 

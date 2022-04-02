@@ -3,7 +3,7 @@ import {
   ScheduleUtcOffset,
 } from '@app/services/specialized-devices/switch-manager.interface'
 import { ScheduleEntryDto } from './schedule-entry.dto'
-import { ValidateNested, IsArray, Equals } from 'class-validator'
+import { ValidateNested, IsArray, Equals, IsNotEmpty } from 'class-validator'
 
 export class DailyScheduleDto implements DailySchedule {
   @Equals('DAILY')
@@ -14,5 +14,6 @@ export class DailyScheduleDto implements DailySchedule {
   dailySchedule: ScheduleEntryDto[]
 
   // TODO add regexp validation here
+  @IsNotEmpty()
   utcOffset: ScheduleUtcOffset
 }

@@ -12,9 +12,22 @@ import {
   SWITCH_MANAGER,
 } from '@app/services/specialized-devices/switch-manager.interface'
 import { SwitchOverrideDto } from './switch-override.dto'
-import { SwitchScheduleDto } from './switch-schedule.dto'
+import {
+  ApiBody,
+  ApiExtraModels,
+  ApiForbiddenResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+  getSchemaPath,
+} from '@nestjs/swagger'
+import { SwitchConfigDto } from './switch-config.dto'
+import { DailyScheduleDto } from './daily-schedule.dto'
+import { WeeklyScheduleDto } from './weekly-schedule.dto'
+import { ISwitchStateDto, SwitchStateDto } from './switch-state.dto'
 
-@Controller('api/devices/:deviceId/version/:version/switches/:moduleId')
+@ApiTags('switch')
+@Controller('api/device/:deviceId/version/:version/switch/:moduleId')
 export class SwitchController {
   constructor(@Inject(SWITCH_MANAGER) private switchSvc: SwitchManager) {}
 
@@ -24,11 +37,16 @@ export class SwitchController {
    * @param moduleId
    */
   @Get(':moduleId')
+  @ApiOkResponse({
+    type: SwitchConfigDto,
+  })
+  @ApiNotFoundResponse()
   getDetails(
     @Param('deviceId') deviceId: string,
     @Param('moduleId') moduleId: string,
     @Param('version') firmwareVersion: string,
   ) {
+    // TODO do existence checking
     return this.switchSvc.getConfig({ deviceId, moduleId, firmwareVersion })
   }
 
@@ -39,12 +57,24 @@ export class SwitchController {
    * @param schedule
    */
   @Put(':moduleId')
+  @ApiExtraModels(DailyScheduleDto, WeeklyScheduleDto)
+  @ApiBody({
+    schema: {
+      anyOf: [
+        { $ref: getSchemaPath(DailyScheduleDto) },
+        { $ref: getSchemaPath(WeeklyScheduleDto) },
+      ],
+    },
+  })
+  @ApiOkResponse()
+  @ApiNotFoundResponse()
   async setSchedule(
     @Param('deviceId') deviceId: string,
     @Param('moduleId') moduleId: string,
     @Param('version') firmwareVersion: string,
-    @Body() { schedule }: SwitchScheduleDto,
+    @Body() schedule: DailyScheduleDto | WeeklyScheduleDto,
   ): Promise<void> {
+    // TODO do existence checking
     await this.switchSvc.setSchedule(
       {
         deviceId,
@@ -61,11 +91,16 @@ export class SwitchController {
    * @param moduleId
    */
   @Get(':moduleId/state')
+  @ApiOkResponse({
+    type: SwitchStateDto,
+  })
+  @ApiNotFoundResponse()
   async getState(
     @Param('deviceId') deviceId: string,
     @Param('moduleId') moduleId: string,
     @Param('version') firmwareVersion: string,
-  ) {
+  ): Promise<ISwitchStateDto> {
+    // TODO do existence checking
     const state = await this.switchSvc.getState({
       deviceId,
       moduleId,
@@ -84,12 +119,14 @@ export class SwitchController {
    * @param override
    */
   @Put(':moduleId/override')
+  @ApiNotFoundResponse()
   async setOverride(
     @Param('deviceId') deviceId: string,
     @Param('moduleId') moduleId: string,
     @Param('version') firmwareVersion: string,
     @Body() override: SwitchOverrideDto,
   ) {
+    // TODO do existence checking
     await this.switchSvc.setOverride(
       {
         deviceId,
@@ -106,11 +143,17 @@ export class SwitchController {
    * @param moduleId
    */
   @Delete(':moduleId/override')
+  @ApiNotFoundResponse()
+  @ApiForbiddenResponse({
+    description: 'There are already no overrides.',
+  })
   async clearOverride(
     @Param('deviceId') deviceId: string,
     @Param('moduleId') moduleId: string,
     @Param('version') firmwareVersion: string,
   ) {
+    // TODO do general existence checking
+    // TODO check override existence checking
     await this.switchSvc.setOverride({
       deviceId,
       moduleId,

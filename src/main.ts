@@ -21,7 +21,12 @@ function setUpSwagger(app: INestApplication) {
  * @param app
  */
 function setUpValidation(app: INestApplication) {
-  app.useGlobalPipes(new ValidationPipe())
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+    }),
+  )
 }
 
 async function bootstrap() {

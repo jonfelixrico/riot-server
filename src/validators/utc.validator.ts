@@ -1,7 +1,5 @@
+import { isValidUtc } from '@app/utils/luxon.utils'
 import { registerDecorator, ValidationOptions } from 'class-validator'
-import { FixedOffsetZone } from 'luxon'
-
-const UTC_REGEXP = /^(?:[+-]\d\d:\d\d)|(?:[+-]\d)$/
 
 export function IsUtc(validationOptions?: ValidationOptions) {
   // We have to use Object; we can't use Record<string, unknown> (recommended) here
@@ -14,11 +12,11 @@ export function IsUtc(validationOptions?: ValidationOptions) {
       options: validationOptions,
       validator: {
         validate(value: unknown) {
-          if (typeof value !== 'string' || !UTC_REGEXP.test(value)) {
+          if (typeof value !== 'string') {
             return false
           }
 
-          return FixedOffsetZone.parseSpecifier(`UTC${value}`)?.isValid
+          return isValidUtc(value)
         },
       },
     })

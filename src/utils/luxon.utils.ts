@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon'
+import { DateTime, FixedOffsetZone } from 'luxon'
 
 export const EPOCH = DateTime.fromMillis(0, {
   zone: 'UTC',
@@ -14,4 +14,12 @@ export const EPOCH = DateTime.fromMillis(0, {
  */
 export function isBetween(date: DateTime, from: DateTime, to: DateTime) {
   return date.diff(from).milliseconds >= 0 && to.diff(date).milliseconds >= 0
+}
+
+const UTC_REGEXP = /^(?:[+-]\d\d:\d\d)|(?:[+-]\d)$/
+export function isValidUtc(toCheck: string) {
+  return (
+    UTC_REGEXP.test(toCheck) &&
+    FixedOffsetZone.parseSpecifier(`UTC${toCheck}`)?.isValid
+  )
 }

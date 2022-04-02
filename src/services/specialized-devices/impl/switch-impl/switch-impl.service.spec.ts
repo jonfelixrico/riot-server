@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { SwitchImplService } from './switch-impl.service'
 
-describe('SwitchImplService', () => {
+describe.skip('SwitchImplService', () => {
   let service: SwitchImplService
 
   beforeEach(async () => {

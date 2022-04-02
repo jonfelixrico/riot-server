@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { ArduinoController } from './arduino.controller'
 
-describe('ArduinoController', () => {
+describe.skip('ArduinoController', () => {
   let controller: ArduinoController
 
   beforeEach(async () => {

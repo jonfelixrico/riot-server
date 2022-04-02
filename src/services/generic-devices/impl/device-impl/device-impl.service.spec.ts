@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { DeviceImplService } from './device-impl.service'
 
-describe('DeviceImplService', () => {
+describe.skip('DeviceImplService', () => {
   let service: DeviceImplService
 
   beforeEach(async () => {

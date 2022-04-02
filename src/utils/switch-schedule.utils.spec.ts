@@ -1,5 +1,5 @@
+import { WeeklySchedule } from '@app/services/specialized-devices/switch-manager.interface'
 import { DateTime } from 'luxon'
-import { WeeklySchedule } from '@app/services/specialized-devices/switch/switch-manager.interface'
 import { computeDailyState, computeWeeklyState } from './switch-schedule.utils'
 
 function hourHelper(timeString: string) {

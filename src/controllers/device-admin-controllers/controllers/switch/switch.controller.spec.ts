@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { SwitchController } from './switch.controller'
 
-describe('SwitchController', () => {
+describe.skip('SwitchController', () => {
   let controller: SwitchController
 
   beforeEach(async () => {

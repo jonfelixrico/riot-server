@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { DeviceRegistrationQueueImplService } from './device-registration-queue-impl.service'
 
-describe('DeviceRegistrationQueueImplService', () => {
+describe.skip('DeviceRegistrationQueueImplService', () => {
   let service: DeviceRegistrationQueueImplService
 
   beforeEach(async () => {

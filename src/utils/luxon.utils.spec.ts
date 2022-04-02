@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { isBetween } from './luxon.utils'
+import { isBetween, isValidUtc } from './luxon.utils'
 
 describe('isBetween', () => {
   const start = DateTime.fromISO('2022-01-01T00:00:00Z')
@@ -21,5 +21,24 @@ describe('isBetween', () => {
     expect(helper(DateTime.fromISO('2022-01-11T00:00:00Z')))
     expect(helper(DateTime.fromISO('2022-01-31T23:59:59Z')))
     expect(helper(DateTime.fromISO('2022-01-01T00:00:00Z')))
+  })
+})
+
+describe('isValidUtc', () => {
+  it('accepts valid UTC values', () => {
+    expect(isValidUtc('+8')).toBeTruthy()
+    expect(isValidUtc('+14')).toBeTruthy()
+    expect(isValidUtc('+0')).toBeTruthy()
+    expect(isValidUtc('-0')).toBeTruthy()
+    expect(isValidUtc('+08:00')).toBeTruthy()
+    expect(isValidUtc('+04:30')).toBeTruthy()
+  })
+
+  it('rejects invalid UTC values', () => {
+    expect(isValidUtc('+69')).toBeFalsy()
+    expect(isValidUtc('-420')).toBeFalsy()
+    expect(isValidUtc('+35')).toBeFalsy()
+    expect(isValidUtc('+99:99')).toBeFalsy()
+    expect(isValidUtc('beef')).toBeFalsy()
   })
 })

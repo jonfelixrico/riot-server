@@ -2,6 +2,7 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { DEVICE_MODEL } from '@app/mongoose/mongoose.di-tokens'
 import {
   Device,
+  DeviceHeartbeat,
   DeviceManager,
   DeviceModule,
 } from '../../device-manager.interface'
@@ -66,5 +67,15 @@ export class DeviceImplService implements DeviceManager {
 
   async getDevices(): Promise<Device[]> {
     return await this.deviceModel.find().exec()
+  }
+
+  async getHeartbeats(): Promise<DeviceHeartbeat[]> {
+    const allDevices = await this.deviceModel.find().lean()
+    return allDevices.map(({ deviceId, lastHeartbeatDt }) => {
+      return {
+        deviceId,
+        lastHeartbeatDt,
+      }
+    })
   }
 }

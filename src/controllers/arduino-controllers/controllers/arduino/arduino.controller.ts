@@ -9,9 +9,10 @@ import {
   Post,
   Put,
 } from '@nestjs/common'
-import { DeviceToRegisterDto } from './device-to-register.dto'
+import { DeviceToRegisterDto } from '@dto/device-to-register.dto'
 import {
   DeviceManager,
+  DeviceModule,
   DEVICE_MANAGER,
 } from '@app/services/generic-devices/device-manager.interface'
 import {
@@ -31,8 +32,8 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger'
-import { ModuleStatesDto, IModuleStatesDto } from './module-states.dto'
-import { ModuleReadingsDto } from './module-readings.dto'
+import { ModuleStatesDto, IModuleStatesDto } from '@dto/module-states.dto'
+import { ModuleReadingsDto } from '@dto/module-readings.dto'
 
 @ApiTags('arduino')
 @Controller('arduino/:deviceId/version/:version')
@@ -61,7 +62,7 @@ export class ArduinoController {
   async queueForRegistration(
     @Param('deviceId') deviceId: string,
     @Param('version') firmwareVersion: string,
-    @Body() toRegister: DeviceToRegisterDto[],
+    @Body() toRegister: DeviceModule[],
   ) {
     if (await this.deviceSvc.doesDeviceExist({ deviceId, firmwareVersion })) {
       throw new ForbiddenException('Device has already been registered.')

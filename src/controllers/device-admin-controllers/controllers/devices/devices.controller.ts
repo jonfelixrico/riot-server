@@ -10,7 +10,7 @@ import {
   DEVICE_MANAGER,
 } from '@app/services/generic-devices/device-manager.interface'
 import { ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger'
-import { DeviceDto } from './device.dto'
+import { DeviceDto } from '@dto/device.dto'
 
 @ApiTags('device')
 @Controller('api/device')

@@ -11,7 +11,7 @@ import {
   SwitchManager,
   SWITCH_MANAGER,
 } from '@app/services/specialized-devices/switch-manager.interface'
-import { SwitchOverrideDto } from './switch-override.dto'
+import { SwitchOverrideDto } from '@dto/switch-override.dto'
 import {
   ApiBody,
   ApiExtraModels,
@@ -21,10 +21,10 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger'
-import { SwitchConfigDto } from './switch-config.dto'
-import { DailyScheduleDto } from './daily-schedule.dto'
-import { WeeklyScheduleDto } from './weekly-schedule.dto'
-import { ISwitchStateDto, SwitchStateDto } from './switch-state.dto'
+import { SwitchConfigDto } from '@dto/switch-config.dto'
+import { DailyScheduleDto } from '@dto/daily-schedule.dto'
+import { WeeklyScheduleDto } from '@dto/weekly-schedule.dto'
+import { ISwitchStateDto, SwitchStateDto } from '@dto/switch-state.dto'
 
 @ApiTags('switch')
 @Controller('api/device/:deviceId/version/:version/switch/:moduleId')

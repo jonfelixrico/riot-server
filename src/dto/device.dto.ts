@@ -1,4 +1,4 @@
-import { DeviceModuleDto } from '@app/controllers/dto/device-module.dto'
+import { DeviceModuleDto } from '@app/dto/device-module.dto'
 import { Device } from '@app/services/generic-devices/device-manager.interface'
 import {
   IsArray,

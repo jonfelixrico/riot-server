@@ -1,9 +1,16 @@
 import {
   ScheduleEntry,
   ScheduleTime,
-  SwitchState,
 } from '@app/services/specialized-devices/switch-manager.interface'
-import { IsInt, Min, Max, IsNotEmpty, ValidateNested } from 'class-validator'
+import { SwitchStateEnum } from '@app/types/switch-state.enum'
+import {
+  IsInt,
+  Min,
+  Max,
+  IsNotEmpty,
+  ValidateNested,
+  IsEnum,
+} from 'class-validator'
 
 export class ScheduleTimeDto implements ScheduleTime {
   @IsInt()
@@ -34,6 +41,6 @@ export class ScheduleEntryDto implements ScheduleEntry {
   @ValidateNested()
   end: ScheduleTimeDto
 
-  // TODO integrate enum here
-  state: SwitchState
+  @IsEnum(SwitchStateEnum)
+  state: SwitchStateEnum
 }

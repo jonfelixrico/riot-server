@@ -1,12 +1,10 @@
-import {
-  Override,
-  SwitchState,
-} from '@app/services/specialized-devices/switch-manager.interface'
-import { IsDate, IsOptional, IsNotEmpty } from 'class-validator'
+import { Override } from '@app/services/specialized-devices/switch-manager.interface'
+import { SwitchStateEnum } from '@app/types/switch-state.enum'
+import { IsDate, IsOptional, IsEnum } from 'class-validator'
 
 export class SwitchOverrideDto implements Override {
-  // TODO use an enum for this
-  state: SwitchState
+  @IsEnum(SwitchStateEnum)
+  state: SwitchStateEnum
 
   @IsDate()
   @IsOptional()

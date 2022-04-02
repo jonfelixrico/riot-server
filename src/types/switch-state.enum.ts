@@ -1,4 +1,4 @@
-export enum SwitchState {
+export enum SwitchStateEnum {
   ON = 'ON',
   OFF = 'OFF',
 }

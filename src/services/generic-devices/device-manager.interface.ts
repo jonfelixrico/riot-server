@@ -12,6 +12,11 @@ export interface Device {
   lastHeartbeatDt: Date
 }
 
+export interface DeviceHeartbeat {
+  deviceId: string
+  lastHeartbeatDt: Date
+}
+
 /**
  * Dependency injection token for DeviceManager.
  */
@@ -41,4 +46,6 @@ export interface DeviceManager {
   })
 
   getDevices(): Promise<Device[]>
+
+  getHeartbeats(): Promise<DeviceHeartbeat[]>
 }

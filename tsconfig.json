@@ -20,6 +20,7 @@
     "resolveJsonModule": true,
 
     "paths": {
+      "@dto/*": ["src/dto/*"],
       "@app/*": ["src/*"]
     }
   }

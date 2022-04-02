@@ -25,7 +25,7 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger'
-import { QueuedDeviceDto } from './queued-device.dto'
+import { QueuedDeviceDto } from '@dto/queued-device.dto'
 
 @ApiTags('device-registration')
 @Controller('api/device/unregistered')

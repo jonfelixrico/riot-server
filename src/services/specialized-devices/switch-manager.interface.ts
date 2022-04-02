@@ -1,16 +1,10 @@
+import { UtcOffset } from '@app/types/datetime.types'
 import { ModuleQuery } from '@app/types/query-common.types'
 
 export type SwitchState = 'ON' | 'OFF'
+export type ScheduleUtcOffset = UtcOffset
 
-type SingleDigit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-
-export type ScheduleUtcOffset =
-  | `+${SingleDigit}${SingleDigit}:${SingleDigit}${SingleDigit}`
-  | `+${SingleDigit}`
-  | `-${SingleDigit}${SingleDigit}:${SingleDigit}${SingleDigit}`
-  | `-${SingleDigit}`
-
-interface BaseSchedule {
+export interface BaseSchedule {
   utcOffset: ScheduleUtcOffset
   type: 'DAILY' | 'WEEKLY'
 }

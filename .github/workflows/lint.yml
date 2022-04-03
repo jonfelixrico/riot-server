@@ -3,11 +3,7 @@
 
 name: Lint
 
-on:
-  pull_request:
-    branches:
-      - develop
-      - master
+on: pull_request
 
 jobs:
   build:

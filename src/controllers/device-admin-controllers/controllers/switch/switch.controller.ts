@@ -26,8 +26,8 @@ import { DailyScheduleDto } from '@dto/daily-schedule.dto'
 import { WeeklyScheduleDto } from '@dto/weekly-schedule.dto'
 import { ISwitchStateDto, SwitchStateDto } from '@dto/switch-state.dto'
 
-@ApiTags('switch')
-@Controller('api/device/:deviceId/version/:version/switch/:moduleId')
+@ApiTags('relay')
+@Controller('api/device/:deviceId/version/:version/relay/:moduleId')
 export class SwitchController {
   constructor(@Inject(SWITCH_MANAGER) private switchSvc: SwitchManager) {}
 

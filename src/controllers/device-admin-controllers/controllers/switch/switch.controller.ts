@@ -26,8 +26,8 @@ import { DailyScheduleDto } from '@dto/daily-schedule.dto'
 import { WeeklyScheduleDto } from '@dto/weekly-schedule.dto'
 import { ISwitchStateDto, SwitchStateDto } from '@dto/switch-state.dto'
 
-@ApiTags('switch')
-@Controller('api/device/:deviceId/version/:version/switch/:moduleId')
+@ApiTags('relay')
+@Controller('api/device/:deviceId/version/:version/relay/:moduleId')
 export class SwitchController {
   constructor(@Inject(SWITCH_MANAGER) private switchSvc: SwitchManager) {}
 
@@ -36,7 +36,7 @@ export class SwitchController {
    * @param deviceId
    * @param moduleId
    */
-  @Get(':moduleId')
+  @Get()
   @ApiOkResponse({
     type: SwitchConfigDto,
   })
@@ -56,7 +56,7 @@ export class SwitchController {
    * @param moduleId
    * @param schedule
    */
-  @Put(':moduleId')
+  @Put()
   @ApiExtraModels(DailyScheduleDto, WeeklyScheduleDto)
   @ApiBody({
     schema: {
@@ -90,7 +90,7 @@ export class SwitchController {
    * @param deviceId
    * @param moduleId
    */
-  @Get(':moduleId/state')
+  @Get('state')
   @ApiOkResponse({
     type: SwitchStateDto,
   })
@@ -118,7 +118,7 @@ export class SwitchController {
    * @param moduleId
    * @param override
    */
-  @Put(':moduleId/override')
+  @Put('override')
   @ApiNotFoundResponse()
   async setOverride(
     @Param('deviceId') deviceId: string,
@@ -142,7 +142,7 @@ export class SwitchController {
    * @param deviceId
    * @param moduleId
    */
-  @Delete(':moduleId/override')
+  @Delete('override')
   @ApiNotFoundResponse()
   @ApiForbiddenResponse({
     description: 'There are already no overrides.',
